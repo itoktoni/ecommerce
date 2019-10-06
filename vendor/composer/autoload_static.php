@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
+class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -12,8 +12,8 @@ class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
@@ -458,8 +458,8 @@ class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/larapack/config-writer/src',
-        1 => __DIR__ . '/..' . '/nesbot/carbon/src',
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
+        1 => __DIR__ . '/..' . '/larapack/config-writer/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -543,8 +543,6 @@ class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
         'App\\Http\\Controllers\\TeamController' => __DIR__ . '/../..' . '/app/Http/Controllers/TeamController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
-        'App\\Http\\Livewire\\DeleteSurvey' => __DIR__ . '/../..' . '/app/Http/Livewire/DeleteSurvey.php',
-        'App\\Http\\Livewire\\WoDetail' => __DIR__ . '/../..' . '/app/Http/Livewire/WoDetail.php',
         'App\\Http\\Middleware\\AccessMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AccessMiddleware.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\MinifyHtml' => __DIR__ . '/../..' . '/app/Http/Middleware/MinifyHtml.php',
@@ -2474,6 +2472,11 @@ class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
         'Modules\\Item\\Http\\Services\\ProductService' => __DIR__ . '/../..' . '/Modules/Item/Http/Services/ProductService.php',
         'Modules\\Item\\Providers\\ModuleServiceProvider' => __DIR__ . '/../..' . '/Modules/Item/Providers/ModuleServiceProvider.php',
         'Modules\\Item\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Item/Providers/RouteServiceProvider.php',
+        'Modules\\Marketing\\Dao\\Models\\Slider' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Models/Slider.php',
+        'Modules\\Marketing\\Dao\\Repositories\\SliderRepository' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Repositories/SliderRepository.php',
+        'Modules\\Marketing\\Http\\Controllers\\SliderController' => __DIR__ . '/../..' . '/Modules/Marketing/Http/Controllers/SliderController.php',
+        'Modules\\Marketing\\Providers\\ModuleServiceProvider' => __DIR__ . '/../..' . '/Modules/Marketing/Providers/ModuleServiceProvider.php',
+        'Modules\\Marketing\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Marketing/Providers/RouteServiceProvider.php',
         'Modules\\Production\\Dao\\Models\\Packaging' => __DIR__ . '/../..' . '/Modules/Production/Dao/Models/Packaging.php',
         'Modules\\Production\\Dao\\Models\\Vendor' => __DIR__ . '/../..' . '/Modules/Production/Dao/Models/Vendor.php',
         'Modules\\Production\\Dao\\Models\\WorkOrder' => __DIR__ . '/../..' . '/Modules/Production/Dao/Models/WorkOrder.php',
@@ -4100,11 +4103,11 @@ class ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInite39ad426e27fc9c1da67dbef632f84b9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitec153ae97542422ebd7f95238a1bc36e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitec153ae97542422ebd7f95238a1bc36e::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInitec153ae97542422ebd7f95238a1bc36e::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitec153ae97542422ebd7f95238a1bc36e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitec153ae97542422ebd7f95238a1bc36e::$classMap;
 
         }, null, ClassLoader::class);
     }

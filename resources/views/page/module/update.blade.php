@@ -12,6 +12,18 @@
             <div class="panel-body line">
                 <div class="col-md-12 col-lg-12">
                     @include('page.'.$template.'.form')
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Group Module</label>
+                        <div class="col-md-10">
+                            <select data-plugin-selectTwo class="form-control input-sm mb-md" multiple id="group_module" name="group[]">
+                                @foreach($list_group as $value)
+                                <option
+                                    {{ $data_group->where('group_module_code', $value->group_module_code)->count() > 0 ? 'selected=""' : ''}}
+                                    value="{{ $value->group_module_code }}">{{ $value->group_module_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <hr>
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="inputDefault">Function </label>
@@ -29,20 +41,7 @@
                         </div>
                         @endfor
                     </div>
-                </div>
-                <hr>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Group Module</label>
-                    <div class="col-md-10">
-                        <select data-plugin-selectTwo class="form-control input-sm mb-md" multiple id="group_module"
-                            name="group[]">
-                            @foreach($list_group as $value)
-                            <option
-                                {{ $data_group->where('group_module_code', $value->group_module_code)->count() > 0 ? 'selected=""' : ''}}
-                                value="{{ $value->group_module_code }}">{{ $value->group_module_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    
                 </div>
             </div>
         </div>

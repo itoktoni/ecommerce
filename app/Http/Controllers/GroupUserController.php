@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Helper;
 use Plugin\Response;
 use App\Dao\Repositories\GroupUserRepository;
+use App\Http\Services\CoreService;
 use App\Http\Services\MasterService;
 
 class GroupUserController extends Controller
@@ -52,12 +53,12 @@ class GroupUserController extends Controller
         return view(Helper::setViewCreate())->with($this->share());
     }
 
-    public function update(MasterService $service)
+    public function update(CoreService $service)
     {
         if (request()->isMethod('POST')) {
 
             $service->update(self::$model);
-            //#bug $service->saveGroupModuleWithUser(self::$model);
+            $service->saveGroupModuleWithUser(self::$model);
             return redirect()->route($this->getModule() . '_data');
         }
 

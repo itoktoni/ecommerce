@@ -37,11 +37,11 @@ class GroupModuleController extends Controller
         return array_merge($view, $data);
     }
 
-    public function create(CoreService $service)
+    public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
 
-            $service->setCode(self::$model->getKeyName())->save(self::$model);
+            $service->save(self::$model);
             Response::redirectBack();
         }
         return view(Helper::setViewCreate())->with($this->share());

@@ -98,6 +98,14 @@ class MasterService
             $this->setData(request()->all());
         }
 
+        if (isset($repository->custom_attribute)) {
+            Validator::make($this->data, $this->rules, [], $repository->custom_attribute)->validate();
+        } else if (isset($repository->custom_message)) {
+            Validator::make($this->data, $this->rules, $repository->custom_message)->validate();
+        } else {
+            Validator::make($this->data, $this->rules)->validate();
+        }
+
         if (!$repository->incrementing && !isset($this->data[$repository->getKeyName()])) {
 
             if ($this->length == null) {
@@ -107,7 +115,6 @@ class MasterService
                     $this->setLenght(config('website.autonumber'));
                 }
             }
-
             if ($this->code == null) {
                 if (isset($repository->prefix)) {
                     $this->setCharacter($repository->prefix);
@@ -121,15 +128,7 @@ class MasterService
             }
             $this->data[$repository->getKeyName()] = $autonumber;
         }
-
-        if (isset($repository->custom_attribute)) {
-            $data = Validator::make($this->data, $this->rules, [], $repository->custom_attribute)->validate();
-        } else if (isset($repository->custom_message)) {
-            $data = Validator::make($this->data, $this->rules, $repository->custom_message)->validate();
-        } else {
-            $data = Validator::make($this->data, $this->rules)->validate();
-        }
-
+       
         return $repository;
         // valdiate rules
     }
@@ -137,7 +136,8 @@ class MasterService
     public function save(MasterInterface $repository)
     {
         // save to database
-        $check = $this->validate($repository)->saveRepository($this->data);
+        $repo = $this->validate($repository);
+        $check = $repo->saveRepository($this->data);
         // check if status status success or failed
         if ($check['status']) {
             Alert::create();

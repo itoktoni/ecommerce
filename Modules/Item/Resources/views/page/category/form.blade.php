@@ -9,7 +9,18 @@
         {!! $errors->first($form.'name', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', 'Image', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Flag', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'flag') ? 'has-error' : ''}}">
+        {!! Form::text($form.'flag', null, ['class' => 'form-control']) !!}
+        {!! $errors->first($form.'flag', '<p class="help-block">:message</p>') !!}
+    </div>
+
+    
+
+</div>
+
+<div class="form-group">
+    {!! Form::label('name', 'File', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'file') ? 'has-error' : ''}}">
         <input type="hidden" value="{{ $form.'image' }}" name="$form.'image'">
         <input type="file" name="{{ $form.'file' }}"
@@ -17,11 +28,8 @@
         {!! $errors->first($form.'file', '<p class="help-block">:message</p>') !!}
     </div>
 
-</div>
-
-<div class="form-group">
     {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-10">
+    <div class="col-md-4">
         {!! Form::textarea($form.'description', null, ['class' => 'form-control lite', 'rows' => '3']) !!}
     </div>
 </div>

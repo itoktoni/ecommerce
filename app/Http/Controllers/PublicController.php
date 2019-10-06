@@ -12,6 +12,9 @@ use App;
 use DB;
 use App\Enums\OptionSlider;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Marketing\Dao\Models\Slider;
+use Modules\Marketing\Dao\Repositories\SliderRepository;
+use Modules\Marketing\Dao\Repositories\SosmedRepository;
 
 class PublicController extends Controller
 {
@@ -19,20 +22,27 @@ class PublicController extends Controller
     public function __construct()
     {
         view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true));
-        // view()->share('product', Helper::createOption('product-api'));
+        view()->share('public_sosmed', Helper::createOption((new SosmedRepository()), false, true, true));
     }
 
-    public function index()
+    public function index($slider = false)
     {
-        return view(Helper::setViewFrontend(__FUNCTION__));
+        if ($slider) {
+            $model = new SliderRepository();
+            $data = $model->slugRepository($slider);
+            return View(Helper::setViewFrontend('page'))->with([
+                'title' => $data->marketing_slider_name,
+                'description' => $data->marketing_slider_description,
+                'image' => Helper::files('slider/' . $data->marketing_slider_image),
+                'page' => $data->marketing_slider_page,
+                'link' => $data->marketing_slider_link,
+            ]);
+        }
 
-
-        // $slider = new \App\Slider();
-        // $product = new \App\Product();
-        // return View('frontend.'.config('website.frontend').'.pages.homepage',[
-        //     'slider' => $slider->baca()->get(),
-        //     'product' => $product->baca()->get(),
-        // ]);
+        $default_slider = Helper::createOption(new SliderRepository(), false, true);
+        return view(Helper::setViewFrontend(__FUNCTION__))->with([
+            'slider' => $default_slider
+        ]);
     }
 
     public function about()
@@ -57,9 +67,7 @@ class PublicController extends Controller
 
     public function category($slug = false)
     {
-        if($slug){
-            
-        }
+        if ($slug) { }
 
         return View(Helper::setViewFrontend(__FUNCTION__));
     }

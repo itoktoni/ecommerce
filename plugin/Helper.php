@@ -194,7 +194,11 @@ class Helper
 
     public static function createImage($image)
     {
-        return '<img src="' . self::files($image) . '">';
+        $path = self::files('logo/image.jpg');
+        if (file_exists(public_path('files//' . $image))) {
+            $path = self::files($image);
+        }
+        return '<img width="95" src="' . $path . '">';
     }
 
     public static function createCheckbox($id)
@@ -306,20 +310,8 @@ class Helper
 
     public static function createOption($option, $placeholder = true, $raw = false, $cache = false)
     {
-        $data = [];
-        if ($cache) {
-            if (is_object($option) && Cache::has($option->getTable() . '_api')) {
-                $parse = Cache::get($option->getTable() . '_api');
-                if (empty($parse)) {
-                    return $data;
-                }
-                return $parse;
-            } else if (Cache::has($option)) {
-                return Cache::get($option);
-            }
-        }
-        try {
-            if (is_object($option)) {
+        if (is_object($option)) {
+            if (!Cache::has($option->getTable() . '_api')) {
                 $data = $option->dataRepository()->get();
                 if (!$raw) {
                     $data = $data->pluck($option->searching, $option->getKeyName());
@@ -327,27 +319,27 @@ class Helper
                 if ($placeholder) {
                     $data = $data->prepend('- Select ' . self::getNameTable($option->getTable()) . ' -', '');
                 }
-            } else {
-                $response = Curl::to(route($option))->withData([
-                    'clean' => true,
-                    'api_token' => auth()->user()->api_token,
-                ])->post();
-                $json  = json_decode($response);
-                if (isset($json->data)) {
-                    $data = collect($json->data);
-                }
-            }
-        } catch (Exception $e) {
-            return $data;
-        }
-        if ($cache) {
-            if (is_object($option)) {
+
                 Cache::put($option->getTable() . '_api', $data, config('website.cache'));
             }
-            Cache::put($option, $data, config('website.cache'));
-        }
 
-        return $data;
+            $data = Cache::get($option->getTable() . '_api');
+            if (empty($data)) {
+                return [];
+            }
+
+            return $data;
+        }
+        else{
+            // $response = Curl::to(route($option))->withData([
+            //     'clean' => true,
+            //     'api_token' => auth()->user()->api_token,
+            // ])->post();
+            // $json  = json_decode($response);
+            // if (isset($json->data)) {
+            //     $data = collect($json->data);
+            // }
+        }
     }
 
     public static function getTable($table = null)

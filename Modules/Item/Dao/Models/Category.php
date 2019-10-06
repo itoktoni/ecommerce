@@ -13,6 +13,8 @@ class Category extends Model
     'item_category_slug',
     'item_category_name',
     'item_category_image',
+    'item_category_flag',
+    'item_category_flag',
     'item_category_description',
     'item_category_created_at',
     'item_category_created_by',
@@ -32,9 +34,10 @@ class Category extends Model
   public $datatable = [
     'item_category_id'          => [false => 'ID'],
     'item_category_name'        => [true => 'Name'],
+    'item_category_flag'        => [true => 'Flag'],
     'item_category_slug'        => [false => 'Slug'],
     'item_category_image'        => [true => 'Images'],
     'item_category_description' => [false => 'Description'],
-    'item_category_created_by'  => [false => 'Updated At'],  
+    'item_category_created_by'  => [false => 'Updated At'],
   ];
 }

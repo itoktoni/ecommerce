@@ -22,9 +22,9 @@ class GroupModule extends Model
     ];
 
     public $timestamps = false;
-    public $incrementing = false;
+    public $incrementing = true;
     public $rules = [
-        'group_module_code' => 'required|min:3|unique:group_modules',
+        'group_module_code' => 'required|min:3|unique:core_group_modules',
         'group_module_name' => 'required|min:3',
     ];
 
@@ -32,6 +32,11 @@ class GroupModule extends Model
     public $status    = [
         '1' => ['Enable', 'primary'],
         '0' => ['Disable', 'danger'],
+    ];
+
+    protected $casts = [
+        'group_module_code' => 'string',
+        'group_module_sort' => 'integer'
     ];
 
     public $datatable = [
@@ -47,6 +52,10 @@ class GroupModule extends Model
     {
         parent::boot();
         parent::saving(function ($model) {
+
+            if(request()->get('group_module_code')){
+                $model->group_module_code = request()->get('group_module_code');
+            }
             if (empty($model->group_module_sort)) {
                 $model->group_module_sort = 0;
             }

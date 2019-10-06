@@ -172,9 +172,9 @@ class CoreService extends MasterService
         }
     }
 
-    public function saveGroupModuleWithUser(GroupUserRepository $repository)
+    public function saveGroupModuleWithUser($repository)
     {
-        $id = key(request()->query());
+        $id = request()->query('code');
         if (request()->exists('group')) {
             $repository->saveConnectionModule($id, request()->get('group'));
         }

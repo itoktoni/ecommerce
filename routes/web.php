@@ -76,6 +76,8 @@ Route::match(['get', 'post'], 'website', 'HomeController@website')->name('websit
 public routes
 */
 Route::get('/', 'PublicController@index')->name('beranda');
+Route::get('/slider/{slider}', 'PublicController@index')->name('single_slider');
+
 Route::get('/shop', 'PublicController@shop')->name('shop');
 Route::get('/cart', 'PublicController@cart')->name('cart');
 Route::get('/checkout', 'PublicController@checkout')->name('checkout');

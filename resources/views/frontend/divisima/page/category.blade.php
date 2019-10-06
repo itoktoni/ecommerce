@@ -19,6 +19,8 @@
 		<div class="row">
 			<div class="col-lg-12  order-1 order-lg-2 mb-5 mb-lg-0">
 				<div class="row">
+					@isset($public_category)
+					@foreach ($public_category as $item_category)
 					<div class="col-lg-3 col-sm-6">
 						<div class="product-item">
 							<a href="">
@@ -27,11 +29,13 @@
 									<img src="{{ Helper::frontend('img/product/6.jpg') }}" alt="">
 								</div>
 								<div class="pi-text">
-									<p class="text-center">Black and White Stripes Dress</p>
+									<p class="text-center">{{ $item_category->item_category_name }}</p>
 								</div>
 							</a>
 						</div>
 					</div>
+					@endforeach
+					@endisset
 					<div class="col-lg-3 col-sm-6">
 						<div class="product-item">
 							<div class="pi-pic">

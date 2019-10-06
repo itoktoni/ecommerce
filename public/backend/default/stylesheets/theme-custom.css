@@ -582,6 +582,16 @@ select[name=datatable_length] {
     text-align: center;
 }
 
+#sort {
+    width: 50px !important;
+    text-align: center;
+}
+
+#description {
+    width: 35% !important;
+    text-align: center;
+}
+
 #type {
     width: 50px !important;
     text-align: center;
@@ -731,6 +741,7 @@ td img {
 }
 
 #reboot {
+    padding-right: 18px !important;
     cursor: pointer;
 }
 
@@ -912,4 +923,9 @@ td img {
 
 #action-master .row {
     margin-right: 0px;
+}
+
+.note-modal-footer {
+    height: 60px !important;
+    padding-right: 30px !important;
 }
