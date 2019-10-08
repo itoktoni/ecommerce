@@ -23,10 +23,12 @@
 					@foreach ($public_category as $item_category)
 					<div class="col-lg-3 col-sm-6">
 						<div class="product-item">
-							<a href="">
+							<a href="{{ route('single_category', ['slug' => $item_category->item_category_slug]) }}">
 								<div class="pi-pic">
-									<div class="tag-sale">New</div>
-									<img src="{{ Helper::frontend('img/product/6.jpg') }}" alt="">
+									@isset($item_category->item_category_flag)
+									<div class="tag-sale">{{ $item_category->item_category_flag }}</div>
+									@endisset
+									<img src="{{ Helper::files('category/'.$item_category->item_category_image) }}" alt="{{ $item_category->item_category_name }}">
 								</div>
 								<div class="pi-text">
 									<p class="text-center">{{ $item_category->item_category_name }}</p>
@@ -36,137 +38,6 @@
 					</div>
 					@endforeach
 					@endisset
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/7.jpg') }}" alt="">
-							</div>
-							<div class="pi-text">
-								<p class="text-center">Flamboyant Pink Top</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/8.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top </p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/10.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Black and White Stripes Dress</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/11.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/12.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top </p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/5.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/9.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/1.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top </p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<div class="tag-new">new</div>
-								<img src="{{ Helper::frontend('img/product/2.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Black and White Stripes Dress</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/3.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top </p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6">
-						<div class="product-item">
-							<div class="pi-pic">
-								<img src="{{ Helper::frontend('img/product/4.jpg') }}" alt="">
-
-							</div>
-							<div class="pi-text">
-
-								<p class="text-center">Flamboyant Pink Top </p>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>

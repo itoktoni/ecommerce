@@ -6,10 +6,6 @@
 	<div class="container">
 		<h2>{{ $title }}</h2>
 		<br>
-		<div class="row">
-			<img class="img-fluid" width="100%" src="{{ $image }}" alt="">
-		</div>
-		<br>
 	</div>
 </div>
 <!-- Page info end -->
@@ -22,6 +18,7 @@
 				<div class="panel">
 					<div aria-labelledby="headingOne" data-parent="#accordion">
 						<div class="panel-body">
+							<img class="col-md-6 img-thumnail float-left" src="{{ $image }}" alt="">
 							{!! html_entity_decode($page) !!}
 						</div>
 					</div>

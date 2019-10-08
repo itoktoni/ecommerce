@@ -11,11 +11,13 @@ use Helper;
 use App;
 use DB;
 use App\Enums\OptionSlider;
+use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Marketing\Dao\Models\Slider;
+use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
 
@@ -55,13 +57,15 @@ class PublicController extends Controller
 
     public function shop()
     {
-        $color = Helper::createOption(new ColorRepository(),false, true)->pluck('item_color_code');
-        $size = Helper::createOption(new SizeRepository(),false, true)->pluck('item_size_code');
-        $tag = Helper::createOption(new TagRepository(),false, true)->pluck('item_tag_slug');
+        $color = Helper::createOption(new ColorRepository(), false, true)->pluck('item_color_code');
+        $size = Helper::createOption(new SizeRepository(), false, true)->pluck('item_size_code');
+        $tag = Helper::createOption(new TagRepository(), false, true)->pluck('item_tag_slug');
+        $brand = Helper::createOption(new BrandRepository(), false, true)->pluck('item_brand_slug', 'item_brand_name');
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'color' => $color,
             'size' => $size,
             'tag' => $tag,
+            'brand' => $brand,
         ]);
     }
 
@@ -70,9 +74,26 @@ class PublicController extends Controller
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
 
-    public function promo()
+    public function promo($slug = false)
     {
-        return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+        if ($slug) {
+            $model = new PromoRepository();
+            $data = $model->slugRepository($slug);
+            return View(Helper::setViewFrontend('page'))->with([
+                'title' => $data->marketing_promo_name,
+                'description' => $data->marketing_promo_description,
+                'image' => Helper::files('promo/' . $data->marketing_promo_image),
+                'page' => $data->marketing_promo_page,
+                'link' => '',
+            ]);
+        }
+
+        $promo = Helper::createOption(new PromoRepository(), false, true);
+        $single = $promo->where('marketing_promo_default', 1)->first();
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'promo' => $promo->whereNotIn('marketing_promo_default', [1])->all(),
+            'single' => $single,
+        ]);
     }
 
     public function category($slug = false)

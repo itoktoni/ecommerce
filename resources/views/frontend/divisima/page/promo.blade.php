@@ -19,68 +19,46 @@
 		<div class="row">
 			<div class="col-lg-12  order-1 order-lg-2 mb-5 mb-lg-0">
 				<div class="row">
+
 					<div class="col-lg-6 col-sm-6">
 						<div class="product-item">
-							<a href="">
-								<div class="pi-pic">
-									<div class="tag-sale">New</div>
-									<img src="{{ Helper::frontend('img/product/6.jpg') }}" alt="">
+							<a href="{{ route('single_promo', ['slug' => $single->marketing_promo_slug]) }}">
+								<div class="header">
+									<h2 class="text-center">
+										{{ $single->marketing_promo_name }}
+									</h2>
+								</div>
+								<div class="col-md-12">
+									<div class="">
+										<img class=" mx-auto d-block img-thumbnail" src="{{ Helper::files('promo/'.$single->marketing_promo_image) }}" alt="">
+									</div>
 								</div>
 								<div class="pi-text">
-									<p class="text-center">Black and White Stripes Dress</p>
+									<p class="text-center">{{ $single->marketing_promo_description }}</p>
 								</div>
 							</a>
 						</div>
 					</div>
 					<div class="col-lg-6 col-sm-6">
 						<div class="row">
-
-							<div class="col-lg-6 col-sm-6">
+							@foreach ($promo as $item_promo)
+							<div
+								class="col-lg-6 col-sm-6																																																																																																																																																																																																																																																																																																																																																																																																									">
 								<div class="product-item">
-									<div class="pi-pic">
-										<img src="{{ Helper::frontend('img/product/7.jpg') }}" alt="">
-									</div>
-									<div class="pi-text">
-										<p class="text-center">Flamboyant Pink Top</p>
-									</div>
+									<a
+										href="{{ route('single_promo', ['slug' => $item_promo->marketing_promo_slug]) }}">
+										<div class="img-thumbnail">
+											<img src="{{ Helper::files('promo/'.$item_promo->marketing_promo_image) }}"
+												alt="">
+										</div>
+										<div class="pi-text">
+											<p class="text-center">{{ $item_promo->marketing_promo_name }}</p>
+										</div>
+									</a>
 								</div>
 							</div>
-							<div class="col-lg-6 col-sm-6">
-								<div class="product-item">
-									<div class="pi-pic">
-										<img src="{{ Helper::frontend('img/product/8.jpg') }}" alt="">
+							@endforeach
 
-									</div>
-									<div class="pi-text">
-
-										<p class="text-center">Flamboyant Pink Top </p>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6 col-sm-6">
-								<div class="product-item">
-									<div class="pi-pic">
-										<img src="{{ Helper::frontend('img/product/10.jpg') }}" alt="">
-
-									</div>
-									<div class="pi-text">
-
-										<p class="text-center">Black and White Stripes Dress</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6 col-sm-6">
-								<div class="product-item">
-									<div class="pi-pic">
-										<img src="{{ Helper::frontend('img/product/11.jpg') }}" alt="">
-
-									</div>
-									<div class="pi-text">
-
-										<p class="text-center">Flamboyant Pink Top</p>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>

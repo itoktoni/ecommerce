@@ -2,6 +2,9 @@
 
 namespace Modules\Item\Dao\Models;
 
+use Plugin\Helper;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -72,8 +75,11 @@ class Category extends Model
       if (request()->has('id')) {
         $data = $model->getDataIn(request()->get('id'));
         if ($data) {
+          Cache::forget('item_category_api');
           foreach ($data as $value) {
-            Helper::removeImage($value->item_category_image, Helper::getTemplate(__CLASS__));
+            if ($value->item_category_image) {
+              Helper::removeImage($value->item_category_image, Helper::getTemplate(__CLASS__));
+            }
           }
         }
       }
