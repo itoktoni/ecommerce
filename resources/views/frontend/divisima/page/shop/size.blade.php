@@ -1,29 +1,14 @@
-<div class="filter-widget mb-0">
+<div id="tag" class="filter-widget mb-0">
     <h2 class="fw-title">Size</h2>
     <div class="fw-size-choose">
-        <div class="sc-item">
-            <input type="radio" name="sc" id="xs-size">
-            <label for="xs-size">XS</label>
+
+        @foreach ($size as $item_size)
+        <div class="btn-group-toggle" style="display: initial" data-toggle="buttons">
+            <label class="btn btn-light" active style="box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.2);">
+                <input type="checkbox" checked autocomplete="off">{{ $item_size }}
+            </label>
         </div>
-        <div class="sc-item">
-            <input type="radio" name="sc" id="s-size">
-            <label for="s-size">S</label>
-        </div>
-        <div class="sc-item">
-            <input type="radio" name="sc" id="m-size" checked="">
-            <label for="m-size">M</label>
-        </div>
-        <div class="sc-item">
-            <input type="radio" name="sc" id="l-size">
-            <label for="l-size">L</label>
-        </div>
-        <div class="sc-item">
-            <input type="radio" name="sc" id="xl-size">
-            <label for="xl-size">XL</label>
-        </div>
-        <div class="sc-item">
-            <input type="radio" name="sc" id="xxl-size">
-            <label for="xxl-size">XXL</label>
-        </div>
+        @endforeach
+
     </div>
 </div>

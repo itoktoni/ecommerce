@@ -320,17 +320,20 @@ class Helper
                     $data = $data->prepend('- Select ' . self::getNameTable($option->getTable()) . ' -', '');
                 }
 
-                Cache::put($option->getTable() . '_api', $data, config('website.cache'));
+                if ($cache) {
+                    Cache::put($option->getTable() . '_api', $data, config('website.cache'));
+                }
+            }
+            if ($cache) {
+                $data = Cache::get($option->getTable() . '_api');
             }
 
-            $data = Cache::get($option->getTable() . '_api');
             if (empty($data)) {
                 return [];
             }
 
             return $data;
-        }
-        else{
+        } else {
             // $response = Curl::to(route($option))->withData([
             //     'clean' => true,
             //     'api_token' => auth()->user()->api_token,

@@ -12,6 +12,9 @@ use App;
 use DB;
 use App\Enums\OptionSlider;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\SizeRepository;
+use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Marketing\Dao\Models\Slider;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
@@ -52,7 +55,14 @@ class PublicController extends Controller
 
     public function shop()
     {
-        return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+        $color = Helper::createOption(new ColorRepository(),false, true)->pluck('item_color_code');
+        $size = Helper::createOption(new SizeRepository(),false, true)->pluck('item_size_code');
+        $tag = Helper::createOption(new TagRepository(),false, true)->pluck('item_tag_slug');
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'color' => $color,
+            'size' => $size,
+            'tag' => $tag,
+        ]);
     }
 
     public function faq()

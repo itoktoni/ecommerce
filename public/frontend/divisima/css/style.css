@@ -1465,6 +1465,10 @@ ol {
     margin-top: 50px;
 }
 
+#tag .btn-group-toggle {
+    margin-right: 15px;
+}
+
 .fw-tag-choose {
     margin-bottom: 20px;
 }

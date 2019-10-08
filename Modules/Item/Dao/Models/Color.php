@@ -11,8 +11,7 @@ class Color extends Model
   protected $fillable = [
     'item_color_id',
     'item_color_name',
-    'item_color_slug',
-    'item_color_description',
+    'item_color_code',
     'item_color_created_at',
     'item_color_created_by',
   ];
@@ -29,9 +28,8 @@ class Color extends Model
   public $searching = 'item_color_name';
   public $datatable = [
     'item_color_id'          => [false => 'ID'],
+    'item_color_code'        => [true => 'Color'],
     'item_color_name'        => [true => 'Name'],
-    'item_color_slug'        => [true => 'Slug'],
-    'item_color_description' => [true => 'Description'],
     'item_color_created_at'  => [false => 'Created At'],
     'item_color_created_by'  => [false => 'Updated At'],
   ];

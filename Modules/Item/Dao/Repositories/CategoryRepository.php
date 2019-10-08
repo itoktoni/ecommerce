@@ -59,42 +59,4 @@ class CategoryRepository extends Category implements MasterInterface
     {
         return $this->whereIn($this->getKeyName(), $in)->get();
     }
-
-    public static function boot()
-    {
-        parent::boot();
-        parent::saving(function ($model) {
-
-            $file = 'item_category_file';
-            if (request()->has($file)) {
-                $image = $model->item_category_image;
-                if ($image) {
-                    Helper::removeImage($image, Helper::getTemplate(__CLASS__));
-                }
-
-                $file = request()->file($file);
-                $name = Helper::uploadImage($file, Helper::getTemplate(__CLASS__));
-                $model->item_category_image = $name;
-            }
-
-            if ($model->item_category_name && empty($model->item_category_slug)) {
-                $model->item_category_slug = Str::slug($model->item_category_name);
-            }
-
-            if (Cache::has('item_category_api')) {
-                Cache::forget('item_category_api');
-            }
-        });
-
-        parent::deleting(function ($model) {
-            if (request()->has('id')) {
-                $data = $model->getDataIn(request()->get('id'));
-                if ($data) {
-                    foreach ($data as $value) {
-                        Helper::removeImage($value->item_category_image, Helper::getTemplate(__CLASS__));
-                    }
-                }
-            }
-        });
-    }
 }

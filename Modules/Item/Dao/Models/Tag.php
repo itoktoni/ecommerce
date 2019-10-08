@@ -2,6 +2,8 @@
 
 namespace Modules\Item\Dao\Models;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
@@ -40,4 +42,20 @@ class Tag extends Model
     '1' => ['Active', 'primary'],
     '0' => ['Not Active', 'danger'],
   ];
+
+
+  public static function boot()
+  {
+    parent::boot();
+    parent::saving(function ($model) {
+
+      if ($model->item_tag_name && empty($model->item_tag_slug)) {
+        $model->item_tag_slug = Str::slug($model->item_tag_name);
+      }
+
+      if (Cache::has('item_tag_api')) {
+        Cache::forget('item_tag_api');
+      }
+    });
+  }
 }
