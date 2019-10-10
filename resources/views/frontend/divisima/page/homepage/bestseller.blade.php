@@ -4,141 +4,45 @@
         <div class="section-title">
             <h2>BROWSE TOP SELLING PRODUCTS</h2>
         </div>
-        <ul class="product-filter-menu">
-            <li><a href="#">TOPS</a></li>
-            <li><a href="#">JUMPSUITS</a></li>
-            <li><a href="#">LINGERIE</a></li>
-            <li><a href="#">JEANS</a></li>
-            <li><a href="#">DRESSES</a></li>
-            <li><a href="#">COATS</a></li>
-            <li><a href="#">JUMPERS</a></li>
-            <li><a href="#">LEGGINGS</a></li>
+        <ul class="product-filter-menu text-center">
+            @isset($public_category)
+            @foreach ($public_category as $home_category)
+            <li>
+                <a href="{{ route('single_category', ['slug' => $home_category->item_category_slug]) }}">
+                    {{ strtoupper($home_category->item_category_name) }}
+                </a>
+            </li>
+            @endforeach
+            @endisset
         </ul>
         <div class="row">
+            @foreach ($public_product->sortByDesc('item_product_counter')->slice(0,8)->all() as $homepage_public)
             <div class="col-lg-3 col-sm-6">
                 <div class="product-item">
                     <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/5.jpg') }}" alt="">
+                        <a href="{{ route('single_product', ['slug' => $homepage_public->item_product_slug]) }}">
+                            <img src="{{ Helper::files('product/'.$homepage_public->item_product_image) }}"
+                                alt="{{ $homepage_public->item_product_name }}">
+                        </a>
                         <div class="pi-links">
                             <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                            @auth
                             <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                            @endauth
                         </div>
                     </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <div class="tag-sale">ON SALE</div>
-                        <img src="{{ Helper::frontend('img/product/6.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                    <a href="{{ route('single_product', ['slug' => $homepage_public->item_product_slug]) }}">
+                        <div class="pi-text">
+                            <h6>{{ number_format($homepage_public->item_product_sell) }}</h6>
+                            <p>{{ $homepage_public->item_product_name }}</p>
                         </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Black and White Stripes Dress</p>
-                    </div>
+                    </a>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/7.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/8.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/9.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/10.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Black and White Stripes Dress</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/11.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="{{ Helper::frontend('img/product/12.jpg') }}" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>$35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
         <div class="text-center pt-5">
-            <button class="site-btn sb-line sb-dark">LOAD MORE</button>
+            <a href="{{ route('shop') }}" class="site-btn sb-line sb-dark">LOAD MORE</a>
         </div>
     </div>
 </section>

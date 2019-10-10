@@ -6,8 +6,8 @@
 	<div class="container">
 		<h4>About Page</h4>
 		<div class="site-pagination">
-			<a href="">Home</a> /
-			<a href="">about</a>
+			<a href="{{ Helper::base_url() }}">Home</a> /
+			<a href="{{ route('about') }}">About</a>
 		</div>
 	</div>
 </div>

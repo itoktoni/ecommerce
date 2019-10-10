@@ -311,25 +311,23 @@ class Helper
     public static function createOption($option, $placeholder = true, $raw = false, $cache = false)
     {
         if (is_object($option)) {
-            if (!Cache::has($option->getTable() . '_api')) {
-                $data = $option->dataRepository()->get();
-                if (!$raw) {
-                    $data = $data->pluck($option->searching, $option->getKeyName());
-                }
-                if ($placeholder) {
-                    $data = $data->prepend('- Select ' . self::getNameTable($option->getTable()) . ' -', '');
-                }
-
-                if ($cache) {
-                    Cache::put($option->getTable() . '_api', $data, config('website.cache'));
-                }
-            }
-            if ($cache) {
+            $data = $option->dataRepository()->get();
+            if ($cache && !Cache::has($option->getTable() . '_api')) {
+                Cache::put($option->getTable() . '_api', $data, config('website.cache'));
+                $data = Cache::get($option->getTable() . '_api');
+            } else if ($cache && Cache::has($option->getTable() . '_api')) {
                 $data = Cache::get($option->getTable() . '_api');
             }
 
             if (empty($data)) {
                 return [];
+            }
+
+            if (!$raw) {
+                $data = $data->pluck($option->searching, $option->getKeyName());
+            }
+            if ($placeholder) {
+                $data = $data->prepend('- Select ' . self::getNameTable($option->getTable()) . ' -', '');
             }
 
             return $data;

@@ -4,20 +4,20 @@ namespace Modules\Item\Http\Controllers;
 
 use Helper;
 use Plugin\Response;
-use Modules\Item\Models\Unit;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
-use Modules\Item\Dao\Repositories\UnitRepository;
+use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
-use Modules\Item\Dao\Repositories\CurrencyRepository;
-use Modules\Item\Dao\Repositories\MaterialRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\SizeRepository;
+use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Item\Http\Services\ProductService;
-use Modules\Production\Dao\Repositories\VendorRepository;
 
 class ProductController extends Controller
 {
     public $template;
+    public $folder;
     public static $model;
 
     public function __construct()
@@ -25,6 +25,7 @@ class ProductController extends Controller
         if (self::$model == null) {
             self::$model = new ProductRepository();
         }
+        $this->folder = 'Item';
         $this->template  = Helper::getTemplate(__class__);
     }
 
@@ -35,33 +36,35 @@ class ProductController extends Controller
 
     private function share($data = [])
     {
-        $unit = Helper::createOption((new UnitRepository()));
+        $brand = Helper::createOption((new BrandRepository()));
         $category = Helper::createOption((new CategoryRepository()));
-        $currency = Helper::createOption((new CurrencyRepository()));
-        $material = Helper::createOption((new MaterialRepository()));
-        $production = Helper::createOption((new VendorRepository()));
+        $tag = Helper::createOption((new TagRepository()), false);
+        $color = Helper::createOption((new ColorRepository()));
+        $size = Helper::createOption((new SizeRepository()));
 
         $view = [
             'key'       => self::$model->getKeyName(),
-            'unit'      => $unit,
+            'brand'      => $brand,
             'category'  => $category,
-            'currency'  => $currency,
-            'material'  => $material,
-            'production'  => $production,
+            'tag'  => $tag,
+            'color'  => $color,
+            'size'  => $size,
         ];
 
         return array_merge($view, $data);
     }
 
-    public function create(ProductService $service)
+    public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
             $service->save(self::$model);
         }
-        return view(Helper::setViewCreate())->with($this->share());
+        return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+            'model' => self::$model,
+        ]));
     }
 
-    public function update(ProductService $service)
+    public function update(MasterService $service)
     {
         if (request()->isMethod('POST')) {
             $service->update(self::$model);
@@ -71,10 +74,23 @@ class ProductController extends Controller
         if (request()->has('code')) {
             $data = $service->show(self::$model);
 
-            return view(Helper::setViewUpdate())->with($this->share([
+            return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName()
             ]));
+        }
+    }
+
+    public function upload()
+    {
+        if (request()->has('code')) {
+
+            $code = request()->get('code');
+            $image = request()->file('file');
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path('files/product_detail'), $imageName);
+
+            return response()->json(['success' => $imageName]);
         }
     }
 
@@ -87,9 +103,12 @@ class ProductController extends Controller
     public function data(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-            $datatable = $service->datatable(self::$model);
+            $datatable = $service->setRaw(['item_product_image'])->datatable(self::$model);
             $datatable->editColumn('item_product_sell', function ($select) {
                 return number_format($select->item_product_sell);
+            });
+            $datatable->editColumn('item_product_image', function ($select) {
+                return Helper::createImage(Helper::getTemplate(__CLASS__) . '/thumbnail_' . $select->item_product_image);
             });
             return $datatable->make(true);
         }

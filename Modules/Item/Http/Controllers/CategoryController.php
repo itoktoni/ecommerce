@@ -72,9 +72,15 @@ class CategoryController extends Controller
     public function data(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-            $datatable = $service->setRaw(['item_category_image'])->datatable(self::$model);
+            $datatable = $service->setRaw(['item_category_image', 'item_category_homepage'])->datatable(self::$model);
             $datatable->editColumn('item_category_image', function ($select) {
                 return Helper::createImage(Helper::getTemplate(__CLASS__) . '/thumbnail_' . $select->item_category_image);
+            });
+            $datatable->editColumn('item_category_homepage', function ($data) {
+                return Helper::createStatus([
+                    'value'  => $data->item_category_homepage,
+                    'status' => [0 => ['No', 'warning'], 1 => ['Home', 'success']],
+                ]);
             });
             return $datatable->make(true);
         }

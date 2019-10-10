@@ -43,7 +43,9 @@ Please checkout my other packages - they are all free, well written and some of 
 
 ## Compatibility
 
-The package is compatible with **Laravel** and **Lumen** versions `5.5`, `5.6`, `5.7`, `5.8` and `6`.
+The package is compatible with **Laravel** versions `5.5`, `5.6`, `5.7`, `5.8` and `6`
+
+and **Lumen** versions `5.5`, `5.6`, `5.7`, `5.8`.
 
 ## Installation
 
@@ -73,7 +75,7 @@ class User extends Model
     use HasCustomCasts;
 
     protected $casts = [
-        'is_admin' => boolean // <-- Laravel default cast type
+        'is_admin' => 'boolean', // <-- Laravel default cast type
         'name' => NameCast::class // <-- Our custom cast class (follow section below)
     ];
 }
@@ -156,6 +158,43 @@ public function updated()
 Beside `updated` method, we can as well create other methods for standard model events:
 `retrieved`, `creating`, `created`, `updating`, `saving`, `saved`, `deleting`, `deleted`, `restoring` and `restored`.
 
+### Using aliased casts
+
+If you find easier to use aliased custom casts, in other words:
+
+```php
+protected $casts = [
+    'avatar' => 'image' // <-- You prefear this ...
+    // ---
+    'avatar' => ImageCast::class // <-- ... over of this
+];
+```
+
+To make the magic happens, we need to add service provider to `providers` array:
+
+```php
+// File: config/app.php
+
+'providers' => [
+    // ...
+
+    /*
+     * Package Service Providers...
+     */
+    Vkovic\LaravelCustomCasts\CustomCastsServiceProvider::class
+
+    // ...
+]
+```
+
+After provider is added, we should publish the config which will be used to connect our aliases with corresponding custom cast classes:
+
+```bash
+php artisan vendor:publish --provider="Vkovic\LaravelCustomCasts\CustomCastsServiceProvider"
+```
+
+This command should create config file located at `config/custom_casts.php`. Inspect it and everything else should be clear.
+
 ### Other functionality
 
 As you can assume from code above, we can easily access casted attribute name as well as instance of underlying model.
@@ -177,6 +216,7 @@ Beside this we can retrieve all casted attributes and their corresponding classe
 
 dd($this->getCustomCasts()); // ['name' => 'App/CustomCasts/NameCast']
 ```
+ 
 
 ### More examples
 

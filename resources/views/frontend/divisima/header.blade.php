@@ -44,7 +44,7 @@
                 <li><a href="{{ route('category') }}">Category</a>
                     @isset($public_category)
                     <ul class="sub-menu">
-                        @foreach ($public_category as $category_item)
+                        @foreach ($public_category->where('item_category_homepage', 1) as $category_item)
                         <li><a
                                 href="{{ route('single_category', ['slug' => $category_item->item_category_slug]) }}">{{ ucfirst($category_item->item_category_name) }}</a>
                         </li>

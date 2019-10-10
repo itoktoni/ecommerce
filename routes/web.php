@@ -89,6 +89,7 @@ Route::get('/promo', 'PublicController@promo')->name('promo');
 Route::get('/promo/{slug}', 'PublicController@promo')->name('single_promo');
 
 Route::get('/brand/{slug}', 'PublicController@brand')->name('single_brand');
+Route::get('/product/{slug}', 'PublicController@product')->name('single_product');
 
 Route::get('/confirmation', 'PublicController@confirmation')->name('confirmation');
 

@@ -21,7 +21,9 @@
 @if (isset($array) && in_array('basic', $array))
 @push('javascript')
 <script>
-    $('.basic').summernote();
+    $('.basic').summernote({
+        height: 200
+    });
 </script>
 @endpush
 @endif

@@ -6,8 +6,8 @@
 	<div class="container">
 		<h4>Catalog Product</h4>
 		<div class="site-pagination">
-			<a href="">Home</a> /
-			<a href="">Shop</a> /
+			<a href="{{ Helper::base_url() }}">Home</a> /
+			<a href="{{ route('shop') }}">Shop</a>
 		</div>
 	</div>
 </div>

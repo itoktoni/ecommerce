@@ -77,5 +77,5 @@ return array(
     'Appstract\\Options\\' => array($vendorDir . '/appstract/laravel-options/src'),
     'App\\' => array($baseDir . '/app'),
     'Alkhachatryan\\LaravelWebConsole\\' => array($baseDir . '/plugin/alkhachatryan/laravel-web-console/src'),
-    '' => array($vendorDir . '/nesbot/carbon/src', $vendorDir . '/larapack/config-writer/src'),
+    '' => array($vendorDir . '/larapack/config-writer/src', $vendorDir . '/nesbot/carbon/src'),
 );

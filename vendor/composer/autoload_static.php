@@ -12,8 +12,8 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
+        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
@@ -25,6 +25,7 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         '5f2edeb18ca19ebd9ee6da72dc9f4292' => __DIR__ . '/..' . '/biscolab/laravel-recaptcha/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '9f394da3192a168c4633675768d80428' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/helpers.php',
+        '8dc8e1be6a930636e31bc1fcfd173572' => __DIR__ . '/..' . '/vkovic/laravel-custom-casts/src/helpers.php',
         '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
         'bdc12d774ffe1c22db8209002cc77337' => __DIR__ . '/../..' . '/plugin/Helper.php',
         'edf2acaddddad78269a170546af4b6f3' => __DIR__ . '/../..' . '/plugin/Notes.php',
@@ -458,8 +459,8 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
-        1 => __DIR__ . '/..' . '/larapack/config-writer/src',
+        0 => __DIR__ . '/..' . '/larapack/config-writer/src',
+        1 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -524,6 +525,7 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'App\\Dao\\Models\\ModuleConnectionAction' => __DIR__ . '/../..' . '/app/Dao/Models/ModuleConnectionAction.php',
         'App\\Dao\\Repositories\\ActionRepository' => __DIR__ . '/../..' . '/app/Dao/Repositories/ActionRepository.php',
         'App\\Dao\\Repositories\\GroupModuleRepository' => __DIR__ . '/../..' . '/app/Dao/Repositories/GroupModuleRepository.php',
+        'App\\Dao\\Repositories\\GroupModuleRepository2' => __DIR__ . '/../..' . '/app/Dao/Repositories/GroupModuleRepository2.php',
         'App\\Dao\\Repositories\\GroupUserRepository' => __DIR__ . '/../..' . '/app/Dao/Repositories/GroupUserRepository.php',
         'App\\Dao\\Repositories\\ModuleActionRepository' => __DIR__ . '/../..' . '/app/Dao/Repositories/ModuleActionRepository.php',
         'App\\Dao\\Repositories\\ModuleRepository' => __DIR__ . '/../..' . '/app/Dao/Repositories/ModuleRepository.php',
@@ -2472,9 +2474,18 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'Modules\\Item\\Http\\Services\\ProductService' => __DIR__ . '/../..' . '/Modules/Item/Http/Services/ProductService.php',
         'Modules\\Item\\Providers\\ModuleServiceProvider' => __DIR__ . '/../..' . '/Modules/Item/Providers/ModuleServiceProvider.php',
         'Modules\\Item\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Item/Providers/RouteServiceProvider.php',
+        'Modules\\Marketing\\Dao\\Models\\Page' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Models/Page.php',
+        'Modules\\Marketing\\Dao\\Models\\Promo' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Models/Promo.php',
         'Modules\\Marketing\\Dao\\Models\\Slider' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Models/Slider.php',
+        'Modules\\Marketing\\Dao\\Models\\Sosmed' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Models/Sosmed.php',
+        'Modules\\Marketing\\Dao\\Repositories\\PageRepository' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Repositories/PageRepository.php',
+        'Modules\\Marketing\\Dao\\Repositories\\PromoRepository' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Repositories/PromoRepository.php',
         'Modules\\Marketing\\Dao\\Repositories\\SliderRepository' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Repositories/SliderRepository.php',
+        'Modules\\Marketing\\Dao\\Repositories\\SosmedRepository' => __DIR__ . '/../..' . '/Modules/Marketing/Dao/Repositories/SosmedRepository.php',
+        'Modules\\Marketing\\Http\\Controllers\\PageController' => __DIR__ . '/../..' . '/Modules/Marketing/Http/Controllers/PageController.php',
+        'Modules\\Marketing\\Http\\Controllers\\PromoController' => __DIR__ . '/../..' . '/Modules/Marketing/Http/Controllers/PromoController.php',
         'Modules\\Marketing\\Http\\Controllers\\SliderController' => __DIR__ . '/../..' . '/Modules/Marketing/Http/Controllers/SliderController.php',
+        'Modules\\Marketing\\Http\\Controllers\\SosmedController' => __DIR__ . '/../..' . '/Modules/Marketing/Http/Controllers/SosmedController.php',
         'Modules\\Marketing\\Providers\\ModuleServiceProvider' => __DIR__ . '/../..' . '/Modules/Marketing/Providers/ModuleServiceProvider.php',
         'Modules\\Marketing\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Marketing/Providers/RouteServiceProvider.php',
         'Modules\\Production\\Dao\\Models\\Packaging' => __DIR__ . '/../..' . '/Modules/Production/Dao/Models/Packaging.php',
@@ -4063,6 +4074,7 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'UpdateHelper\\UpdateHelperInterface' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelperInterface.php',
         'UsersTableSeeder' => __DIR__ . '/../..' . '/database/seeds/UsersTableSeeder.php',
         'Vkovic\\LaravelCustomCasts\\CustomCastBase' => __DIR__ . '/..' . '/vkovic/laravel-custom-casts/src/CustomCastBase.php',
+        'Vkovic\\LaravelCustomCasts\\CustomCastsServiceProvider' => __DIR__ . '/..' . '/vkovic/laravel-custom-casts/src/CustomCastsServiceProvider.php',
         'Vkovic\\LaravelCustomCasts\\HasCustomCasts' => __DIR__ . '/..' . '/vkovic/laravel-custom-casts/src/HasCustomCasts.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',

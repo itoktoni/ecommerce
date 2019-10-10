@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
-use Jackiedo\DotenvEditor\Facades\DotenvEditor;
-use Helper;
-use App;
 use DB;
+use App;
+use Helper;
 use App\Enums\OptionSlider;
-use Modules\Item\Dao\Repositories\BrandRepository;
-use Modules\Item\Dao\Repositories\CategoryRepository;
-use Modules\Item\Dao\Repositories\ColorRepository;
-use Modules\Item\Dao\Repositories\SizeRepository;
-use Modules\Item\Dao\Repositories\TagRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Modules\Item\Dao\Models\Product;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Artisan;
 use Modules\Marketing\Dao\Models\Slider;
+use Jackiedo\DotenvEditor\Facades\DotenvEditor;
+use Modules\Item\Dao\Repositories\TagRepository;
+use Modules\Item\Dao\Repositories\SizeRepository;
+use Modules\Item\Dao\Repositories\BrandRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
@@ -28,6 +30,7 @@ class PublicController extends Controller
     {
         view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true));
         view()->share('public_sosmed', Helper::createOption((new SosmedRepository()), false, true, true));
+        view()->share('public_product', Helper::createOption((new ProductRepository()), false, true, true));
     }
 
     public function index($slider = false)
@@ -156,7 +159,6 @@ class PublicController extends Controller
 
     public function install()
     {
-
         if (request()->isMethod('POST')) {
 
             $file = DotenvEditor::load('local.env');
@@ -202,12 +204,12 @@ class PublicController extends Controller
         return View('frontend.' . config('website.frontend') . '.pages.konfirmasi');
     }
 
-    public function product()
+    public function product($slug = false)
     {
-        $product = new \App\Product();
-
-        return View('frontend.' . config('website.frontend') . '.pages.product')->with([
-            'product' => $product->baca()->Where('active', '!=', 0)->get(),
+        $data_product = new ProductRepository();
+        $product = $data_product->slugRepository($slug);
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'single_product' => $product,
         ]);
     }
 

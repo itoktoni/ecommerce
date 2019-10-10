@@ -5,29 +5,24 @@ namespace Modules\Item\Dao\Repositories;
 use Helper;
 use Plugin\Notes;
 use Illuminate\Support\Str;
-use Modules\Item\Dao\Models\Unit;
+use Modules\Item\Dao\Models\Brand;
 use Modules\Item\Dao\Models\Product;
 use Modules\Item\Dao\Models\Category;
-use Modules\Item\Dao\Models\Currency;
-use Modules\Item\Dao\Models\Material;
-use Modules\Production\Dao\Models\Vendor;
 use App\Dao\Interfaces\MasterInterface;
+use Modules\Production\Dao\Models\Vendor;
 
 class ProductRepository extends Product implements MasterInterface
 {
-    private static $unit;
+    private static $brand;
     private static $category;
-    private static $material;
-    private static $currency;
-    private static $production;
 
-    public static function getUnit()
+    public static function getBrand()
     {
-        if (self::$unit == null) {
-            self::$unit = new Unit();
+        if (self::$brand == null) {
+            self::$brand = new Brand();
         }
 
-        return self::$unit;
+        return self::$brand;
     }
 
     public static function getCategory()
@@ -39,47 +34,15 @@ class ProductRepository extends Product implements MasterInterface
         return self::$category;
     }
 
-    public static function getCurrency()
-    {
-        if (self::$currency == null) {
-            self::$currency = new Currency();
-        }
-
-        return self::$currency;
-    }
-
-    public static function getMaterial()
-    {
-        if (self::$material == null) {
-            self::$material = new Material();
-        }
-
-        return self::$material;
-    }
-
-    public static function getProduction()
-    {
-        if (self::$production == null) {
-            self::$production = new Vendor();
-        }
-
-        return self::$production;
-    }
-    
     public function dataRepository()
     {
-        $unit = self::getUnit();
+        $brand = self::getBrand();
         $category = self::getCategory();
-        $currency = self::getCurrency();
-        $material = self::getMaterial();
-        $production = self::getProduction();
         $list = Helper::dataColumn($this->datatable, $this->primaryKey);
         $query = $this->select($list)
-            ->leftJoin($unit->getTable(), $unit->getKeyName(), 'item_product_item_unit_id')
+            ->leftJoin($brand->getTable(), $brand->getKeyName(), 'item_product_item_brand_id')
             ->leftJoin($category->getTable(), $category->getKeyName(), 'item_product_item_category_id')
-            ->leftJoin($currency->getTable(), $currency->getKeyName(), 'item_product_item_currency_id')
-            ->leftJoin($material->getTable(), $material->getKeyName(), 'item_product_item_material_id')
-            ->leftJoin($production->getTable(), $production->getKeyName(), 'item_product_production_vendor_id');
+            ->orderBy('item_product_created_at', 'DESC');
         return $query;
     }
 
@@ -113,6 +76,14 @@ class ProductRepository extends Product implements MasterInterface
         }
     }
 
+    public function slugRepository($slug, $relation = false)
+    {
+        if ($relation) {
+            return $this->with($relation)->where('item_product_slug', $slug)->firstOrFail();
+        }
+        return $this->where('item_product_slug', $slug)->firstOrFail();
+    }
+
     public function showRepository($id, $relation)
     {
         if ($relation) {
@@ -120,33 +91,4 @@ class ProductRepository extends Product implements MasterInterface
         }
         return $this->findOrFail($id);
     }
-
-    public static function boot()
-    {
-        parent::boot();
-        parent::saving(function ($model) {
-            if ($model->item_product_name && empty($model->item_product_slug)) {
-                $model->item_product_slug = Str::slug($model->item_product_name);
-            }
-            $file = $model->item_product_image;
-            if (!empty($file)) //handle images
-            {
-                $file = $model->item_product_image;
-                if (!empty($file)) //handle images
-                {
-                    $name = Helper::upload($file, Helper::getTemplate(__CLASS__));
-                    $model->item_product_image = $name;
-                }
-            }
-
-            $model->item_product_created_by = auth()->user()->username;
-            $model->item_product_updated_by = auth()->user()->username;
-        });
-
-        parent::updating(function ($model) {
-            $name = $model->getOriginal('item_product_image');
-            Helper::remove($name, Helper::getTemplate(__CLASS__));
-        });
-    }
-
 }
