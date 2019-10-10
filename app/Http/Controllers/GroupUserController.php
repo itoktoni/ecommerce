@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Repositories\GroupModuleRepository;
 use Helper;
 use Plugin\Response;
 use App\Dao\Repositories\GroupUserRepository;
@@ -30,7 +31,7 @@ class GroupUserController extends Controller
 
     private function share($data = [])
     {
-        $group = Helper::createOption('group_module_api', true)
+        $group = Helper::createOption((new GroupModuleRepository()), false, true, true)
             ->pluck('group_module_name', 'group_module_code')
             ->prepend('- Select Group -', '');
 
