@@ -5,6 +5,7 @@ namespace Modules\Item\Dao\Repositories;
 use Helper;
 use Plugin\Notes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Models\Brand;
 use Modules\Item\Dao\Models\Product;
 use Modules\Item\Dao\Models\Category;
@@ -74,6 +75,24 @@ class ProductRepository extends Product implements MasterInterface
         } catch (\Illuminate\Database\QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
+    }
+
+    public function deleteImageDetail($id)
+    {
+        return DB::table('item_product_image')->where('item_product_image_file', $id)->delete();
+    }
+
+    public function getImageDetail($id)
+    {
+        return DB::table('item_product_image')->where('item_product_image_item_product_id', $id)->get();
+    }
+
+    public function saveImageDetail($id, $image)
+    {
+        DB::table('item_product_image')->insert([
+            'item_product_image_item_product_id' => $id,
+            'item_product_image_file' => $image,
+        ]);
     }
 
     public function slugRepository($slug, $relation = false)

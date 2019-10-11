@@ -3,16 +3,19 @@
 namespace Modules\Item\Http\Controllers;
 
 use Helper;
+use Plugin\Notes;
 use Plugin\Response;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
+use Intervention\Image\Facades\Image;
+use Modules\Item\Http\Services\ProductService;
+use Modules\Item\Dao\Repositories\TagRepository;
+use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\BrandRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
-use Modules\Item\Dao\Repositories\ColorRepository;
-use Modules\Item\Dao\Repositories\SizeRepository;
-use Modules\Item\Dao\Repositories\TagRepository;
-use Modules\Item\Http\Services\ProductService;
 
 class ProductController extends Controller
 {
@@ -76,8 +79,20 @@ class ProductController extends Controller
 
             return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
                 'model'        => $data,
+                'image_detail' => self::$model->getImageDetail($data->item_product_id),
                 'key'          => self::$model->getKeyName()
             ]));
+        }
+    }
+
+    public function delete_image()
+    {
+        if (request()->has('code')) {
+            $code = request()->get('code');
+            self::$model->deleteImageDetail($code);
+
+            Helper::removeImage($code, 'product_detail');
+            return redirect()->back();
         }
     }
 
@@ -86,11 +101,26 @@ class ProductController extends Controller
         if (request()->has('code')) {
 
             $code = request()->get('code');
-            $image = request()->file('file');
-            $imageName = $image->getClientOriginalName();
-            $image->move(public_path('files/product_detail'), $imageName);
+            $path = public_path('files/product_detail');
+            $photos = request()->file('file');
 
-            return response()->json(['success' => $imageName]);
+            for ($i = 0; $i < count($photos); $i++) {
+                $photo = $photos[$i];
+                $name = sha1(date('YmdHis') . str_random(30));
+                $save_name = $name . '.' . $photo->getClientOriginalExtension();
+                $resize_name = 'thumbnail_' . $save_name;
+
+                Image::make($photo)
+                    ->resize(250, null, function ($constraints) {
+                        $constraints->aspectRatio();
+                    })
+                    ->save($path . '/' . $resize_name);
+
+                $photo->move($path, $save_name);
+                self::$model->saveImageDetail($code, $save_name);
+            }
+
+            // return Notes::create('Data upload Success');
         }
     }
 

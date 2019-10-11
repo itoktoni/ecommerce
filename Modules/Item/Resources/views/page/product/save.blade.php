@@ -30,16 +30,8 @@
         </div>
         {!! Form::close() !!}
         <br>
-        <div class="panel panel-default">
-            <div class="panel-body line">
-                <div class="col-md-12 col-lg-12">
-                    <div class="panel panel-default">
-                        @include($folder.'::page.'.$template.'.upload')
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @include($folder.'::page.'.$template.'.upload')
+       
     </div>
 </div>
 

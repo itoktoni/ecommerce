@@ -929,3 +929,33 @@ td img {
     height: 60px !important;
     padding-right: 30px !important;
 }
+
+#dropimage {
+    margin-top: 20px;
+}
+
+#dropimage a {
+    text-decoration: none;
+}
+
+#dropimage img {
+    margin-right: 5px;
+    width: 80px !important;
+}
+
+#dropimage span {
+    width: 80px !important;
+    height: 30px;
+    text-align: center;
+    background-color: #191c21;
+    color: black;
+    background: rgba(192, 195, 196, 0.5);
+    padding: 3px 5px;
+    position: absolute;
+    bottom: 0;
+}
+
+#dropimage img:hover {
+    background: grey;
+    opacity: 0.5;
+}

@@ -2497,3 +2497,22 @@ ol {
 #category .pi-text p {
     color: #faf8f9;
 }
+
+.pagination {
+    text-align: center;
+    margin: 0px auto;
+}
+
+.page-item.active .page-link {
+    background-color: #f51167;
+    color: #fff;
+    border: none;
+}
+
+.page-link {
+    color: #f51167;
+}
+
+.page-link:hover {
+    color: #000;
+}

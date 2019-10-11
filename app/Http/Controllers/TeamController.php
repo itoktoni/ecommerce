@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\Repositories\GroupUserRepository;
 use Helper;
 use Plugin\Response;
 use App\Dao\Repositories\TeamRepository;
@@ -28,7 +29,7 @@ class TeamController extends Controller
     private function share($data = [])
     {
         $status = Helper::shareStatus(self::$model->status)->prepend('- Select Status -', '');
-        $group = Helper::createOption('group_user_api', true)
+        $group = Helper::createOption((new GroupUserRepository()), true)
             ->pluck('group_user_name', 'group_user_code')->prepend('- Select Group -', '');
 
         $view = [

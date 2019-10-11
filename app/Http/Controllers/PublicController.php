@@ -64,11 +64,14 @@ class PublicController extends Controller
         $size = Helper::createOption(new SizeRepository(), false, true)->pluck('item_size_code');
         $tag = Helper::createOption(new TagRepository(), false, true)->pluck('item_tag_slug');
         $brand = Helper::createOption(new BrandRepository(), false, true)->pluck('item_brand_slug', 'item_brand_name');
+        
+        $product = ProductRepository::paginate(9);
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'color' => $color,
             'size' => $size,
             'tag' => $tag,
             'brand' => $brand,
+            'product' => $product,
         ]);
     }
 
@@ -208,8 +211,12 @@ class PublicController extends Controller
     {
         $data_product = new ProductRepository();
         $product = $data_product->slugRepository($slug);
+        $product->item_product_counter = $product->item_product_counter + 1;
+        $product->save();
+        $product_image = $data_product->getImageDetail($product->item_product_id);
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'single_product' => $product,
+            'product_image' => $product_image,
         ]);
     }
 

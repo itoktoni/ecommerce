@@ -26,15 +26,13 @@
 				</div>
 				<div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
 					<div class="product-thumbs-track">
-						<div class="pt active" data-imgbigurl="img/single-product/1.jpg">
-							<img src="img/single-product/thumb-1.jpg" alt="">
+						@foreach ($product_image as $item_product_image)
+						<div class="pt"
+							data-imgbigurl="{{ Helper::files('product_detail/'.$item_product_image->item_product_image_file) }}">
+							<img src="{{ Helper::files('product_detail/thumbnail_'.$item_product_image->item_product_image_file) }}"
+								alt="{{ $item_product_image->item_product_image_file }}">
 						</div>
-						<div class="pt" data-imgbigurl="img/single-product/2.jpg"><img
-								src="img/single-product/thumb-2.jpg" alt=""></div>
-						<div class="pt" data-imgbigurl="img/single-product/3.jpg"><img
-								src="img/single-product/thumb-3.jpg" alt=""></div>
-						<div class="pt" data-imgbigurl="img/single-product/4.jpg"><img
-								src="img/single-product/thumb-4.jpg" alt=""></div>
+						@endforeach
 					</div>
 				</div>
 			</div>
@@ -92,7 +90,6 @@
 						</div>
 						<div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
 							<div class="panel-body">
-								<img src="./img/cards.png" alt="">
 								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so
 									dales. Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus.
 									Ut consectetur lacus leo, non scelerisque nulla euismod nec.</p>
