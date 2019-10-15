@@ -1,4 +1,3 @@
-<!-- Footer section -->
 <section class="footer-section">
     <div class="container">
         <div class="row">
@@ -55,7 +54,7 @@
             </div>
             <div class="col-lg-3 col-sm-6">
                 <div class="footer-widget contact-widget">
-                    <h2>Questions</h2>
+                    <h2>Address</h2>
                     <div class="con-info">
                         <span>C.</span>
                         <p>Your Company Ltd </p>
@@ -79,11 +78,9 @@
     <div class="social-links-warp">
         <div class="container">
             @include(Helper::setExtendFrontend('sosmed'))
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             <p class="text-white text-center mt-5">{{ config('website.footer') }}</p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
+            {{ dump(Cart::getContent()) }}
         </div>
     </div>
 </section>
-<!-- Footer section end -->

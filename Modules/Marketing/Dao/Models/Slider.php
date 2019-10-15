@@ -43,4 +43,9 @@ class Slider extends Model
     'marketing_slider_image'        => [true => 'Images'],
     'marketing_slider_created_by'  => [false => 'Updated At'],  
   ];
+
+  public $status = [
+    '1' => ['Active', 'primary'],
+    '0' => ['Not Active', 'danger'],
+  ];
 }

@@ -27,11 +27,18 @@
         {!! $errors->first($form.'file', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4">
-        {!! Form::textarea($form.'description', null, ['class' => 'form-control', 'rows' => '5']) !!}
+    {!! Form::label('name', 'Status', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+        {{ Form::select($form.'status', $status, null, ['class'=> 'form-control']) }}
+        {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
     </div>
 
+</div>
+<div class="form-group">
+    {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-10">
+        {!! Form::textarea($form.'description', null, ['class' => 'form-control', 'rows' => '5']) !!}
+    </div>
 </div>
 <div class="form-group">
 

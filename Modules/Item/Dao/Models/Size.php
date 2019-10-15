@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Size extends Model
 {
   protected $table = 'item_size';
-  protected $primaryKey = 'item_size_id';
+  protected $primaryKey = 'item_size_code';
   protected $fillable = [
-    'item_size_id',
     'item_size_code',
     'item_size_name',
     'item_size_description',
@@ -18,7 +17,7 @@ class Size extends Model
   ];
 
   public $timestamps = true;
-  public $incrementing = true;
+  public $incrementing = false;
   public $rules = [
     'item_size_name' => 'required|min:3',
   ];
@@ -27,9 +26,7 @@ class Size extends Model
   const UPDATED_AT = 'item_size_created_by';
 
   public $searching = 'item_size_name';
-  private static $warehouse;
   public $datatable = [
-    'item_size_id'          => [false => 'ID'],
     'item_size_code'       => [true => 'Code'],
     'item_size_name'        => [true => 'Name'],
     'item_size_description' => [true => 'Description'],

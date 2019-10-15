@@ -34,5 +34,5 @@ function convertNumber(strg) {
 }
 
 $(document).ready(function() {
-    $("select").chosen();
+    $("select.form-control").chosen();
 });

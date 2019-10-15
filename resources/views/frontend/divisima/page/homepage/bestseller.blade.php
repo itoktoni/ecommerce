@@ -8,7 +8,7 @@
             @isset($public_category)
             @foreach ($public_category as $home_category)
             <li>
-                <a href="{{ route('single_category', ['slug' => $home_category->item_category_slug]) }}">
+                <a href="{{ route('filters', ['type' => 'category', 'slug' => $home_category->item_category_slug]) }}">
                     {{ strtoupper($home_category->item_category_name) }}
                 </a>
             </li>

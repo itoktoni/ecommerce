@@ -201,6 +201,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Alkhachatryan\LaravelWebConsole\LaravelWebConsoleServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class,
     ],
 
     /*
@@ -260,6 +261,8 @@ return [
         'DotenvEditor' => Jackiedo\DotenvEditor\Facades\DotenvEditor::class,
         'Curl'          => Ixudra\Curl\Facades\Curl::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Notification' => Gloudemans\Notify\Notifications\NotificationFacade::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
     ],
 
 ];

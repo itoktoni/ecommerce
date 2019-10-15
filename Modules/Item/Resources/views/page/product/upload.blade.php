@@ -28,11 +28,12 @@
                 <label class="col-md-2 control-label" for="">Files</label>
                 @foreach ($image_detail as $item_image)
                 @isset($item_image)
-                <div class="col-md-1">
-                <a onclick="return confirm('Are you sure to delete image ?');" href="{{ route('item_product_delete_image', ['code' => $item_image->item_product_image_file]) }}">
+                <div id="{{ $loop->iteration }}" class="col-md-1">
+                    <a class="delete" data="{{ $loop->iteration }}"
+                        href="{{ route('item_product_delete_image', ['code' => $item_image->item_product_image_file]) }}">
                         <img
                             src="{{ Helper::files('product_detail/'.'thumbnail_'.$item_image->item_product_image_file) }}">
-                            <span>Delete</span>
+                        <span>Delete</span>
                     </a>
                 </div>
                 @endisset
@@ -47,12 +48,12 @@
 
 @push('javascript')
 <link rel="stylesheet" href="{{ Helper::backend('vendor/dropzone/dropzone.css') }}">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+<script src="{{ Helper::backend('vendor/dropzone/dropzone.min.js') }}"></script>
 
 <script type="text/javascript">
     Dropzone.options.myDropzone = {
         uploadMultiple: true,
-        parallelUploads: 2,
+        parallelUploads: 5,
         maxFilesize: 8,
         dictFileTooBig: 'Image is larger than 16MB',
         timeout: 10000,
@@ -65,6 +66,29 @@
           setTimeout(function(){location.reload()}, 1000);
         }
     };
+
+    $(document).on('click', '.delete', function(e) {
+        e.preventDefault();
+        var conf = confirm("Are you sure to delete image ?");
+        if (conf == true) {
+            var url = $(this).attr('href');
+            var code = $(this).attr('data');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method : 'POST',
+                success: function (done){
+                    $('#'+code).remove();
+                }
+            });
+        }
+
+        return false;
+    });
 </script>
 
 @endpush

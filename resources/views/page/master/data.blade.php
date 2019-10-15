@@ -66,12 +66,23 @@
                     <table id="datatable" class="responsive table-striped table-condensed table-bordered table-hover">
                         <thead>
                             <tr>
-                                @foreach($fields as $item => $value)<th{!! strpos($value, 'Description' ) !==false
-                                    ? ' id="description"' : '' !!}{!! $value=='Sort' ? ' id="sort"' : '' !!}{!!
-                                    $value=='Type' ? ' id="type"' : '' !!}{!! $value=='Images' || $value=='Active' || $value=='Status' ||
-                                    $value=='Visible' ? ' id="status"' : '' !!}>
-                                    <strong>{{ $value }}</strong></th>
-                                    @endforeach
+                                @php
+                                $status = [
+                                'Images',
+                                'Active',
+                                'Default',
+                                'Status',
+                                'Visible',
+                                'Homepage',
+                                ];
+                                @endphp
+                                @foreach($fields as $item => $value)<th 
+                                {!! strpos($value, 'Description' ) !== false ? ' id="description"' : '' !!}
+                                {!! $value=='Sort' ? ' id="sort"' : '' !!}
+                                {!! $value=='Type' ? ' id="type"' : '' !!}
+                                {!! in_array($value, $status) ? ' id="status"' : '' !!}>
+                                <strong>{{ $value }}</strong></th>
+                                @endforeach
                                     <th width="5" class="center"><input id="checkAll" class="selectall"
                                             onclick="toggle(this)" type="checkbox"></th>
                                     @php

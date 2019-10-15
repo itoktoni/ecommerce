@@ -23,7 +23,7 @@
 					@foreach ($public_category as $item_category)
 					<div class="col-lg-3 col-sm-6">
 						<div class="product-item">
-							<a href="{{ route('single_category', ['slug' => $item_category->item_category_slug]) }}">
+							<a href="{{ route('filters', ['type' => 'category', 'slug' => $item_category->item_category_slug]) }}">
 								<div class="pi-pic">
 									@isset($item_category->item_category_flag)
 									<div class="tag-sale">{{ $item_category->item_category_flag }}</div>

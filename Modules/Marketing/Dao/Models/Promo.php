@@ -19,9 +19,17 @@ class Promo extends Model
     'marketing_promo_description',
     'marketing_promo_page',
     'marketing_promo_image',
-    'marketing_promo_default',
     'marketing_promo_created_at',
     'marketing_promo_created_by',
+    'marketing_promo_default',
+    'marketing_promo_status',
+    'marketing_promo_code',
+    'marketing_promo_matrix',
+    'marketing_promo_user_json',
+    'marketing_promo_start_date',
+    'marketing_promo_end_date',
+    'marketing_promo_maximal',
+    'marketing_promo_type',
   ];
 
   public $timestamps = true;
@@ -38,12 +46,29 @@ class Promo extends Model
   public $datatable = [
     'marketing_promo_id'          => [false => 'ID'],
     'marketing_promo_name'        => [true => 'Name'],
-    'marketing_promo_default'        => [true => 'Status'],
+    'marketing_promo_default'        => [true => 'Default'],
     'marketing_promo_slug'        => [false => 'Slug'],
     'marketing_promo_description' => [true => 'Description'],
     'marketing_promo_image'        => [true => 'Images'],
+    'marketing_promo_status'        => [true => 'Status'],
     'marketing_promo_created_by'  => [false => 'Updated At'],
   ];
+
+  public $status = [
+    '1' => ['Active', 'primary'],
+    '0' => ['Not Active', 'danger'],
+  ];
+
+  public $default = [
+    '1' => ['Active', 'success'],
+    '0' => ['Not Active', 'warning'],
+  ];
+
+  public $type = [
+    '1' => ['Promo', 'success'],
+    '2' => ['Voucher', 'primary'],
+  ];
+
 
   public static function boot()
   {

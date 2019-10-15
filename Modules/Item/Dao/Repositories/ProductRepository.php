@@ -103,7 +103,7 @@ class ProductRepository extends Product implements MasterInterface
         return $this->where('item_product_slug', $slug)->firstOrFail();
     }
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = false)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);

@@ -6,4 +6,5 @@
 <link rel="stylesheet" href="{{ Helper::frontend('css/jquery-ui.min.css') }}" />
 <link rel="stylesheet" href="{{ Helper::frontend('css/owl.carousel.min.css') }}" />
 <link rel="stylesheet" href="{{ Helper::frontend('css/animate.min.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/notiny.min.css') }}" />
 <link rel="stylesheet" href="{{ Helper::frontend('css/style.min.css') }}" />

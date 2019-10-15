@@ -9,6 +9,8 @@ use Modules\Production\Models\Vendor;
 use Modules\Sales\Models\OrderDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\SizeRepository;
 
 class Product extends Model
 {
@@ -25,7 +27,9 @@ class Product extends Model
     'item_product_sell',
     'item_product_item_category_id',
     'item_product_item_brand_id',
-    'item_product_item_tag_id',
+    'item_product_item_color_json',
+    'item_product_item_size_json',
+    'item_product_item_tag_json',
     'item_product_name',
     'item_product_description',
     'item_product_updated_at',
@@ -33,6 +37,8 @@ class Product extends Model
     'item_product_deleted_at',
     'item_product_updated_by',
     'item_product_created_by',
+    'item_product_discount_type',
+    'item_product_discount_value',
   ];
 
   public $timestamps = true;
@@ -51,11 +57,15 @@ class Product extends Model
   public $datatable = [
     'item_product_id'          => [false => 'ID'],
     'item_category_name'        => [true => 'Category'],
-    'item_product_name'        => [true => 'Name'],
+    'item_category_slug'        => [false => 'Category'],
+    'item_product_name'        => [true => 'Group Name'],
     'item_brand_name'        => [true => 'Brand'],
+    'item_brand_slug'        => [false => 'Brand'],
     'item_product_sell'        => [true => 'Price'],
     'item_product_image'        => [true => 'Images'],
     'item_product_slug'        => [false => 'Slug'],
+    'item_product_discount_type'        => [false => 'Slug'],
+    'item_product_discount_value'        => [false => 'Slug'],
     'item_product_description' => [false => 'Description'],
     'item_product_created_at'  => [false => 'Created At'],
     'item_product_created_by'  => [false => 'Updated At'],
@@ -64,6 +74,12 @@ class Product extends Model
   public $status = [
     '1' => ['Active', 'primary'],
     '0' => ['Not Active', 'danger'],
+  ];
+
+  public $promo = [
+    '0' => ['Not Active', 'danger'],
+    '1' => ['Percent', 'primary'],
+    '2' => ['Amount', 'success'],
   ];
 
   public static function boot()
@@ -83,7 +99,33 @@ class Product extends Model
         $model->item_product_image = $name;
       }
 
-      $model->item_product_item_tag_id = json_encode(request()->get('item_product_item_tag_id'));
+      // $request_size = request()->get('item_product_item_size_id');
+      // $request_color = request()->get('item_product_item_color_id');
+      // $request_name = request()->get('item_product_name');
+
+      // if (!empty($request_color) && !empty($request_size)) {
+      //   $size = new SizeRepository();
+      //   $data_size = $size->showRepository($request_size)->item_size_code;
+      //   $color = new ColorRepository();
+      //   $data_color = $color->showRepository($request_color)->item_color_name;
+
+      //   $model->item_product_group_name = $request_name . ' ' . strtoupper($data_color) . ' ' . strtoupper($data_size);
+      // } else if (!empty($request_color) && empty($request_size)) {
+
+      //   $color = new ColorRepository();
+      //   $data_color = $color->showRepository($request_color)->item_color_name;
+
+      //   $model->item_product_group_name = $request_name . ' ' . strtoupper($data_color);
+      // } else if (!empty($request_size) && empty($request_color)) {
+      //   $size = new SizeRepository();
+      //   $data_size = $size->showRepository($request_size)->item_size_code;
+
+      //   $model->item_product_group_name = $request_name . ' ' . strtoupper($data_size);
+      // }
+
+      $model->item_product_item_tag_json = json_encode(request()->get('item_product_item_tag_json'));
+      $model->item_product_item_color_json = json_encode(request()->get('item_product_item_color_json'));
+      $model->item_product_item_size_json = json_encode(request()->get('item_product_item_size_json'));
 
       if ($model->item_product_name && empty($model->item_product_slug)) {
         $model->item_product_slug = Str::slug($model->item_product_name);
@@ -99,7 +141,7 @@ class Product extends Model
 
     parent::deleting(function ($model) {
       if (request()->has('id')) {
-        $data = $model->getDataIn(request()->get('id'));
+        $data = $model->whereIn($model->getkeyName(), request()->get('id'))->get();
         if ($data) {
           Cache::forget('item_product_api');
           foreach ($data as $value) {

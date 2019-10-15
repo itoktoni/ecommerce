@@ -17,15 +17,24 @@
                 </div>
                 <div class="col-xl-4 col-lg-5">
                     <div class="user-panel">
+                        @auth
+                        <div class="up-item">
+                            <i class="flaticon-profile"></i>
+                            <a href="{{ route('myaccount') }}">My Account</a>
+                        </div>
+                        @endauth
+                        @guest
                         <div class="up-item">
                             <i class="flaticon-profile"></i>
                             <a href="{{ route('login') }}">Sign In</a> or <a href="{{ route('register') }}">Create
                                 Account</a>
                         </div>
-                        <div class="up-item">
+                        @endguest
+                        <div id="count" class="up-item">
+                            <input type="hidden" id="product_name" value="{{ session()->get('product') ?? null }}">
                             <div class="shopping-card">
                                 <i class="flaticon-bag"></i>
-                                <span>0</span>
+                                <span id="cart">{{ Cart::getContent()->count() }}</span>
                             </div>
                             <a href="{{ route('cart') }}">Shopping Cart</a>
                         </div>
@@ -38,7 +47,9 @@
         <div class="container">
             <!-- menu -->
             <ul class="main-menu">
-                <li><a href="{{ config('app.url') }}">Home</a></li>
+                <li>
+                    <div id="home" onclick="location.href = '{{ config('app.url') }}';">Home</div>
+                </li>
                 <li><a href="{{ route('about') }}">About</a>
                 <li><a href="{{ route('shop') }}">Shop <span class="new"> Sale </span></a></li>
                 <li><a href="{{ route('category') }}">Category</a>
@@ -46,7 +57,7 @@
                     <ul class="sub-menu">
                         @foreach ($public_category->where('item_category_homepage', 1) as $category_item)
                         <li><a
-                                href="{{ route('single_category', ['slug' => $category_item->item_category_slug]) }}">{{ ucfirst($category_item->item_category_name) }}</a>
+                                href="{{ route('filters', ['type' => 'category', 'slug' => $category_item->item_category_slug]) }}">{{ ucfirst($category_item->item_category_name) }}</a>
                         </li>
                         @endforeach
                     </ul>

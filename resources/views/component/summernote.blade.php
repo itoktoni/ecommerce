@@ -12,7 +12,8 @@
     $('.lite').summernote({
         toolbar: [
             ['fontsize', ['fontsize','ul', 'ol', 'paragraph', 'height']],
-        ]
+        ],
+        height: 200
         });
 </script>
 @endpush
@@ -22,7 +23,7 @@
 @push('javascript')
 <script>
     $('.basic').summernote({
-        height: 200
+        height: 400
     });
 </script>
 @endpush

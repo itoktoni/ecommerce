@@ -20,7 +20,7 @@
 
     {!! Form::label('name', 'Flag', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'flag') ? 'has-error' : ''}}">
-        <select data-plugin-selectTwo class="form-control input-sm mb-md" multiple id="group_module" name="flag[]">
+        <select class="form-control input-sm mb-md" multiple id="group_module" name="flag[]">
             @foreach($flag as $key => $value)
             <option {{ isset($model) && in_array($key, json_decode($model->{$form.'flag'})) ? 'selected' : '' }} value="{{ $key }}">
                 {{ ucwords(str_replace('_', ' ', $value)) }}</option>

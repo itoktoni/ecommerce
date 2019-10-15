@@ -30,6 +30,7 @@ class PromoController extends Controller
     {
         $view = [
             'template' => $this->template,
+            'status' => Helper::shareStatus(self::$model->status),
         ];
 
         return array_merge($view, $data);
@@ -72,14 +73,20 @@ class PromoController extends Controller
     public function data(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-            $datatable = $service->setRaw(['marketing_promo_image', 'marketing_promo_default'])->datatable(self::$model);
+            $datatable = $service->setRaw(['marketing_promo_image', 'marketing_promo_status', 'marketing_promo_default'])->datatable(self::$model);
             $datatable->editColumn('marketing_promo_image', function ($select) {
                 return Helper::createImage(Helper::getTemplate(__CLASS__) . '/thumbnail_' . $select->marketing_promo_image);
             });
             $datatable->editColumn('marketing_promo_default', function ($data) {
                 return Helper::createStatus([
                     'value'  => $data->marketing_promo_default,
-                    'status' => [0 => ['No', 'warning'], 1 => ['Yes', 'success']],
+                    'status' => self::$model->default,
+                ]);
+            });
+            $datatable->editColumn('marketing_promo_status', function ($data) {
+                return Helper::createStatus([
+                    'value'  => $data->marketing_promo_status,
+                    'status' => self::$model->status,
                 ]);
             });
             return $datatable->make(true);

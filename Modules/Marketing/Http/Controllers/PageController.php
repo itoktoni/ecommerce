@@ -28,8 +28,19 @@ class PageController extends Controller
 
     private function share($data = [])
     {
+        $page = [
+            'no' => 'No',
+            'home' => 'Home',
+            'about' => 'About',
+            'shop' => 'Shop',
+            'category' => 'Category',
+            'promo' => 'Promo',
+            'contact' => 'Contact Us',
+            'confirmation' => 'Confirmation',
+        ];
         $view = [
             'template' => $this->template,
+            'page' => $page,
         ];
 
         return array_merge($view, $data);

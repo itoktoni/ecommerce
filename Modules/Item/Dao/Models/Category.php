@@ -17,6 +17,7 @@ class Category extends Model
     'item_category_name',
     'item_category_image',
     'item_category_flag',
+    'item_category_status',
     'item_category_homepage',
     'item_category_description',
     'item_category_created_at',
@@ -40,11 +41,16 @@ class Category extends Model
     'item_category_flag'        => [true => 'Flag'],
     'item_category_slug'        => [false => 'Slug'],
     'item_category_image'        => [true => 'Images'],
-    'item_category_homepage'        => [true => 'Status'],
+    'item_category_homepage'        => [true => 'Homepage'],
+    'item_category_status'        => [true => 'Status'],
     'item_category_description' => [false => 'Description'],
     'item_category_created_by'  => [false => 'Updated At'],
   ];
 
+  public $status = [
+    '1' => ['Active', 'primary'],
+    '0' => ['Not Active', 'danger'],
+  ];
 
   public static function boot()
   {

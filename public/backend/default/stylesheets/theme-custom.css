@@ -939,12 +939,12 @@ td img {
 }
 
 #dropimage img {
-    margin-right: 5px;
+    padding-right: 10px;
     width: 80px !important;
 }
 
 #dropimage span {
-    width: 80px !important;
+    width: 90% !important;
     height: 30px;
     text-align: center;
     background-color: #191c21;
@@ -956,6 +956,5 @@ td img {
 }
 
 #dropimage img:hover {
-    background: grey;
     opacity: 0.5;
 }

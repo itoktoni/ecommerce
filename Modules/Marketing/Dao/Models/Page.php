@@ -41,4 +41,9 @@ class Page extends Model
     'marketing_page_image'        => [true => 'Images'],
     'marketing_page_created_by'  => [false => 'Updated At'],  
   ];
+
+  public $status = [
+    '1' => ['Active', 'primary'],
+    '0' => ['Not Active', 'danger'],
+  ];
 }

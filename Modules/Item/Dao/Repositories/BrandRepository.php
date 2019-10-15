@@ -45,6 +45,15 @@ class BrandRepository extends Brand implements MasterInterface
         }
     }
 
+    public function slugRepository($slug, $relation = false)
+    {
+        if ($relation) {
+            return $this->with($relation)->where('item_brand_slug', $slug)->firstOrFail();
+        }
+        return $this->where('item_brand_slug', $slug)->firstOrFail();
+    }
+
+
     public function showRepository($id, $relation)
     {
         if ($relation) {

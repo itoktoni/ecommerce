@@ -79,22 +79,28 @@ Route::get('/', 'PublicController@index')->name('beranda');
 Route::get('/slider/{slider}', 'PublicController@index')->name('single_slider');
 
 Route::get('/shop', 'PublicController@shop')->name('shop');
-Route::get('/cart', 'PublicController@cart')->name('cart');
-Route::get('/checkout', 'PublicController@checkout')->name('checkout');
+Route::get('/shop/{type}/{slug}', 'PublicController@shop')->name('filters');
+
+Route::get('/brand/{brand}', 'PublicController@shop')->name('filter_brand');
+
+Route::match(['get', 'post'], 'cart', 'PublicController@cart')->name('cart');
+Route::match(['get', 'post'], 'checkout', 'PublicController@checkout')->name('checkout');
+Route::match(['get', 'post'], 'myaccount', 'PublicController@myaccount')->name('myaccount');
+
+Route::get('/delete/{id}', 'PublicController@delete')->name('delete');
 
 Route::get('/category', 'PublicController@category')->name('category');
-Route::get('/category/{slug}', 'PublicController@category')->name('single_category');
 
 Route::get('/promo', 'PublicController@promo')->name('promo');
 Route::get('/promo/{slug}', 'PublicController@promo')->name('single_promo');
 
-Route::get('/brand/{slug}', 'PublicController@brand')->name('single_brand');
 Route::get('/product/{slug}', 'PublicController@product')->name('single_product');
 
 Route::get('/confirmation', 'PublicController@confirmation')->name('confirmation');
 
 Route::get('/about', 'PublicController@about')->name('about');
 Route::get('/jual/{slug}', 'PublicController@product')->name('product');
+
 Route::match(['get', 'post'], 'contact', 'PublicController@contact')->name('contact');
 
 /*

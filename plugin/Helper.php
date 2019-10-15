@@ -206,6 +206,50 @@ class Helper
         return '<input type="checkbox" name="id[]" value="' . $id . '">';
     }
 
+    public static function shareTag($model, $field, $cache = false)
+    {
+        $data = self::shareOption($model, false, true, $cache)->mapWithKeys(function ($item) use ($field) {
+            return [$item[$field] => self::snakeToLabel($item[$field])];
+        });
+
+        return $data;
+    }
+
+    public static function shareOption($option, $placeholder = true, $raw = false, $cache = false)
+    {
+        if (is_object($option)) {
+            $data = $option->dataRepository()->get();
+            if ($cache && !Cache::has($option->getTable() . '_api')) {
+                Cache::put($option->getTable() . '_api', $data, config('website.cache'));
+                $data = Cache::get($option->getTable() . '_api');
+            } else if ($cache && Cache::has($option->getTable() . '_api')) {
+                $data = Cache::get($option->getTable() . '_api');
+            }
+
+            if (empty($data)) {
+                return [];
+            }
+
+            if (!$raw) {
+                $data = $data->pluck($option->searching, $option->getKeyName());
+            }
+            if ($placeholder) {
+                $data = $data->prepend('- Select ' . self::getNameTable($option->getTable()) . ' -', '');
+            }
+
+            return $data;
+        } else {
+            // $response = Curl::to(route($option))->withData([
+            //     'clean' => true,
+            //     'api_token' => auth()->user()->api_token,
+            // ])->post();
+            // $json  = json_decode($response);
+            // if (isset($json->data)) {
+            //     $data = collect($json->data);
+            // }
+        }
+    }
+
     public static function shareStatus($data)
     {
         $status = collect($data)->map(function ($item, $key) {
@@ -249,6 +293,11 @@ class Helper
             }
         }
         return '<span class="btn btn-xs btn-block btn-' . $color . '">' . $label . '</span>';
+    }
+
+    public static function snakeToLabel($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
     }
 
     public static function createTag($data, $implode = false)

@@ -22,13 +22,14 @@ use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
+use Cart;
 
 class PublicController extends Controller
 {
 
     public function __construct()
     {
-        view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true));
+        view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true))->where('item_category_status', 1);
         view()->share('public_sosmed', Helper::createOption((new SosmedRepository()), false, true, true));
         view()->share('public_product', Helper::createOption((new ProductRepository()), false, true, true));
     }
@@ -58,24 +59,118 @@ class PublicController extends Controller
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
 
-    public function shop()
+    public function filters()
     {
-        $color = Helper::createOption(new ColorRepository(), false, true)->pluck('item_color_code');
+        return redirect()->route('shop');
+    }
+
+    public function shop($type = null, $slug = null)
+    {
+        $color = Helper::createOption(new ColorRepository(), false, true);
         $size = Helper::createOption(new SizeRepository(), false, true)->pluck('item_size_code');
         $tag = Helper::createOption(new TagRepository(), false, true)->pluck('item_tag_slug');
         $brand = Helper::createOption(new BrandRepository(), false, true)->pluck('item_brand_slug', 'item_brand_name');
-        
-        $product = ProductRepository::paginate(9);
+
+        $object_product = new ProductRepository();
+        $product = $object_product->dataRepository();
+        $session = [];
+        // session()->flush();
+        if ($type == 'add' && is_numeric($slug)) {
+            $product = new ProductRepository();
+            $item = $product->showRepository($slug);
+            $additional = [];
+
+            $discount = 0;
+            if ($item->item_product_discount_type == 1) {
+                $discount = $item->item_product_sell * $item->item_product_discount_value;
+            } else if ($item->item_product_discount_type == 2) {
+                $discount = $item->item_product_discount_value;
+            }
+            if ($ifcolor = json_decode($item->item_product_item_color_json) && $ifsize = json_decode($item->item_product_item_size_json)) {
+                $additional = [
+                    'image' => $item->item_product_image,
+                    'list_color' => json_decode($item->item_product_item_color_json),
+                    'list_size' => json_decode($item->item_product_item_size_json),
+                    'color' => $ifcolor[0],
+                    'size' => $ifsize[0],
+                    'discount' => $discount,
+                ];
+            } else if ($ifcolor = json_decode($item->item_product_item_color_json) && empty(json_decode($item->item_product_item_size_json))) {
+                $additional = [
+                    'image' => $item->item_product_image,
+                    'list_color' => json_decode($item->item_product_item_color_json),
+                    'list_size' => null,
+                    'color' => $ifcolor[0],
+                    'size' => null,
+                    'discount' => $discount,
+                ];
+            } else if (empty(json_decode($item->item_product_item_color_json)) && $ifsize = json_decode($item->item_product_item_size_json)) {
+                $additional = [
+                    'image' => $item->item_product_image,
+                    'list_color' => null,
+                    'list_size' => json_decode($item->item_product_item_size_json),
+                    'color' => null,
+                    'size' => $ifsize[0],
+                    'discount' => $discount,
+                ];
+            } else {
+                $additional = [
+                    'image' => $item->item_product_image,
+                    'list_color' => null,
+                    'list_size' => null,
+                    'color' => null,
+                    'size' => null,
+                    'discount' => $discount,
+                ];
+            }
+            Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell, 1, $additional);
+            session()->flash('product', $item->item_product_name);
+        } else {
+            switch ($type) {
+                case 'brand':
+                    session()->put('filter.item_brand_slug', $slug);
+                    break;
+                case 'category':
+                    session()->put('filter.item_category_slug', $slug);
+                    break;
+                case 'size':
+                    session()->put('filter.item_product_item_size_json', $slug);
+                    break;
+                case 'color':
+                    session()->put('filter.item_product_item_color_json', $slug);
+                case 'reset':
+                    session()->forget('filter');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (session()->has('filter')) {
+            foreach (session()->get('filter') as $key => $value) {
+                if ($key == 'item_product_item_color_json' || $key == 'item_product_item_size_json') {
+                    $product->where($key, 'like', '%' . $value . '%');
+                } else {
+                    $product->where($key, $value);
+                }
+            }
+        }
+
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'color' => $color,
             'size' => $size,
             'tag' => $tag,
             'brand' => $brand,
-            'product' => $product,
+            'product' => $product->paginate(9),
         ]);
     }
 
     public function faq()
+    {
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+    }
+
+    public function myaccount()
     {
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
@@ -85,6 +180,7 @@ class PublicController extends Controller
         if ($slug) {
             $model = new PromoRepository();
             $data = $model->slugRepository($slug);
+
             return View(Helper::setViewFrontend('page'))->with([
                 'title' => $data->marketing_promo_name,
                 'description' => $data->marketing_promo_description,
@@ -97,14 +193,31 @@ class PublicController extends Controller
         $promo = Helper::createOption(new PromoRepository(), false, true);
         $single = $promo->where('marketing_promo_default', 1)->first();
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            'promo' => $promo->whereNotIn('marketing_promo_default', [1])->all(),
+            'promo' => $promo->where('marketing_promo_status', 1)->whereNotIn('marketing_promo_default', [1])->all(),
             'single' => $single,
         ]);
     }
 
     public function category($slug = false)
     {
-        if ($slug) { }
+        if ($slug) {
+
+            $category = new CategoryRepository();
+            $data_category = $category->slugRepository($slug);
+            $color = Helper::createOption(new ColorRepository(), false, true)->pluck('item_color_code');
+            $size = Helper::createOption(new SizeRepository(), false, true)->pluck('item_size_code');
+            $tag = Helper::createOption(new TagRepository(), false, true)->pluck('item_tag_slug');
+            $brand = Helper::createOption(new BrandRepository(), false, true)->pluck('item_brand_slug', 'item_brand_name');
+
+            $product = ProductRepository::where('item_product_item_category_id', $data_category->item_category_id)->paginate(9);
+            return View(Helper::setViewFrontend('shop'))->with([
+                'color' => $color,
+                'size' => $size,
+                'tag' => $tag,
+                'brand' => $brand,
+                'product' => $product,
+            ]);
+        }
 
         return View(Helper::setViewFrontend(__FUNCTION__));
     }
@@ -112,6 +225,51 @@ class PublicController extends Controller
     public function cart()
     {
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+    }
+
+    public function delete($id)
+    {
+        if (is_numeric($id)) {
+            $product = new ProductRepository();
+            $item = $product->showRepository($id);
+
+            Cart::remove($id);
+
+            return redirect()->route('cart');
+        }
+
+        return false;
+    }
+
+    public function add($id)
+    {
+        if (is_numeric($id)) {
+            $product = new ProductRepository();
+            $item = $product->showRepository($id);
+
+            $discount = 0;
+            if ($item->item_product_discount_type == 1) {
+                $discount = $item->item_product_sell * $item->item_product_discount_value;
+            } else if ($item->item_product_discount_type == 2) {
+                $discount = $item->item_product_discount_value;
+            }
+
+            $additional = [];
+            if (json_decode($item->item_product_color_json) && json_decode($item->item_product_size_json)) {
+                $additional = [
+                    'image' => $item->item_product_image,
+                    'color' => 'random',
+                    'size' => 'random',
+                    'discount' => $discount,
+                ];
+            }
+            Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell, 1, [
+                'image' => $item->item_product_image,
+                'color' => 'random',
+                'size' => 'random',
+            ]);
+        }
+        return true;
     }
 
     public function checkout()

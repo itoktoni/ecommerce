@@ -41,9 +41,10 @@ class ProductController extends Controller
     {
         $brand = Helper::createOption((new BrandRepository()));
         $category = Helper::createOption((new CategoryRepository()));
-        $tag = Helper::createOption((new TagRepository()), false);
-        $color = Helper::createOption((new ColorRepository()));
-        $size = Helper::createOption((new SizeRepository()));
+        $tag = Helper::shareTag((new TagRepository()), 'item_tag_slug');
+        $color = Helper::shareTag((new ColorRepository()), 'item_color_slug');
+        $size = Helper::shareTag((new SizeRepository()), 'item_size_code');
+        $type = Helper::shareStatus(self::$model->promo);
 
         $view = [
             'key'       => self::$model->getKeyName(),
@@ -52,6 +53,7 @@ class ProductController extends Controller
             'tag'  => $tag,
             'color'  => $color,
             'size'  => $size,
+            'type'  => $type,
         ];
 
         return array_merge($view, $data);
@@ -60,7 +62,11 @@ class ProductController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-            $service->save(self::$model);
+            $check = $service->save(self::$model);
+            if($check['status']){
+                return redirect()->route($this->getModule().'_update', ['code' => $check['data']->item_product_id]);
+            }
+            return redirect()->back();
         }
         return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
             'model' => self::$model,
@@ -92,7 +98,7 @@ class ProductController extends Controller
             self::$model->deleteImageDetail($code);
 
             Helper::removeImage($code, 'product_detail');
-            return redirect()->back();
+            return response()->json(['status' => $code]);
         }
     }
 
@@ -120,7 +126,7 @@ class ProductController extends Controller
                 self::$model->saveImageDetail($code, $save_name);
             }
 
-            // return Notes::create('Data upload Success');
+            return response()->json(['status' => 1]);
         }
     }
 

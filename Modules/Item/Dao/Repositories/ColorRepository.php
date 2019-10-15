@@ -45,7 +45,7 @@ class ColorRepository extends Color implements MasterInterface
         }
     }
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = false)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);
