@@ -55,6 +55,17 @@ class PromoRepository extends Promo implements MasterInterface
         return $this->where('marketing_promo_slug', $slug)->firstOrFail();
     }
 
+    public function codeRepository($code)
+    {
+        $date = date('Y-m-d');
+        return $this->where([
+            ['marketing_promo_code', '=', $code],
+            ['marketing_promo_status', '=', 1],
+            ['marketing_promo_start_date', '<=', $date],
+            ['marketing_promo_end_date', '>=', $date],
+        ])->first();
+    }
+
     public function showRepository($id, $relation = false)
     {
         if ($relation) {
@@ -67,5 +78,4 @@ class PromoRepository extends Promo implements MasterInterface
     {
         return $this->whereIn($this->getKeyName(), $in)->get();
     }
-
 }

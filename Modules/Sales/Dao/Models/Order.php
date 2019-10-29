@@ -2,12 +2,14 @@
 
 namespace Modules\Sales\Dao\Models;
 
+use Plugin\Helper;
+use Illuminate\Support\Facades\Auth;
 use Modules\Crm\Dao\Models\Customer;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Finance\Dao\Models\Payment;
 use Modules\Forwarder\Dao\Models\Vendor;
 use Modules\Sales\Dao\Models\OrderDetail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Finance\Dao\Models\Payment;
 
 class Order extends Model
 {
@@ -18,6 +20,7 @@ class Order extends Model
   protected $fillable = [
     'sales_order_id',
     'sales_order_reff',
+    'sales_order_email',
     'sales_order_delivery',
     'sales_order_invoice',
     'sales_order_date',
@@ -26,23 +29,44 @@ class Order extends Model
     'sales_order_invoice_date',
     'sales_order_attachment',
     'sales_order_note',
-    'sales_order_crm_customer_id',
-    'sales_order_forwarder_vendor_id',
     'sales_order_status',
     'sales_order_updated_at',
     'sales_order_created_at',
     'sales_order_updated_by',
     'sales_order_created_by',
+    'sales_order_crm_customer_id',
+    'sales_order_deleted_at',
+    'sales_order_rajaongkir_province_id',
+    'sales_order_rajaongkir_city_id',
+    'sales_order_rajaongkir_location',
+    'sales_order_rajaongkir_courier',
+    'sales_order_rajaongkir_ongkir',
+    'sales_order_rajaongkir_name',
+    'sales_order_rajaongkir_expedition',
+    'sales_order_rajaongkir_service',
+    'sales_order_rajaongkir_address',
+    'sales_order_rajaongkir_postcode',
+    'sales_order_rajaongkir_phone',
+    'sales_order_rajaongkir_notes',
+    'sales_order_rajaongkir_weight',
   ];
 
   public $timestamps = true;
   public $incrementing = false;
   public $rules = [
-    'sales_order_date' => 'required',
-    'sales_order_crm_customer_id' => 'required',
-    'sales_order_forwarder_vendor_id' => 'required',
-    'temp_id' => 'required',
+    'sales_order_rajaongkir_province_id' => 'required',
+    'sales_order_rajaongkir_city_id' => 'required',
+    'sales_order_rajaongkir_location' => 'required',
+    'sales_order_rajaongkir_courier' => 'required',
+    'sales_order_rajaongkir_ongkir' => 'required|numeric',
+    'sales_order_rajaongkir_address' => 'required',
+    'sales_order_email' => 'required|email',
+    'sales_order_rajaongkir_name' => 'required',
+    'sales_order_rajaongkir_phone' => 'required',
+    'sales_order_rajaongkir_weight' => 'required',
   ];
+
+  public $validate = true;
 
   public $prefix = 'SO';
   public $order = 'sales_order_date';
@@ -57,6 +81,8 @@ class Order extends Model
   public $datatable = [
     'sales_order_id'             => [true => 'ID'],
     'sales_order_date'           => [true => 'Order Date'],
+    'sales_order_name'           => [true => 'Name'],
+    'sales_order_email'           => [true => 'Email'],
     'crm_customer_name'           => [true => 'Customer Name'],
     'sales_order_status'           => [true => 'Status'],
     'sales_order_created_at'     => [false => 'Created At'],
@@ -78,6 +104,19 @@ class Order extends Model
     '2' => ['PREPARE', 'success'],
     '3' => ['PRODUCTION', 'info'],
     '4' => ['DELIVER', 'primary'],
+  ];
+
+  public $custom_attribute = [
+
+    'sales_order_rajaongkir_province_id' => 'Province',
+    'sales_order_rajaongkir_city_id' => 'City',
+    'sales_order_rajaongkir_location' => 'Location',
+    'sales_order_rajaongkir_courier' => 'Courier',
+    'sales_order_rajaongkir_ongkir' => 'Ongkir',
+    'sales_order_rajaongkir_address' => 'Address',
+    'sales_order_rajaongkir_postcode' => 'Postcode',
+    'sales_order_rajaongkir_phone' => 'Phone',
+
   ];
 
   public $custom_message = [
@@ -110,8 +149,26 @@ class Order extends Model
   {
     parent::boot();
     parent::creating(function ($model) {
-      $model->sales_order_created_by = auth()->user()->username;
+
+      if (Auth::check()) {
+        $model->sales_order_created_by = auth()->user()->username;
+      }
+      else{
+        
+        $model->sales_order_created_by = 'no login';
+        
+      }
+      
+      if (!request()->has('sales_order_crm_customer_id')) {
+        $model->sales_order_crm_customer_id = 0;
+      }
+      
+      if (!request()->has('sales_order_date')) {
+        $model->sales_order_date = date('Y-m-d');
+      }
+      
       $model->sales_order_status = 1;
+      $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO'.date('Ym'), config('website.autonumber'));
     });
   }
 

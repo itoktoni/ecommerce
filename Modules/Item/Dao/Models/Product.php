@@ -25,12 +25,14 @@ class Product extends Model
     'item_product_buy',
     'item_product_image',
     'item_product_sell',
+    'item_product_gram',
     'item_product_item_category_id',
     'item_product_item_brand_id',
     'item_product_item_color_json',
     'item_product_item_size_json',
     'item_product_item_tag_json',
     'item_product_name',
+    'item_product_flag',
     'item_product_description',
     'item_product_updated_at',
     'item_product_created_at',
@@ -46,6 +48,7 @@ class Product extends Model
   public $rules = [
     'item_product_name' => 'required|min:3',
     'item_product_sell' => 'required',
+    'item_product_gram' => 'required|numeric',
     'item_product_file' => 'file|image|mimes:jpeg,png,jpg|max:2048',
   ];
 
@@ -59,13 +62,20 @@ class Product extends Model
     'item_category_name'        => [true => 'Category'],
     'item_category_slug'        => [false => 'Category'],
     'item_product_name'        => [true => 'Group Name'],
+    'item_product_flag'        => [false => 'Flag'],
     'item_brand_name'        => [true => 'Brand'],
     'item_brand_slug'        => [false => 'Brand'],
     'item_product_sell'        => [true => 'Price'],
+    'item_product_gram'        => [false => 'Gram'],
     'item_product_image'        => [true => 'Images'],
     'item_product_slug'        => [false => 'Slug'],
+    'item_wishlist_item_product_id'        => [false => 'Product'],
+    'item_wishlist_user_id'        => [false => 'User'],
     'item_product_discount_type'        => [false => 'Slug'],
     'item_product_discount_value'        => [false => 'Slug'],
+    'item_product_item_size_json'        => [false => 'Slug'],
+    'item_product_item_color_json'        => [false => 'Slug'],
+    'item_product_item_tag_json'        => [false => 'Tag'],
     'item_product_description' => [false => 'Description'],
     'item_product_created_at'  => [false => 'Created At'],
     'item_product_created_by'  => [false => 'Updated At'],
@@ -123,9 +133,15 @@ class Product extends Model
       //   $model->item_product_group_name = $request_name . ' ' . strtoupper($data_size);
       // }
 
-      $model->item_product_item_tag_json = json_encode(request()->get('item_product_item_tag_json'));
-      $model->item_product_item_color_json = json_encode(request()->get('item_product_item_color_json'));
-      $model->item_product_item_size_json = json_encode(request()->get('item_product_item_size_json'));
+      if (request()->has('item_product_item_tag_json')) {
+        $model->item_product_item_tag_json = json_encode(request()->get('item_product_item_tag_json'));
+      }
+      if (request()->has('item_product_item_color_json')) {
+        $model->item_product_item_color_json = json_encode(request()->get('item_product_item_color_json'));
+      }
+      if (request()->has('item_product_item_size_json')) {
+        $model->item_product_item_size_json = json_encode(request()->get('item_product_item_size_json'));
+      }
 
       if ($model->item_product_name && empty($model->item_product_slug)) {
         $model->item_product_slug = Str::slug($model->item_product_name);

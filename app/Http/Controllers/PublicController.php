@@ -4,53 +4,69 @@ namespace App\Http\Controllers;
 
 use DB;
 use App;
+use Auth;
+use Cart;
 use Helper;
 use App\Enums\OptionSlider;
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
+use Modules\Sales\Dao\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use Modules\Item\Dao\Models\Product;
+use Modules\Sales\Emails\OrderEmail;
+use Illuminate\Support\Facades\Cache;
+use Modules\Item\Dao\Models\Wishlist;
 use Illuminate\Support\Facades\Config;
+use App\Http\Services\EcommerceService;
 use Illuminate\Support\Facades\Artisan;
 use Modules\Marketing\Dao\Models\Slider;
+use Illuminate\Support\Facades\Validator;
+use Modules\Marketing\Emails\ContactEmail;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Item\Dao\Repositories\WishlistRepository;
+use Modules\Marketing\Dao\Repositories\PageRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
-use Cart;
+use Modules\Marketing\Dao\Repositories\ContactRepository;
 
 class PublicController extends Controller
 {
-
     public function __construct()
     {
         view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true))->where('item_category_status', 1);
         view()->share('public_sosmed', Helper::createOption((new SosmedRepository()), false, true, true));
         view()->share('public_product', Helper::createOption((new ProductRepository()), false, true, true));
+        view()->share('public_page', Helper::createOption((new PageRepository()), false, true, true)->where('marketing_page_status', 1));
     }
 
     public function index($slider = false)
     {
+        $wishlist = [];
+        if (Auth::check()) {
+            $wish = new WishlistRepository();
+            $wishlist = $wish->getUserRepository();
+        }
+
         if ($slider) {
             $model = new SliderRepository();
             $data = $model->slugRepository($slider);
-            return View(Helper::setViewFrontend('page'))->with([
-                'title' => $data->marketing_slider_name,
-                'description' => $data->marketing_slider_description,
-                'image' => Helper::files('slider/' . $data->marketing_slider_image),
-                'page' => $data->marketing_slider_page,
-                'link' => $data->marketing_slider_link,
+            return View(Helper::setViewFrontend('single_slider'))->with([
+                'data' => $data
             ]);
         }
 
         $default_slider = Helper::createOption(new SliderRepository(), false, true);
         return view(Helper::setViewFrontend(__FUNCTION__))->with([
-            'slider' => $default_slider
+            'slider' => $default_slider,
+            'whitelist' => $wishlist,
         ]);
     }
 
@@ -66,6 +82,15 @@ class PublicController extends Controller
 
     public function shop($type = null, $slug = null)
     {
+        // dd(session()->all());
+        // session()->forget('filter');
+        if (request()->isMethod('POST')) {
+            if (empty(request()->get('search'))) {
+                session()->forget('filter.item_product_name');
+            } else {
+                session()->put('filter.item_product_name', request()->get('search'));
+            }
+        }
         $color = Helper::createOption(new ColorRepository(), false, true);
         $size = Helper::createOption(new SizeRepository(), false, true)->pluck('item_size_code');
         $tag = Helper::createOption(new TagRepository(), false, true)->pluck('item_tag_slug');
@@ -76,8 +101,7 @@ class PublicController extends Controller
         $session = [];
         // session()->flush();
         if ($type == 'add' && is_numeric($slug)) {
-            $product = new ProductRepository();
-            $item = $product->showRepository($slug);
+            $item = $object_product->showRepository($slug);
             $additional = [];
 
             $discount = 0;
@@ -86,82 +110,112 @@ class PublicController extends Controller
             } else if ($item->item_product_discount_type == 2) {
                 $discount = $item->item_product_discount_value;
             }
-            if ($ifcolor = json_decode($item->item_product_item_color_json) && $ifsize = json_decode($item->item_product_item_size_json)) {
-                $additional = [
-                    'image' => $item->item_product_image,
-                    'list_color' => json_decode($item->item_product_item_color_json),
-                    'list_size' => json_decode($item->item_product_item_size_json),
-                    'color' => $ifcolor[0],
-                    'size' => $ifsize[0],
-                    'discount' => $discount,
-                ];
-            } else if ($ifcolor = json_decode($item->item_product_item_color_json) && empty(json_decode($item->item_product_item_size_json))) {
-                $additional = [
-                    'image' => $item->item_product_image,
-                    'list_color' => json_decode($item->item_product_item_color_json),
-                    'list_size' => null,
-                    'color' => $ifcolor[0],
-                    'size' => null,
-                    'discount' => $discount,
-                ];
-            } else if (empty(json_decode($item->item_product_item_color_json)) && $ifsize = json_decode($item->item_product_item_size_json)) {
-                $additional = [
-                    'image' => $item->item_product_image,
-                    'list_color' => null,
-                    'list_size' => json_decode($item->item_product_item_size_json),
-                    'color' => null,
-                    'size' => $ifsize[0],
-                    'discount' => $discount,
-                ];
+
+            $stock = DB::table('view_stock_product')->where('product', $item->item_product_id)->get();
+            $option_stock = $stock->mapWithKeys(function ($item) {
+                $size = $item->size ? $item->size . ' - ' : '';
+                $color = $item->hex ? $item->hex . ' - ' : '';
+                $stock = 'Stock ( ' . $item->qty . ' )';
+
+                return [$item->id => $size . $color . $stock];
+            })->toArray();
+
+            $additional = [
+                'image' => $item->item_product_image,
+                'list_option' => $option_stock,
+                'option' => $stock->first()->id ?? null,
+                'product' => $item->item_product_id ?? null,
+                'size' => $stock->first()->size ?? null,
+                'color' => $stock->first()->hex ?? null,
+                'stock' => $stock->first()->qty ?? null,
+                'discount' => $discount,
+                'gram' => $item->item_product_gram,
+            ];
+
+            $price = $item->item_product_sell - $discount;
+            Cart::add($stock->first()->id, $item->item_product_name, $price, 1, $additional);
+        } else if ($type == 'love' && is_numeric($slug)) {
+
+            $love = DB::table('item_wishlist')->where([
+                'item_wishlist_item_product_id' => $slug,
+                'item_wishlist_user_id' => Auth::user()->id,
+            ]);
+
+            if ($love->count() > 0) {
+
+                $love->delete();
             } else {
-                $additional = [
-                    'image' => $item->item_product_image,
-                    'list_color' => null,
-                    'list_size' => null,
-                    'color' => null,
-                    'size' => null,
-                    'discount' => $discount,
-                ];
+                $love = DB::table('item_wishlist')->insert([
+                    'item_wishlist_item_product_id' => $slug,
+                    'item_wishlist_user_id' => Auth::user()->id,
+                    'item_wishlist_created_at' => date('Y-m-d H:i:s'),
+                ]);
             }
-            Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell, 1, $additional);
-            session()->flash('product', $item->item_product_name);
         } else {
             switch ($type) {
                 case 'brand':
-                    session()->put('filter.item_brand_slug', $slug);
+                    if (!session()->has('filter.item_brand_slug.' . $slug)) {
+                        session()->put('filter.item_brand_slug.' . $slug, $slug);
+                    }
                     break;
                 case 'category':
-                    session()->put('filter.item_category_slug', $slug);
+                    if (!session()->has('filter.item_category_slug.' . $slug)) {
+                        session()->put('filter.item_category_slug.' . $slug, $slug);
+                    }
                     break;
                 case 'size':
-                    session()->put('filter.item_product_item_size_json', $slug);
+                    if (!session()->has('filter.item_product_item_size_json.' . $slug)) {
+                        session()->put('filter.item_product_item_size_json.' . $slug, $slug);
+                    }
                     break;
                 case 'color':
-                    session()->put('filter.item_product_item_color_json', $slug);
+                    if (!session()->has('filter.item_product_item_color_json.' . $slug)) {
+                        session()->put('filter.item_product_item_color_json.' . $slug, $slug);
+                    }
+                    break;
+                case 'tag':
+                    if (!session()->has('filter.item_product_item_tag_json.' . $slug)) {
+                        session()->put('filter.item_product_item_tag_json.' . $slug, $slug);
+                    }
+                    break;
                 case 'reset':
                     session()->forget('filter');
                     break;
-                default:
+                case 'remove_filter':
+                    session()->forget('filter.' . $slug);
+                    foreach (session()->get('filter') as $rmv => $remove) {
+                        if (empty($remove)) {
+                            session()->forget('filter.' . $rmv);
+                        }
+                    }
                     break;
             }
         }
-
         if (session()->has('filter')) {
             foreach (session()->get('filter') as $key => $value) {
-                if ($key == 'item_product_item_color_json' || $key == 'item_product_item_size_json') {
+                if ($key == 'item_product_item_tag_json') {
+                    foreach ($value as $filter) {
+                        $product->where($key, 'like', '%' . $filter . '%');
+                    }
+                } else if ($key == 'item_product_name') {
                     $product->where($key, 'like', '%' . $value . '%');
                 } else {
-                    $product->where($key, $value);
+                    $product->whereIn($key, array_values($value));
                 }
             }
         }
-
+        $wishlist = [];
+        if (Auth::check()) {
+            $wish = new WishlistRepository();
+            $wishlist = $wish->getUserRepository();
+        }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'color' => $color,
             'size' => $size,
             'tag' => $tag,
             'brand' => $brand,
             'product' => $product->paginate(9),
+            'whitelist' => $wishlist,
         ]);
     }
 
@@ -175,25 +229,42 @@ class PublicController extends Controller
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
 
+    public function page($slug = false)
+    {
+        if ($slug && Cache::has('marketing_page_api')) {
+
+            $page = Cache::get('marketing_page_api');
+            $data = $page->where('marketing_page_slug', $slug)->first();
+            if (!$data) {
+                abort(404, 'Page not found !');
+            }
+
+            return View(Helper::setViewFrontend('page'))->with([
+                'data' => $data,
+            ]);
+        }
+
+        abort(404, 'Page not found !');
+    }
+
     public function promo($slug = false)
     {
         if ($slug) {
             $model = new PromoRepository();
             $data = $model->slugRepository($slug);
 
-            return View(Helper::setViewFrontend('page'))->with([
-                'title' => $data->marketing_promo_name,
-                'description' => $data->marketing_promo_description,
-                'image' => Helper::files('promo/' . $data->marketing_promo_image),
-                'page' => $data->marketing_promo_page,
-                'link' => '',
+            return View(Helper::setViewFrontend('single_promo'))->with([
+                'data' => $data,
             ]);
         }
 
-        $promo = Helper::createOption(new PromoRepository(), false, true);
-        $single = $promo->where('marketing_promo_default', 1)->first();
+        $promo = new PromoRepository();
+        $data_promo = $promo->dataRepository()
+            ->where('marketing_promo_status', 1)
+            ->where('marketing_promo_type', 1)->get();
+        $single = $data_promo->where('marketing_promo_default', 1)->first();
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            'promo' => $promo->where('marketing_promo_status', 1)->whereNotIn('marketing_promo_default', [1])->all(),
+            'promo' => $data_promo->whereNotIn('marketing_promo_default', [1]),
             'single' => $single,
         ]);
     }
@@ -224,16 +295,124 @@ class PublicController extends Controller
 
     public function cart()
     {
+        // Cart::clear();
+        if (request()->isMethod('POST')) {
+
+            $request = request()->all();
+            if (isset($request['code']) && !empty($request['code'])) {
+
+                $code = $request['code'];
+                $validate = Validator::make($request, [
+                    'code' => 'required|exists:marketing_promo,marketing_promo_code',
+                ], [
+                    'code.exists' => 'Voucher Not Valid !',
+                ]);
+
+                $promo = new PromoRepository();
+                $data = $promo->codeRepository(strtoupper($code));
+
+                if ($data) {
+                    $value = Cart::getTotal();
+                    $matrix = $data->marketing_promo_matrix;
+                    if ($matrix) {
+
+                        // validate with minimal
+                        $minimal = $data->marketing_promo_minimal;
+                        if ($minimal) {
+                            if ($minimal > $value) {
+                                $validate->getMessageBag()->add('code', 'Minimal value ' . number_format($minimal) . ' !');
+                                return redirect()->back()->withErrors($validate);
+                            }
+                        }
+
+                        $string = str_replace('@value', $value, $matrix);
+                        $total = $value;
+
+                        try {
+                            $total = Helper::calculate($string);
+                        } catch (\Throwable $th) {
+                            $total = $value;
+                        }
+
+                        $promo = Cart::getConditions()->first();
+                        if ($promo) {
+                            Cart::removeCartCondition($promo->getName());
+                        }
+                        $condition = new \Darryldecode\Cart\CartCondition(array(
+                            'name' => $data->marketing_promo_code,
+                            'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
+                            'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                            'value' => -$total,
+                            'order' => 1,
+                            'attributes' => array( // attributes field is optional
+                                'name' => $data->marketing_promo_name,
+                            )
+                        ));
+
+                        Cart::condition($condition);
+                    }
+                } else {
+                    $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
+                    return redirect()->back()->withErrors($validate)->withInput();
+                }
+
+                if ($validate->fails()) {
+                    return redirect()->back()->withErrors($validate)->withInput();
+                }
+            } else {
+
+                $index = 0;
+                foreach ($request['cart'] as $value) {
+
+                    $validate = Validator::make(
+                        $request,
+                        [
+                            'cart.*.qty' => 'numeric|min:1',
+                            'cart.*.option' => 'required',
+                        ],
+                        [],
+                        [
+                            'cart.' . $index . '.qty' => 'Input must correct',
+                        ]
+                    );
+
+                    if ($validate->fails()) {
+                        return redirect()->back()->withErrors($validate)->withInput();
+                    }
+
+                    $stock = DB::table('view_stock_product')->where('id', $value['option'])->first();
+
+                    $input_qty = floatval($value['qty']);
+                    $data_qty = $stock->qty;
+                    $data_product = $stock->id;
+
+                    if ($input_qty > $data_qty) {
+                        $validate->errors()->add('cart.' . $index . '.qty', 'Stock Not Enought !');
+                    }
+
+                    Cart::update($data_product, array(
+                        'quantity' => [
+                            'relative' => false,
+                            'value' => $input_qty
+                        ], // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
+                    ));
+
+                    $index++;
+                }
+
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+        }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
 
     public function delete($id)
     {
-        if (is_numeric($id)) {
-            $product = new ProductRepository();
-            $item = $product->showRepository($id);
-
+        if (Cart::getContent()->contains('id', $id)) {
             Cart::remove($id);
+            if (Cart::isEmpty()) {
+                Cart::clearCartConditions();
+            }
 
             return redirect()->route('cart');
         }
@@ -272,47 +451,186 @@ class PublicController extends Controller
         return true;
     }
 
-    public function checkout()
+    public function checkout(EcommerceService $service)
     {
-        return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+        $address = null;
+        $email = null;
+        $phone = null;
+        $notes = null;
+        $name = null;
+        $postcode = null;
+        $province = null;
+
+        $city = [];
+        $location = [];
+        $ongkir = [];
+
+        $list_city = [];
+        $list_location = [];
+
+        $courier = [
+            '' => 'Choose Expedition',
+            'pos' => 'POS Indonesia (POS)',
+            'jne' => 'Jalur Nugraha Ekakurir (JNE)',
+            'tiki' => 'Citra Van Titipan Kilat (TIKI)',
+            'rpx' => 'RPX Holding (RPX)',
+            'wahana' => 'Wahana Prestasi Logistik (WAHANA)',
+            'sicepat' => 'SiCepat Express (SICEPAT)',
+            'jnt' => 'J&T Express (J&T)',
+            'sap' => 'SAP Express (SAP)',
+            'jet' => 'JET Express (JET)',
+            'indah' => 'Indah Logistic (INDAH)',
+            'ninja' => 'Ninja Express (NINJA)',
+            'first' => 'First Logistics (FIRST)',
+            'lion' => 'Lion Parcel (LION)',
+            'rex' => 'Royal Express Indonesia (REX)',
+        ];
+
+        if (Auth::check()) {
+
+            $address = Auth::user()->address;
+            $phone = Auth::user()->phone;
+            $email = Auth::user()->email;
+            $name = Auth::user()->name;
+            $postcode = Auth::user()->postcode;
+
+            $province = Auth::user()->province;
+            $city = Auth::user()->city;
+            $location = Auth::user()->district;
+        }
+
+        $validate = [];
+        if (request()->isMethod('POST')) {
+
+            $request = request()->all();
+
+            $address = $request['sales_order_rajaongkir_address'];
+            $email = $request['sales_order_email'];
+            $name = $request['sales_order_rajaongkir_name'];
+            $phone = $request['sales_order_rajaongkir_phone'];
+            $notes = $request['sales_order_rajaongkir_notes'];
+            $postcode = $request['sales_order_rajaongkir_postcode'];
+
+            $province = $request['sales_order_rajaongkir_province_id'];
+            $city = $request['sales_order_rajaongkir_city_id'];
+            $location = $request['sales_order_rajaongkir_location'];
+
+            if (request()->has('sales_order_rajaongkir_ongkir')) {
+
+                $post_to = $location;
+                $post_weight = request()->get('sales_order_rajaongkir_weight');
+                $post_courier = request()->get('sales_order_rajaongkir_courier');
+
+                $response = Curl::to(route('ongkir'))->withData([
+                    'to' => $post_to,
+                    'weight' => $post_weight,
+                    'courier' => $post_courier,
+                ])->post();
+                $json  = json_decode($response);
+
+                if (isset($json) && !empty($json)) {
+                    $int = 0;
+                    $ongkir[''] = 'Choose Ongkir';
+                    foreach ($json as $value) {
+                        $ongkir[$value->cost] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
+                    }
+                }
+            }
+
+            $order = new OrderRepository();
+            $validate = Validator::make($request, $order->rules, $order->custom_attribute);
+            $check = $order->saveRepository($request);
+            $id = $check['data']->sales_order_id;
+
+            foreach (Cart::getContent() as $item) {
+
+                $stock = DB::table('view_stock_product')->where('id', $item->attributes['option'])->first();
+                DB::table('sales_order_detail')->insert([
+                    'sales_order_detail_sales_order_id' => $id,
+                    'sales_order_detail_item_product_id' => $item->attributes['product'],
+                    'sales_order_detail_qty_order' => $item->quantity,
+                    'sales_order_detail_price_order' => $item->price,
+                    'sales_order_detail_total_order' => $item->price * $item->quantity,
+                    'sales_order_detail_option' => $stock->id,
+                    'sales_order_detail_item_size' => $stock->size,
+                    'sales_order_detail_item_color' => $stock->color,
+                    'sales_order_detail_gram' => $item->attributes['gram'],
+                    'sales_order_detail_discount' => $item->attributes['discount'],
+                    'sales_order_detail_price_real' => $item->price + $item->attributes['discount'],
+                ]);
+
+                if (Cart::getContent()->contains('id', $item->id)) {
+                    Cart::remove($item->id);
+                    if (Cart::isEmpty()) {
+                        Cart::clearCartConditions();
+                    }
+                }
+            }
+
+            $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
+            Mail::to($email)->send(new OrderEmail($data));
+
+            return redirect()->back()->with(['success' => true]);
+        }
+
+        if ($province) {
+            $list_city = DB::table('rajaongkir_cities')->where('province_id', $province)->get()->sortBy('city_name')->pluck('city_name', 'city_id')->toArray();
+        }
+
+        if ($city) {
+            $list_location = DB::table('rajaongkir_districts')->where('city_id', $city)->get()->sortBy('subdistrict_name')->pluck('subdistrict_name', 'subdistrict_id')->toArray();
+        }
+
+        if (Cache::has('province')) {
+            $list_province =  Cache::get('province');
+        } else {
+            $list_province = Cache::rememberForever('province', function () {
+                return DB::table('rajaongkir_provinces')->get()->sortBy('province')->pluck('province', 'province_id')->prepend(' Choose Province', '0')->toArray();
+            });
+        }
+
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'address' => $address,
+            'email' => $email,
+            'phone' => $phone,
+            'notes' => $notes,
+            'name' => $name,
+            'postcode' => $postcode,
+            'province' => $province,
+            'city' => $city,
+            'location' => $location,
+            'list_province' => $list_province,
+            'list_city' => $list_city,
+            'list_location' => $list_location,
+            'courier' => $courier,
+            'ongkir' => $ongkir,
+        ])->withErrors($validate);
     }
 
+    public function email($id)
+    {
+
+        $order = new OrderRepository();
+        $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
+        return new OrderEmail($data);
+    }
 
     public function contact()
     {
         if (request()->isMethod('POST')) {
 
-            $data = [
-                'email' => request()->get('email'),
-                'name' => request()->get('name'),
-                'header' => 'Notification Information From Customer',
-                'desc' => request()->get('desc'),
-            ];
-
-            $from = request()->get('email');
-            $name = request()->get('name');
-
+            $contact = new ContactRepository();
             $request = request()->all();
-            $request['message'] = request()->get('desc');
-            $contact = new App\Contact();
-            $contact->simpan($request);
+            request()->validate($contact->rules);
 
-            $this->validate(request(), [
-                'email' => 'email|required',
-                'name'  => 'required',
-                'desc' => 'required',
-            ]);
-            try {
-                $test = Mail::send('emails.contact', $data, function ($message) use ($from, $name) {
-                    $message->to(config('mail.from.address'), config('mail.from.name'));
-                    $message->subject('Notification Information From Customer');
-                    $message->from(config('mail.from.address'), config('mail.from.name'));
-                });
-            } catch (Exception $e) {
-                // return Response::redirectBack();;
+            $data = $contact->saveRepository($request);
+            if ($data['status']) {
+                try {
+                    Mail::to(config('website.email'))->send(new ContactEmail($data['data']));
+                } catch (Exception $e) { }
             }
 
-            return Response::redirectBack();;
+            return redirect()->back()->withInput();
         }
 
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
@@ -369,12 +687,88 @@ class PublicController extends Controller
     {
         $data_product = new ProductRepository();
         $product = $data_product->slugRepository($slug);
+
+        $discount = 0;
+        if ($product->item_product_discount_type == 1) {
+            $discount = $product->item_product_sell * $product->item_product_discount_value;
+        } else if ($product->item_product_discount_type == 2) {
+            $discount = $product->item_product_discount_value;
+        }
+
+        $outstanding = DB::table('view_outstanding_order')->where('sod_product', $product->item_product_id)->get()->pluck('sod_qty', 'sod_option')->all();
+
+        $stock = DB::table('view_stock_product')->where('product', $product->item_product_id)->get();
+        $option_stock = $stock->mapWithKeys(function ($item) use ($outstanding) {
+
+            $collect_qty = $item->qty;
+            if (array_key_exists($item->id, $outstanding)) {
+                $collect_qty = $item->qty - $outstanding[$item->id];
+            }
+            $size = $item->size ? $item->size . ' - ' : '';
+            $color = $item->hex ? $item->hex . ' - ' : '';
+            $stock = 'Stock ( ' . $collect_qty . ' )';
+
+            return [$item->id => $size . $color . $stock];
+        })->toArray();
+
+        $additional = [
+            'image' => $product->item_product_image,
+            'list_option' => $option_stock,
+            'option' => $stock->first()->id ?? null,
+            'discount' => $discount,
+            'stock' => $stock->first()->qty ?? null,
+            'gram' => $product->item_product_gram,
+        ];
+
+        if (request()->isMethod('POST')) {
+            $request = request()->all();
+            $validate = Validator::make($request, [
+                'qty' => 'required|numeric|min:1',
+                'option' => 'required|exists:view_stock_product,id',
+            ], [
+                'option.exists' => 'Please choose color & size !'
+            ]);
+
+            if ($validate->fails()) {
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+
+            $parse = $stock->where('id', $request['option'])->first();
+            $outstanding = DB::table('view_outstanding_order')->where(['sod_option' => $request['option']])->first();
+            $outstanding_value = 0;
+            if ($outstanding) {
+                $outstanding_value = $outstanding->sod_qty ?? 0;
+            }
+
+            if ($request['qty']  > $parse->qty - $outstanding_value) {
+                $validate->errors()->add('qty', 'Stock Not Enough !');
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+
+            $additional = [
+                'image' => $product->item_product_image,
+                'list_option' => $option_stock,
+                'option' => $parse->id ?? null,
+                'product' => $product->item_product_id ?? null,
+                'size' => $parse->size ?? null,
+                'color' => $parse->hex ?? null,
+                'stock' => $parse->qty ?? null,
+                'discount' => $discount,
+                'gram' => $product->item_product_gram,
+            ];
+
+            Cart::add($parse->id, $product->item_product_name, $product->item_product_sell - $discount, request()->get('qty'), $additional);
+        }
+
         $product->item_product_counter = $product->item_product_counter + 1;
         $product->save();
         $product_image = $data_product->getImageDetail($product->item_product_id);
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'single_product' => $product,
             'product_image' => $product_image,
+            'discount' => $discount,
+            'stock' => $stock,
+            'list' => $option_stock,
         ]);
     }
 

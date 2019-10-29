@@ -49,8 +49,8 @@ class PageController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->save(self::$model);
+            return redirect()->back();
         }
         return view(Helper::setViewCreate())->with($this->share());
     }
@@ -83,9 +83,12 @@ class PageController extends Controller
     public function data(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-            $datatable = $service->setRaw(['marketing_slider_image'])->datatable(self::$model);
-            $datatable->editColumn('marketing_slider_image', function ($select) {
-                return Helper::createImage(Helper::getTemplate(__CLASS__) . '/thumbnail_' . $select->marketing_slider_image);
+            $datatable = $service->setRaw(['marketing_page_status'])->datatable(self::$model);
+            $datatable->editColumn('marketing_page_status', function ($data) {
+                return Helper::createStatus([
+                    'value'  => $data->marketing_page_status,
+                    'status' => self::$model->status,
+                ]);
             });
             return $datatable->make(true);
         }

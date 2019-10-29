@@ -9,38 +9,17 @@
         {!! $errors->first($form.'name', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', 'Default', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'default') ? 'has-error' : ''}}">
-        {{ Form::select($form.'default', $page, $model->marketing_promo_default ?? null, ['class'=> 'form-control']) }}
-        {!! $errors->first($form.'default', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', 'Active', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+        {{ Form::select($form.'status', [1 => 'Active', 0 => 'Non Active'], $model->marketing_page_status ?? null, ['class'=> 'form-control']) }}
+        {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
     </div>
 
 </div>
 
 <div class="form-group">
-
-    {!! Form::label('name', 'Default', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'default') ? 'has-error' : ''}}">
-        {{ Form::select($form.'default', [1 => 'Active', 0 => 'Non Active'], $model->marketing_promo_default ?? null, ['class'=> 'form-control']) }}
-        {!! $errors->first($form.'default', '<p class="help-block">:message</p>') !!}
-    </div>
-
-    {!! Form::label('name', 'Default', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'default') ? 'has-error' : ''}}">
-        {{ Form::select($form.'default', [1 => 'Top', 2 => 'Non Active'], $model->marketing_promo_default ?? null, ['class'=> 'form-control']) }}
-        {!! $errors->first($form.'default', '<p class="help-block">:message</p>') !!}
-    </div>
-
-</div>
-<div class="form-group">
-
-    <div class="col-md-2">
-        @isset($model->{$form.'image'})
-        <img class="img-thumbnail" src="{{ Helper::files('promo/'.$model->{$form.'image'}) }}" alt="">
-        @endisset
-    </div>
-
+    {!! Form::label('name', 'Description Page', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10">
-        {!! Form::textarea($form.'page', null, ['class' => 'form-control basic', 'rows' => '5']) !!}
+        {!! Form::textarea($form.'description', null, ['class' => 'form-control basic', 'rows' => '5']) !!}
     </div>
 </div>

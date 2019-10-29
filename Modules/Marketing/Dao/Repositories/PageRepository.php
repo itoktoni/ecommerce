@@ -50,9 +50,9 @@ class PageRepository extends Page implements MasterInterface
     public function slugRepository($slug, $relation = false)
     {
         if ($relation) {
-            return $this->with($relation)->where('marketing_slider_slug', $slug)->firstOrFail();
+            return $this->with($relation)->where('marketing_page_slug', $slug)->firstOrFail();
         }
-        return $this->where('marketing_slider_slug', $slug)->firstOrFail();
+        return $this->where('marketing_page_slug', $slug)->firstOrFail();
     }
 
     public function showRepository($id, $relation = false)
@@ -63,46 +63,4 @@ class PageRepository extends Page implements MasterInterface
         return $this->findOrFail($id);
     }
 
-    public function getDataIn($in)
-    {
-        return $this->whereIn($this->getKeyName(), $in)->get();
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-        parent::saving(function ($model) {
-
-            $file = 'marketing_slider_file';
-            if (request()->has($file)) {
-                $image = $model->marketing_slider_image;
-                if ($image) {
-                    Helper::removeImage($image, Helper::getTemplate(__CLASS__));
-                }
-
-                $file = request()->file($file);
-                $name = Helper::uploadImage($file, Helper::getTemplate(__CLASS__));
-                $model->marketing_slider_image = $name;
-            }
-
-            if ($model->marketing_slider_name && empty($model->marketing_slider_slug)) {
-                $model->marketing_slider_slug = Str::slug($model->marketing_slider_name);
-            }
-
-            if (Cache::has('marketing_slider_api')) {
-                Cache::forget('marketing_slider_api');
-            }
-        });
-
-        parent::deleting(function ($model) {
-            if (request()->has('id')) {
-                $data = $model->getDataIn(request()->get('id'));
-                if ($data) {
-                    foreach ($data as $value) {
-                        Helper::removeImage($value->marketing_slider_image, Helper::getTemplate(__CLASS__));
-                    }
-                }
-            }
-        });
-    }
 }

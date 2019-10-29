@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Ixudra\Curl\Facades\Curl;
 // use Helper;
 // use Curl;
 /*
@@ -22,6 +23,111 @@ if (Cache::has('routing')) {
         }
     });
 }
+Route::match(
+    [
+        'GET',
+        'POST'
+    ],
+    'city',
+    function () {
+        $input = request()->get('q');
+        $province = request()->get('province');
+        
+        $query = DB::table('rajaongkir_cities');
+        if($province){
+            $query->where('province_id', $province);
+        }
+
+        return $query->get();
+
+    }
+)->name('city');
+
+Route::match(
+    [
+        'GET',
+        'POST'
+    ],
+    'location',
+    function () {
+        $input = request()->get('q');
+        $city = request()->get('city');
+
+        $query = DB::table('rajaongkir_districts');
+        if ($city) {
+            $query->where('city_id', $city);
+        }
+
+        return $data = $query->get();
+    }
+)->name('location');
+
+Route::match(
+    [
+        'GET',
+        'POST'
+    ],
+    'ongkir',
+    function () {
+        $from = '6981';
+        $to = request()->get('to');
+        $weight = request()->get('weight');
+        $courier = request()->get('courier');
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://pro.rajaongkir.com/api/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=$from&originType=subdistrict&destination=$to&destinationType=subdistrict&weight=$weight&courier=$courier",
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded",
+                "key: 2b17656e6964f1bdf59dc0f109475ead"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        $parse = json_decode($response, true);
+        if (isset($parse)) {
+            $data = $parse['rajaongkir'];
+            if ($data['status']['code'] == '200') {
+                $items = array();
+                foreach ($data['results'][0]['costs'] as $value) {
+                    $items[] = [
+                        'id' => $value['cost'][0]['value'],
+                        'service' => $value['service'],
+                        'description' => $value['description'],
+                        'etd' => $value['cost'][0]['etd'],
+                        'cost' => $value['cost'][0]['value'],
+                        'price' => number_format($value['cost'][0]['value'])
+                    ];
+                }
+            } else {
+
+                $items[] = [
+                    'id' => null,
+                    'text' => $data['status']['code'] . ' - ' . $data['status']['description']
+                ];
+            }
+        } else {
+
+            $items[] = [
+                'id' => null,
+                'text' => 'Connection Time Out !'
+            ];
+        }
+
+        curl_close($curl);
+
+        return response()->json($items);
+    }
+)->name('ongkir');
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();

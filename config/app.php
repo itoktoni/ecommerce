@@ -202,6 +202,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Alkhachatryan\LaravelWebConsole\LaravelWebConsoleServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
+        rizalafani\rajaongkirlaravel\RajaOngkirServiceProvider::class,
     ],
 
     /*
@@ -263,6 +264,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Notification' => Gloudemans\Notify\Notifications\NotificationFacade::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+        'RajaOngkir' => rizalafani\rajaongkirlaravel\RajaOngkirFacade::class,
     ],
 
 ];

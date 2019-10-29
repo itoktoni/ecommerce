@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -25,7 +26,7 @@ class LoginController extends Controller
      */
 
     protected $username;
-    protected $redirectTo = 'dashboard';
+    // protected $redirectTo = 'dashboard';
 
     /**
      * Create a new controller instance.
@@ -38,14 +39,23 @@ class LoginController extends Controller
         $this->username = $this->findUsername();
     }
 
+    public function redirectTo()
+    {
+        if (auth()->user()->group_user != 'customer') {
+            return route('home');
+        } else {
+            return url()->to(config('app.url'));
+        }
+    }
+
     public function findUsername()
     {
         $login = request()->input('login');
- 
+
         $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
- 
+
         request()->merge([$fieldType => $login]);
- 
+
         return $fieldType;
     }
 

@@ -10,24 +10,26 @@
                     </a>
                 </div>
                 <div class="col-xl-6 col-lg-5">
-                    <form class="header-search-form">
-                        <input type="text" placeholder="Search on divisima ....">
-                        <button><i class="flaticon-search"></i></button>
-                    </form>
+                    {!! Form::open(['route' => 'shop','class' => 'header-search-form', 'files' =>
+                    true]) !!}
+                    <input type="text" name="search" placeholder="Search on divisima ....">
+                    <button type="submit"><i class="flaticon-search"></i></button>
+                    {!! Form::close() !!}
                 </div>
                 <div class="col-xl-4 col-lg-5">
                     <div class="user-panel">
                         @auth
                         <div class="up-item">
                             <i class="flaticon-profile"></i>
-                            <a href="{{ route('myaccount') }}">My Account</a>
+                            <a href="{{ route('myaccount') }}">My Account</a> or
+                            <a class="text-danger" href="{{ route('reset') }}">Logout</a>
                         </div>
                         @endauth
                         @guest
                         <div class="up-item">
                             <i class="flaticon-profile"></i>
-                            <a href="{{ route('login') }}">Sign In</a> or <a href="{{ route('register') }}">Create
-                                Account</a>
+                            <a href="{{ route('login') }}">Sign In</a> or
+                            <a href="{{ route('register') }}">Create Account</a>
                         </div>
                         @endguest
                         <div id="count" class="up-item">
@@ -50,8 +52,6 @@
                 <li>
                     <div id="home" onclick="location.href = '{{ config('app.url') }}';">Home</div>
                 </li>
-                <li><a href="{{ route('about') }}">About</a>
-                <li><a href="{{ route('shop') }}">Shop <span class="new"> Sale </span></a></li>
                 <li><a href="{{ route('category') }}">Category</a>
                     @isset($public_category)
                     <ul class="sub-menu">
@@ -64,6 +64,8 @@
                     @endisset
                 </li>
                 <li><a href="{{ route('promo') }}">Promo</a>
+                <li><a href="{{ route('shop') }}">Shop <span class="new"> Sale </span></a></li>
+                <li><a href="{{ route('confirmation') }}">Confirmation</a>
                 <li><a href="{{ route('contact') }}">Contact Us</a></li>
             </ul>
         </div>

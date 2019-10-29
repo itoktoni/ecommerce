@@ -8,14 +8,19 @@
             @foreach ($public_product->slice(0,5)->all() as $homepage_public)
             <div class="product-item">
                 <div class="pi-pic">
+                    @isset($homepage_public->item_product_flag)
+                    <div class="tag-sale">{{ $homepage_public->item_product_flag }}</div>
+                    @endisset
                     <a href="{{ route('single_product', ['slug' => $homepage_public->item_product_slug]) }}">
                         <img src="{{ Helper::files('product/'.$homepage_public->item_product_image) }}"
                             alt="{{ $homepage_public->item_product_name }}">
                     </a>
                     <div class="pi-links">
-                        <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         @auth
-                        <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                        <a href="{{ route('filters', ['type' => 'love', 'slug' => $homepage_public->item_product_id]) }}"
+                            class="wishlist-btn"><i class="fa fa-heart{{ array_key_exists($homepage_public->item_product_id, $whitelist) ? '' : '-o' }}"
+                                aria-hidden="true"></i>
+                        </a>
                         @endauth
                     </div>
                 </div>

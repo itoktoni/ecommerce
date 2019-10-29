@@ -6,6 +6,7 @@
 <script src="{{ Helper::frontend('js/jquery.zoom.min.js') }}"></script>
 <script src="{{ Helper::frontend('js/jquery-ui.min.js') }}"></script>
 <script src="{{ Helper::frontend('js/notiny.min.js') }}"></script>
+<script src="{{ Helper::backend('vendor/chosen/chosen.jquery.min.js') }}"></script>
 <script src="{{ Helper::frontend('js/main.js') }}"></script>
 
 @stack('javascript')

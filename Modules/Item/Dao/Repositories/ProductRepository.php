@@ -41,9 +41,10 @@ class ProductRepository extends Product implements MasterInterface
         $category = self::getCategory();
         $list = Helper::dataColumn($this->datatable, $this->primaryKey);
         $query = $this->select($list)
+            ->leftJoin('item_wishlist', 'item_wishlist_item_product_id', 'item_product_id')
             ->leftJoin($brand->getTable(), $brand->getKeyName(), 'item_product_item_brand_id')
             ->leftJoin($category->getTable(), $category->getKeyName(), 'item_product_item_category_id')
-            ->orderBy('item_product_created_at', 'DESC');
+            ->orderBy('item_product_created_at', 'DESC')->orderBy('item_product_name', 'ASC');
         return $query;
     }
 

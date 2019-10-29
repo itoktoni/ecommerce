@@ -42,7 +42,7 @@ class ProductController extends Controller
         $brand = Helper::createOption((new BrandRepository()));
         $category = Helper::createOption((new CategoryRepository()));
         $tag = Helper::shareTag((new TagRepository()), 'item_tag_slug');
-        $color = Helper::shareTag((new ColorRepository()), 'item_color_slug');
+        $color = Helper::shareOption((new ColorRepository()), false);
         $size = Helper::shareTag((new SizeRepository()), 'item_size_code');
         $type = Helper::shareStatus(self::$model->promo);
 

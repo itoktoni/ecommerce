@@ -28,6 +28,7 @@ class Promo extends Model
     'marketing_promo_user_json',
     'marketing_promo_start_date',
     'marketing_promo_end_date',
+    'marketing_promo_minimal',
     'marketing_promo_maximal',
     'marketing_promo_type',
   ];
@@ -37,6 +38,10 @@ class Promo extends Model
   public $rules = [
     'marketing_promo_name' => 'required|min:3|unique:marketing_promo',
     'marketing_promo_file' => 'file|image|mimes:jpeg,png,jpg|max:2048',
+    'marketing_promo_start_date' => 'required|date_format:Y-m-d',
+    'marketing_promo_end_date' => 'required|date_format:Y-m-d|after:marketing_promo_start_date',
+    'marketing_promo_matrix' => 'required',
+    'marketing_promo_matrix' => 'required',
   ];
 
   const CREATED_AT = 'marketing_promo_created_at';
@@ -60,8 +65,8 @@ class Promo extends Model
   ];
 
   public $default = [
-    '1' => ['Active', 'success'],
     '0' => ['Not Active', 'warning'],
+    '1' => ['Active', 'success'],
   ];
 
   public $type = [
@@ -91,6 +96,8 @@ class Promo extends Model
         $model->marketing_promo_slug = Str::slug($model->marketing_promo_name);
       }
 
+      $model->marketing_promo_code = strtoupper(trim(request()->get('marketing_promo_code')));
+
       if ($model->marketing_promo_default == '1') {
         DB::table($model->getTable())
           ->where('marketing_promo_id', '<>', $model->marketing_promo_id)
@@ -98,6 +105,14 @@ class Promo extends Model
       }
 
       $model->marketing_promo_default = request()->get('marketing_promo_default');
+
+      if (empty(request()->get('marketing_promo_start_date'))) {
+        $model->marketing_promo_start_date = null;
+      }
+
+      if (empty(request()->get('marketing_promo_end_date'))) {
+        $model->marketing_promo_end_date = null;
+      }
 
       if (Cache::has('marketing_promo_api')) {
         Cache::forget('marketing_promo_api');

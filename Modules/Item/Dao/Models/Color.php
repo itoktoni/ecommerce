@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Color extends Model
 {
   protected $table = 'item_color';
-  protected $primaryKey = 'item_color_code';
+  protected $primaryKey = 'item_color_id';
   protected $fillable = [
+    'item_color_id',
     'item_color_code',
     'item_color_name',
     'item_color_slug',
@@ -19,7 +20,7 @@ class Color extends Model
   ];
 
   public $timestamps = true;
-  public $incrementing = false;
+  public $incrementing = true;
   public $rules = [
     'item_color_name' => 'required|min:3',
   ];

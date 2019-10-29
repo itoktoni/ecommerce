@@ -1,44 +1,52 @@
 @extends('auth.credential')
 @section('content')
-{!! Form::open(['class' => 'login100-form validate-form']) !!}  
 
-    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-         {!! Form::text('username', null, ['class' => 'input100', 'placeholder' => 'Username']) !!}
-        <span class="focus-input100"></span>
-        <span class="symbol-input100">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-        </span>
+{!! Form::open(['class' => '']) !!}
+<img src="{{ Helper::files('logo/'.config('website.logo')) }}" id="icon" alt="Logo" />
+<div class="input-div one">
+    <div class="{{ $errors->has('username') ? 'error' : ''}}">
+        <h5>Username</h5>
+        {!! Form::text('username', null, ['autofocus', 'class' => 'input']) !!}
     </div>
-    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-       {!! Form::email('email', null, ['class' => 'input100', 'placeholder' => 'Email']) !!}
-        <span class="focus-input100"></span>
-        <span class="symbol-input100">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-        </span>
+</div>
+<div class="input-div one">
+    <div class="{{ $errors->has('name') ? 'error' : ''}}">
+        <h5>Name</h5>
+        {!! Form::text('name', null, ['autofocus', 'class' => 'input']) !!}
     </div>
-    <div class="wrap-input100 validate-input" data-validate="Password is required">
-        {!! Form::password('password', ['readonly onfocus=this.removeAttribute("readonly");', 'class' => 'input100', 'placeholder' => 'Password']) !!}
-        <span class="focus-input100"></span>
-        <span class="symbol-input100">
-            <i class="fa fa-lock" aria-hidden="true"></i>
-        </span>
+</div>
+<div class="input-div one">
+    <div class="{{ $errors->has('email') ? 'error' : ''}}">
+        <h5>Email</h5>
+        {!! Form::text('email', null, ['autofocus', 'class' => 'input']) !!}
     </div>
-    <div class="wrap-input100 validate-input" data-validate="Password is required">
-        {!! Form::password('password_confirmation', ['readonly onfocus=this.removeAttribute("readonly");', 'class' => 'input100', 'placeholder' => 'Password']) !!}
-        <span class="focus-input100"></span>
-        <span class="symbol-input100">
-            <i class="fa fa-lock" aria-hidden="true"></i>
-        </span>
+</div>
+<div class="input-div pass">
+    <div class="{{ $errors->has('password') ? 'error' : ''}}">
+        <h5>Password</h5>
+        {!! Form::password('password', ['class' => 'input']) !!}
     </div>
-     <input type="submit" class="fadeIn fourth" value="Register">
-    <div style="min-height: 1px;margin-top: -20px;font-size: 12px;" class="text-center p-t-12">
-        @if ($errors->any())
-             @foreach ($errors->all() as $error)
-                 <span class="help-block text-danger">
-                    <strong>{{ $error }}</strong>
-                </span>
-             @endforeach
-         @endif
+</div>
+<div class="input-div pass">
+    <div class="{{ $errors->has('password_confirmation') ? 'error' : ''}}">
+        <h5>Confirmation</h5>
+        {!! Form::password('password_confirmation', ['class' => 'input']) !!}
     </div>
+</div>
+<a href="{{ route('login') }}">Already have account ?</a>
+<input type="submit" class="btn" value="Register">
+
+@if ($errors->any())
+@foreach ($errors->all() as $error)
+@if ($loop->first)
+<span class="help-block text-danger text-left">
+    <strong>{{ $error }}</strong><br>
+</span>
+@endif
+@endforeach
+@endif
+
 {!! Form::close() !!}
+
 @endsection
+   

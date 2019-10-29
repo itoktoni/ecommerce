@@ -46,6 +46,11 @@
         font-weight: bold;
     }
 
+    .invoice-box table tr.voucher td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+    }
+
     .invoice-box table tr.details td {
         padding-bottom: 20px;
     }
@@ -89,6 +94,12 @@
 
     .invoice-box table tr.heading td:nth-child(4) {
         text-align: right;
+    }
+
+    #title h4{
+        margin-top: 5px;
+        text-align:right;
+        font-size:1.5em;
     }
 
     @media only screen and (max-width: 600px) {

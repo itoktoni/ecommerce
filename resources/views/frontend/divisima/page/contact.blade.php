@@ -22,15 +22,16 @@
 				<h3>Get in touch</h3>
 				<p>{!! config('website.address') !!}</p>
 				<p>{{ config('website.phone') }}</p>
-				<p>{{ config('mail.from.address') }}</p>
+				<p>{{ config('website.email') }}</p>
 
-				<form class="contact-form">
-					<input type="text" placeholder="Your name">
-					<input type="text" placeholder="Your e-mail">
-					<input type="text" placeholder="Subject">
-					<textarea placeholder="Message"></textarea>
-					<button class="site-btn">SEND NOW</button>
-				</form>
+				{!!Form::open(['route' => 'contact', 'class' => 'contact-form']) !!}
+				<input type="text" class="{{ $errors->has('marketing_contact_name') ? 'error' : ''}}" value="{{ old('marketing_contact_name') ?? null }}" name="marketing_contact_name" placeholder="Your name">
+				<input type="text" class="{{ $errors->has('marketing_contact_email') ? 'error' : ''}}" value="{{ old('marketing_contact_email') ?? null }}" name="marketing_contact_email" placeholder="Your e-mail">
+				<input type="text" class="{{ $errors->has('marketing_contact_phone') ? 'error' : ''}}" value="{{ old('marketing_contact_phone') ?? null }}" name="marketing_contact_phone" placeholder="Phone">
+				<input type="text" class="{{ $errors->has('marketing_contact_subject') ? 'error' : ''}}" value="{{ old('marketing_contact_subject') ?? null }}" name="marketing_contact_subject" placeholder="Subject">
+				<textarea class="{{ $errors->has('marketing_contact_message') ? 'error' : ''}}" name="marketing_contact_message" placeholder="Message">{{ old('marketing_contact_message') ?? null }}</textarea>
+				<button type="submit" class="site-btn">SEND NOW</button>
+				{!! Form::close() !!}
 			</div>
 		</div>
 	</div>

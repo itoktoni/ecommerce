@@ -77,8 +77,8 @@ class HomeController extends Controller
     {
         $chart = new HomeChart();
         $chart->labels(['One', 'Two', 'Three', 'Four']);
-        $chart->dataset('My dataset', 'line', [1, 2, 3, 4])->color('#aaaaaa')->backgroundColor('#aaaaaa')->fill(true);
-        $chart->dataset('My dataset 2', 'line', [4, 3, 2, 1])->color('#717fe0')->backgroundColor('#717fe0')->fill(true);
+        $chart->dataset('My dataset', 'line', [1, 2, 3, 4])->color('#ebfaf1')->backgroundColor('#2ccb8f')->fill(true);
+        $chart->dataset('My dataset 2', 'line', [4, 3, 2, 1])->color('#2ccb8f')->backgroundColor('#ebfaf1')->fill(true);
 
         $chart->options([
             'tooltip' => [

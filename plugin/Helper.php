@@ -2,18 +2,20 @@
 
 namespace Plugin;
 
-use App\Dao\Models\Filters;
 use DB;
 use Curl;
 use File;
 use Route;
+use App\Dao\Models\Filters;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
+use ChrisKonnertz\StringCalc\StringCalc;
 use Thedevsaddam\LaravelSchema\Schema\Schema as Table;
-use Illuminate\Support\Str;
 
 class Helper
 {
+    public static $cal;
     public static function base_url()
     {
         return config('app.url');
@@ -204,6 +206,14 @@ class Helper
     public static function createCheckbox($id)
     {
         return '<input type="checkbox" name="id[]" value="' . $id . '">';
+    }
+
+    public static function calculate($string)
+    {
+        if (self::$cal == null) {
+            self::$cal = new StringCalc();
+        }
+        return self::$cal->calculate($string);
     }
 
     public static function shareTag($model, $field, $cache = false)

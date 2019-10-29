@@ -24,16 +24,20 @@ class User extends Authenticatable
         'photo',
         'group_user',
         'remember_token',
-        'user_address',
+        'address',
         'birth',
         'place_birth',
         'notes',
         'phone',
+        'deleted_at',
         'created_at',
         'updated_at',
-        'updated_by',
-        'created_by',
         'active',
+        'api_token',
+        'province',
+        'city',
+        'district',
+        'postcode',
     ];
     public $timestamps    = true; //timestamp will true
     public $incrementing  = true; //make creating id use lastcode

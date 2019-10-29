@@ -3,6 +3,7 @@
 
 <head>
     @include(Helper::setExtendFrontend('meta'))
+    @stack('css')
 </head>
 
 <body>
@@ -17,6 +18,23 @@
     @include(Helper::setExtendFrontend('footer'))
     @include(Helper::setExtendFrontend('js'))
 
-</body>
+    <div id="alert">
+        @if ($errors->any())
+        <script type="text/javascript">
+            $(function() {
+                @foreach ($errors->all() as $error)
+                    $.notiny({ text: '{{ $error }}', position: 'right-top' });
+                @endforeach
+            });
+        </script>
+        @endif
+    </div>
 
+</body>
+@stack('js')
+<script>
+$(document).ready(function() {
+    $("select.form-control.chosen").chosen();
+});
+</script>
 </html>

@@ -157,7 +157,7 @@
                     <li class="divider"></li>
                     <li>
                         <div id="logout" class="header-menu" role="menuitem" tabindex="-1"
-                            onclick="location.href ='{{ route('reboot') }}';">&nbsp;<i class="fa fa-power-off"></i> &nbsp;
+                            onclick="location.href ='{{ route('reset') }}';">&nbsp;<i class="fa fa-power-off"></i> &nbsp;
                             Logout</div>
                     </li>
                     @endauth

@@ -4,7 +4,7 @@
 <!-- Page info -->
 <div class="page-top-info">
 	<div class="container">
-		<h2>{{ $title }}</h2>
+		<h2>{{ $data->marketing_page_name }}</h2>
 		<br>
 	</div>
 </div>
@@ -18,8 +18,7 @@
 				<div class="panel">
 					<div aria-labelledby="headingOne" data-parent="#accordion">
 						<div class="panel-body">
-							<img class="col-md-6 img-thumnail float-left" src="{{ $image }}" alt="">
-							{!! html_entity_decode($page) !!}
+							{!! html_entity_decode($data->marketing_page_description) !!}
 						</div>
 					</div>
 				</div>

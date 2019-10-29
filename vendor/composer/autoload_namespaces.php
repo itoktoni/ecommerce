@@ -11,4 +11,5 @@ return array(
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Orangehill\\Iseed' => array($vendorDir . '/orangehill/iseed/src'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
+    'ChrisKonnertz\\StringCalc' => array($vendorDir . '/chriskonnertz/string-calc/src'),
 );

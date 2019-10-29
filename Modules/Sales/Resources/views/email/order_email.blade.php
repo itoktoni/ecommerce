@@ -18,7 +18,7 @@
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
                 <td colspan="4">
-                    <table>
+                    <table id="title">
                         <tr>
                             <td class="title">
                                 <img src="{{ Helper::files('logo/'.config('website.logo')) }}"
@@ -26,9 +26,10 @@
                             </td>
 
                             <td>
-                                Purchase Order #: {{ $master->{$master->getKeyName} }}<br>
-                                Created: {{ $date->toFormattedDateString() }}
+                                <span>Created: {{ $date->toFormattedDateString() }}</span>
+                                <h4>Sales Order #{{ $master->sales_order_id }}</h4>
                             </td>
+
                         </tr>
                     </table>
                 </td>
@@ -38,15 +39,16 @@
                 <td colspan="4">
                     <table>
                         <tr>
-                            <td>
-                                {{ $customer->crm_customer_name ?? '' }}.<br>
-                                {{ $customer->crm_customer_description ?? '' }}
+                            <td class="col-md-4">
+                                {{ $master->sales_order_rajaongkir_name ?? '' }}<br>
+                                {{ $master->sales_order_email ?? '' }}<br>
+                                {{ $master->sales_order_rajaongkir_phone ?? '' }}<br>
                             </td>
 
-                            <td>
-                                {{ config('website.name') }}.<br>
-                                {{ config('website.owner') }}<br>
-                                {{ config('website.address') }}
+                            <td class="col-md-8">
+                                {{ $master->sales_order_rajaongkir_address ?? '' }}<br>
+                                {{ $master->sales_order_rajaongkir_expedition ?? '' }}<br>
+                                {{ $master->sales_order_rajaongkir_service ?? '' }}<br>
                             </td>
                         </tr>
                     </table>
@@ -90,6 +92,24 @@
             </tr>
             @endforeach
 
+            <tr class="item">
+                <td colspan="3">
+                    {{ $master->sales_order_rajaongkir_expedition ?? '' }}
+                </td>
+            
+                <td>
+                    {{ number_format($master->sales_order_rajaongkir_ongkir) }}
+                </td>
+            </tr>
+            <tr class="voucher">
+                <td colspan="3">
+                    Voucher
+                </td>
+            
+                <td>
+                    {{ number_format($detail->sum($template_detail.'_total_order')) }}
+                </td>
+            </tr>
             <tr class="item last">
                 <td colspan="3">
                     Total

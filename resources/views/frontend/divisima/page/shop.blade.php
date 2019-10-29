@@ -26,20 +26,32 @@
 				</div>
 
 				<div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
-					@if (session()->has('filter'))
+					@if (session()->has('filter') && count(session()->get('filter')) > 0)
 					<div class="row">
 						<div class="col-lg-12">
 							<button type="button" class="btn btn-danger btn-xs">
 								Filter :
 							</button>
-
 							@foreach (session()->get('filter') as $key_filter => $value_filter)
-							<button type="button" class="btn btn-secondary btn-xs">
+							@if ($key_filter == 'item_product_name')
+							<a onclick="return confirm('Are you sure to delete filter ?');"
+								href="{{ route('filters', ['type' => 'remove_filter', 'slug' => $key_filter]) }}"
+								class="btn btn-secondary btn-xs">
 								{{ $value_filter }} <span class="badge badge-light">x</span>
-							</button>
+							</a>
+							@else
+							@foreach ($value_filter as $filter_filter)
+							<a onclick="return confirm('Are you sure to delete filter ?');"
+								href="{{ route('filters', ['type' => 'remove_filter', 'slug' => $key_filter.'.'.$filter_filter]) }}"
+								class="btn btn-secondary btn-xs">
+								{{ $filter_filter }} <span class="badge badge-light">x</span>
+							</a>
+							@endforeach
+							@endif
 							@endforeach
 
-							<a href="{{ route('filters', ['type' => 'reset', 'slug' => true]) }}"
+							<a onclick="return confirm('Are you sure to reset filter ?');"
+								href="{{ route('filters', ['type' => 'reset', 'slug' => true]) }}"
 								class="btn btn-danger btn-xs">
 								Reset
 							</a>

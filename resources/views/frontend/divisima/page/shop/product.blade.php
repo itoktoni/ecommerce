@@ -3,16 +3,19 @@
     <div class="col-lg-4 col-sm-6">
         <div class="product-item">
             <div class="pi-pic">
+                @isset($item_product->item_product_flag)
+                <div class="tag-sale">{{ $item_product->item_product_flag }}</div>
+                @endisset
                 <a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
                     <img src="{{ Helper::files('product/'.$item_product->item_product_image) }}"
                         alt="{{ $item_product->item_product_name }}">
                 </a>
                 <div class="pi-links">
-                    <a alt="{{ $item_product->item_product_name }}"
-                        href="{{ route('filters', ['type' => 'add', 'slug' => $item_product->item_product_id]) }}" class="add-card"><i
-                            class="flaticon-bag"></i><span>ADD TO CART</span></a>
                     @auth
-                    <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                    <a href="{{ route('filters', ['type' => 'love', 'slug' => $item_product->item_product_id]) }}" class="wishlist-btn">
+                       <i class="fa fa-heart{{ array_key_exists($item_product->item_product_id, $whitelist) ? '' : '-o' }}"
+                        aria-hidden="true"></i>
+                    </a>
                     @endauth
                 </div>
             </div>

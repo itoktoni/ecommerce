@@ -7,6 +7,7 @@ use Plugin\Response;
 use App\Http\Controllers\Controller;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use App\Http\Services\MasterService;
+use App\User;
 
 class PromoController extends Controller
 {
@@ -28,9 +29,13 @@ class PromoController extends Controller
 
     private function share($data = [])
     {
+        $user = User::where('group_user', 'customer')->get();
         $view = [
             'template' => $this->template,
             'status' => Helper::shareStatus(self::$model->status),
+            'default' => Helper::shareStatus(self::$model->default),
+            'type' => Helper::shareStatus(self::$model->type),
+            'user' => $user->pluck('user_id', 'name')->all(),
         ];
 
         return array_merge($view, $data);
@@ -42,7 +47,9 @@ class PromoController extends Controller
 
             $service->save(self::$model);
         }
-        return view(Helper::setViewCreate())->with($this->share());
+        return view(Helper::setViewCreate())->with($this->share([
+            'model' => self::$model,
+        ]));
     }
 
     public function update(MasterService $service)

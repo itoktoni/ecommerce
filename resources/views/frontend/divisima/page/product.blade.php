@@ -13,19 +13,27 @@
 		</div>
 	</div>
 </div>
-<!-- Page info end -->
 
+<!-- Page info end -->
+{!! Form::model($single_product, ['route'=> ['single_product', 'slug' =>
+$single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
+!!}
 <!-- product section -->
-<section class="product-section">
+<section id="pjax" class="product-section">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="product-pic-zoom">
 					<img class="product-big-img"
-						src="{{ Helper::files('product/'.$single_product->item_product_image) }}" alt="">
+						src="{{ Helper::files('product/'.$single_product->item_product_image) }}"
+						alt="{{ $single_product->item_product_name }}">
 				</div>
 				<div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
 					<div class="product-thumbs-track">
+						<div class="pt" data-imgbigurl="{{ Helper::files('product/'.$single_product->item_product_image) }}">
+							<img src="{{ Helper::files('product/thumbnail_'.$single_product->item_product_image) }}"
+								alt="{{ $single_product->item_product_name }}">
+						</div>
 						@foreach ($product_image as $item_product_image)
 						<div class="pt"
 							data-imgbigurl="{{ Helper::files('product_detail/'.$item_product_image->item_product_image_file) }}">
@@ -38,39 +46,28 @@
 			</div>
 			<div class="col-lg-6 product-details">
 				<h2 class="p-title">{{ $single_product->item_product_name }}</h2>
-				<h3 class="p-price">{{ number_format($single_product->item_product_sell) }}</h3>
-				<div class="fw-size-choose">
-					<p>Size</p>
-					<div class="sc-item">
-						<input type="radio" name="sc" id="xs-size">
-						<label for="xs-size">32</label>
-					</div>
-					<div class="sc-item">
-						<input type="radio" name="sc" id="s-size">
-						<label for="s-size">34</label>
-					</div>
-					<div class="sc-item">
-						<input type="radio" name="sc" id="m-size" checked="">
-						<label for="m-size">36</label>
-					</div>
-					<div class="sc-item">
-						<input type="radio" name="sc" id="l-size">
-						<label for="l-size">38</label>
-					</div>
-					<div class="sc-item disable">
-						<input type="radio" name="sc" id="xl-size" disabled>
-						<label for="xl-size">40</label>
-					</div>
-					<div class="sc-item">
-						<input type="radio" name="sc" id="xxl-size">
-						<label for="xxl-size">42</label>
+				@if ($discount > 0)
+				<h3 class="p-price coret">Price {{ number_format($single_product->item_product_sell) }}</h3>
+				<h3 class="p-price">After Discount {{ number_format($single_product->item_product_sell - $discount) }}
+				</h3>
+				@else
+				<h3 class="p-price">Price {{ number_format($single_product->item_product_sell) }}</h3>
+				@endif
+				@if($stock->count() > 0)
+				<h5 style="margin-top:50px;"> Available Stock </h5>
+				<div id="option_product" class="col-md-5">
+					<div class="row">
+						{{ Form::select('option', $list, old('option') ?? null, ['class' => 'form-control']) }}
 					</div>
 				</div>
 				<div class="quantity">
 					<p>Quantity</p>
-					<div class="pro-qty"><input type="text" value="1"></div>
+				<div class="pro-qty"><input type="text" name="qty" value="{{ old('qty') ?? 1}}"></div>
 				</div>
-				<a href="#" class="site-btn">SHOP NOW</a>
+				<button type="submit" id="pjax" class="site-btn">SHOP NOW</button>
+				@else
+				<button type="button" class="site-btn">Out Of Stock</button>
+				@endif
 				<div id="accordion" class="accordion-area">
 					<div class="panel">
 						<div class="panel-header" id="headingOne">
@@ -124,4 +121,5 @@
 	</div>
 </section>
 <!-- product section end -->
+{!! Form::close() !!}
 @endsection

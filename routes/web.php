@@ -78,7 +78,7 @@ public routes
 Route::get('/', 'PublicController@index')->name('beranda');
 Route::get('/slider/{slider}', 'PublicController@index')->name('single_slider');
 
-Route::get('/shop', 'PublicController@shop')->name('shop');
+Route::match(['get', 'post'], 'shop', 'PublicController@shop')->name('shop');
 Route::get('/shop/{type}/{slug}', 'PublicController@shop')->name('filters');
 
 Route::get('/brand/{brand}', 'PublicController@shop')->name('filter_brand');
@@ -88,13 +88,15 @@ Route::match(['get', 'post'], 'checkout', 'PublicController@checkout')->name('ch
 Route::match(['get', 'post'], 'myaccount', 'PublicController@myaccount')->name('myaccount');
 
 Route::get('/delete/{id}', 'PublicController@delete')->name('delete');
+Route::get('/email/{id}', 'PublicController@email')->name('email');
 
 Route::get('/category', 'PublicController@category')->name('category');
 
 Route::get('/promo', 'PublicController@promo')->name('promo');
 Route::get('/promo/{slug}', 'PublicController@promo')->name('single_promo');
+Route::get('/page/{slug}', 'PublicController@page')->name('page');
 
-Route::get('/product/{slug}', 'PublicController@product')->name('single_product');
+Route::match(['get', 'post'], '/product/{slug}', 'PublicController@product')->name('single_product');
 
 Route::get('/confirmation', 'PublicController@confirmation')->name('confirmation');
 
@@ -109,5 +111,3 @@ auth mechanizme
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('reset', 'UserController@resetRedis')->name('reset');
 Route::get('reboot', 'UserController@resetRouting')->name('reboot');
-
-Route::get('lifewire', 'HomeController@lifewire')->name('lifewire');

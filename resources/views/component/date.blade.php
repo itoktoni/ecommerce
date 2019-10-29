@@ -8,10 +8,21 @@
 
 @push('javascript')
     <script>
+        @if(in_array('date', $array))
         $(".date").flatpickr({
             altInput: true,
             altFormat: "j F Y",
             dateFormat: "Y-m-d",
         });
+        @endif
+
+        @if(in_array('datetime', $array))
+        $(".datetime").flatpickr({
+            enableTime: true,
+            altInput: true,
+            altFormat: "j F Y H:i",
+            dateFormat: "Y-m-d H:i",
+        });
+        @endif
     </script>
 @endpush
