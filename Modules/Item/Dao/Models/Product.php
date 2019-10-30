@@ -34,6 +34,8 @@ class Product extends Model
     'item_product_name',
     'item_product_flag',
     'item_product_description',
+    'item_product_care',
+    'item_product_return',
     'item_product_updated_at',
     'item_product_created_at',
     'item_product_deleted_at',

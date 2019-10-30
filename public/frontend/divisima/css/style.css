@@ -1036,6 +1036,10 @@
         margin-right: 0;
     }
     
+    .footer-widget ul li {
+        width: 150px;
+    }
+    
     .footer-widget ul li a {
         display: inline-block;
         position: relative;

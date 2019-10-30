@@ -19,8 +19,6 @@
 			<div class="row">
 				<div class="col-lg-3 order-2 order-lg-1">
 					@include(Helper::setExtendFrontend('shop.category', true))
-					@include(Helper::setExtendFrontend('shop.color', true))
-					@include(Helper::setExtendFrontend('shop.size', true))
 					@include(Helper::setExtendFrontend('shop.brand', true))
 					@include(Helper::setExtendFrontend('shop.tag', true))
 				</div>

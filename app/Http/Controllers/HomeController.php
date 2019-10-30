@@ -75,6 +75,9 @@ class HomeController extends Controller
 
     public function dashboard()
     {
+        if (Auth::user()->group_user == 'customer') {
+            return redirect()->to('/');
+        }
         $chart = new HomeChart();
         $chart->labels(['One', 'Two', 'Three', 'Four']);
         $chart->dataset('My dataset', 'line', [1, 2, 3, 4])->color('#ebfaf1')->backgroundColor('#2ccb8f')->fill(true);

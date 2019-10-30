@@ -23,7 +23,7 @@
 @push('javascript')
 <script>
     $('.basic').summernote({
-        height: 400
+        height: 300
     });
 </script>
 @endpush

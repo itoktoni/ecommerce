@@ -1,48 +1,63 @@
 <section class="footer-section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-5 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="footer-widget about-widget">
                     <h2>About</h2>
                     {!! config('website.description') !!}
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="footer-widget about-widget">
                     <h2>Page</h2>
                     @if ($public_page->count() > 5)
-                     
+                    @php
+                    $count_page = $public_page->count() / 2;
+                    $parsing_page = $public_page->chunk($count_page);
+                    @endphp
+                    @foreach ($parsing_page as $header_footer_page)
+                    <ul>
+                        @foreach ($header_footer_page as $detail_footer_page)
+                        <li>
+                            <a href="{{ route('page', ['slug' => $detail_footer_page->marketing_page_slug]) }}">
+                                {{ $detail_footer_page->marketing_page_name }}
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                    @endforeach
                     @else
                     <ul>
-                    @foreach ($public_page as $public_item_page)
-                    <li><a href="">{{ $public_item_page->marketing_page_name }}</a></li>
-                    @endforeach
+                        @foreach ($public_page as $public_item_page)
+                        <li>
+                            <a href="{{ route('page', ['slug' => $public_item_page->marketing_page_slug]) }}">
+                                {{ $public_item_page->marketing_page_name }}
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
                     @endif
-                    </ul>
-                    <ul>
-                        <li><a href="">Bloggers</a></li>
-                        <li><a href="">Support</a></li>
-                        <li><a href="">Terms of Use</a></li>
-                        <li><a href="">Shipping</a></li>
-                        <li><a href="">Blog</a></li>
-                    </ul>
+
                 </div>
             </div>
             <div class="col-lg-4 col-sm-6">
                 <div class="footer-widget contact-widget">
                     <h2>Address</h2>
                     <div class="con-info">
-                    <p>{{ strtoupper(config('website.name')) }}</p>
+                        <p>{{ strtoupper(config('website.name')) }}</p>
                     </div>
                     <div id="address" class="con-info">
                         {!! html_entity_decode(config('website.address')) !!}
                     </div>
                     <div class="con-info">
-                        <span>Phone : </span><p>{{ config('website.phone') }}</p>
+                        <span>Phone : </span>
+                        <p>{{ config('website.phone') }}</p>
                     </div>
                     <div class="con-info">
-                       <span>Email : </span>
-                       <a href="mailto:{{ config('website.email') }}"><p>{{ config('website.email') }}</p></a>
+                        <span>Email : </span>
+                        <a href="mailto:{{ config('website.email') }}">
+                            <p>{{ config('website.email') }}</p>
+                        </a>
                     </div>
                 </div>
             </div>

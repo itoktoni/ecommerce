@@ -14,6 +14,35 @@
         {!! $errors->first($form.'slug', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
+<div class="form-group">
+
+    {!! Form::label('name', 'Image', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'image') ? 'has-error' : ''}}">
+        <input type="file" name="{{ $form.'file' }}"
+            class="{{ $errors->has($form.'file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
+        {!! $errors->first($form.'image', '<p class="help-block">:message</p>') !!}
+    </div>
+    {!! Form::label('name', 'Tag', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
+        {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control', 'multiple']) }}
+        {!! $errors->first($form.'item_tag_json', '<p class="help-block">:message</p>') !!}
+    </div>
+</div>
+<div class="form-group">
+
+    {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-{{ isset($model->item_product_image) && !empty($model->item_product_image) ? '8' : '10' }}">
+        {!! Form::textarea($form.'description', null, ['class' => 'form-control basic', 'rows' => '3']) !!}
+    </div>
+
+    <div class="col-md-2">
+        @isset ($model->item_product_image)
+        <img width="100%" class="img-thumbnail"
+            src="{{ Helper::files($template.'/thumbnail_'.$model->item_product_image) }}" alt="">
+        @endisset
+    </div>
+</div>
+
 <hr>
 <div class="form-group">
     {!! Form::label('name', 'Buying Price', ['class' => 'col-md-2 control-label']) !!}
@@ -57,6 +86,13 @@
         {!! $errors->first($form.'gram', '<p class="help-block">:message</p>') !!}
     </div>
 
+</div>
+<div class="form-group">
+
+    {!! Form::label('name', 'Care', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-10">
+        {!! Form::textarea($form.'care', null, ['class' => 'form-control basic', 'rows' => '3']) !!}
+    </div>
 </div>
 
 <hr>
@@ -106,7 +142,13 @@
 {!! $errors->first($form.'item_size_json', '<p class="help-block">:message</p>') !!}
 </div>
 </div> --}}
+<div class="form-group">
 
+    {!! Form::label('name', 'Return', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-10">
+        {!! Form::textarea($form.'return', null, ['class' => 'form-control basic', 'rows' => '3']) !!}
+    </div>
+</div>
 <hr>
 <div class="form-group">
 
@@ -120,39 +162,5 @@
     <div class="col-md-4 {{ $errors->has($form.'discount_value') ? 'has-error' : ''}}">
         {!! Form::text($form.'discount_value', null, ['class' => 'form-control']) !!}
         {!! $errors->first($form.'discount_value', '<p class="help-block">:message</p>') !!}
-    </div>
-
-</div>
-
-<hr>
-
-<div class="form-group">
-
-    {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-{{ isset($model->item_product_image) && !empty($model->item_product_image) ? '8' : '10' }}">
-        {!! Form::textarea($form.'description', null, ['class' => 'form-control basic', 'rows' => '3']) !!}
-    </div>
-
-    <div class="col-md-2">
-        @isset ($model->item_product_image)
-        <img width="100%" class="img-thumbnail"
-            src="{{ Helper::files($template.'/thumbnail_'.$model->item_product_image) }}" alt="">
-        @endisset
-    </div>
-</div>
-
-<div class="form-group">
-
-    {!! Form::label('name', 'Image', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-3 {{ $errors->has($form.'image') ? 'has-error' : ''}}">
-        <input type="file" name="{{ $form.'file' }}"
-            class="{{ $errors->has($form.'file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
-        {!! $errors->first($form.'image', '<p class="help-block">:message</p>') !!}
-    </div>
-    {{ dd(json_decode($form.'item_tag_json')) }}
-    {!! Form::label('name', 'Tag', ['class' => 'col-md-1 control-label']) !!}
-    <div class="col-md-6 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
-        {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control', 'multiple']) }}
-        {!! $errors->first($form.'item_tag_json', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

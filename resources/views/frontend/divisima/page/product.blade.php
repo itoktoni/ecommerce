@@ -30,7 +30,8 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 				</div>
 				<div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
 					<div class="product-thumbs-track">
-						<div class="pt" data-imgbigurl="{{ Helper::files('product/'.$single_product->item_product_image) }}">
+						<div class="pt"
+							data-imgbigurl="{{ Helper::files('product/'.$single_product->item_product_image) }}">
 							<img src="{{ Helper::files('product/thumbnail_'.$single_product->item_product_image) }}"
 								alt="{{ $single_product->item_product_name }}">
 						</div>
@@ -62,7 +63,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 				</div>
 				<div class="quantity">
 					<p>Quantity</p>
-				<div class="pro-qty"><input type="text" name="qty" value="{{ old('qty') ?? 1}}"></div>
+					<div class="pro-qty"><input type="text" name="qty" value="{{ old('qty') ?? 1}}"></div>
 				</div>
 				<button type="submit" id="pjax" class="site-btn">SHOP NOW</button>
 				@else
@@ -109,12 +110,8 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 						</div>
 					</div>
 				</div>
-				<div class="social-sharing">
-					<a href=""><i class="fa fa-google-plus"></i></a>
-					<a href=""><i class="fa fa-pinterest"></i></a>
-					<a href=""><i class="fa fa-facebook"></i></a>
-					<a href=""><i class="fa fa-twitter"></i></a>
-					<a href=""><i class="fa fa-youtube"></i></a>
+				<div class="text-center" style="margin-top:20px;">
+					<div class="addthis_inline_share_toolbox"></div>
 				</div>
 			</div>
 		</div>
