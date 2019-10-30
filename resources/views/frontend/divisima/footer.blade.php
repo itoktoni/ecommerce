@@ -13,7 +13,7 @@
                     @if ($public_page->count() > 5)
                     @php
                     $count_page = $public_page->count() / 2;
-                    $parsing_page = $public_page->chunk($count_page);
+                    $parsing_page = $public_page->chunk(round($count_page));
                     @endphp
                     @foreach ($parsing_page as $header_footer_page)
                     <ul>
