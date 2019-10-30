@@ -60,4 +60,17 @@ class Kernel extends HttpKernel
 //        'Request' => \Illuminate\Support\Facades\Request::class,
         
     ];
+
+    /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->call(function () {
+            DB::table('recent_users')->delete();
+        })->daily();
+    }
 }
