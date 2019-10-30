@@ -67,8 +67,6 @@
         <div class="container">
             @include(Helper::setExtendFrontend('sosmed'))
             <p class="text-white text-center mt-5">{{ config('website.footer') }}</p>
-
-            {{ dump(Cart::getContent()) }}
         </div>
     </div>
 </section>
