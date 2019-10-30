@@ -1,5 +1,5 @@
 @extends(Helper::setExtendBackend())
-@component('component.date')
+@component('component.date', ['array' => ['date']])
 @endcomponent
 @component('component.summernote', ['array' => ['lite', 'basic']])
 @endcomponent
