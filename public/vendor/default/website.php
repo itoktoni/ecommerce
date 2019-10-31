@@ -15,6 +15,7 @@ return [
         'email' => 'itok.toni@gmail.com',
         'address' => '',
         'header' => '',
+        'color' => '',
         'footer' => 'footer laravel core',
         'phone' => '(+62 21) 345321',
         'install' => '0',

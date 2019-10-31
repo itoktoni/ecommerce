@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Modules\Sales\Models\Order;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Modules\Finance\Dao\Repositories\BankRepository;
 
 class OrderEmail extends Mailable implements ShouldQueue
 {
@@ -23,6 +24,7 @@ class OrderEmail extends Mailable implements ShouldQueue
     public $customer;
     public $forwarder;
     public $detail;
+    public $account;
 
     public function __construct($order)
     {
@@ -30,6 +32,8 @@ class OrderEmail extends Mailable implements ShouldQueue
         $this->customer = $order->customer;
         $this->forwarder = $order->forwarder;
         $this->detail = $order->detail;
+        $account = new BankRepository();
+        $this->account = $account->dataRepository()->get();
     }
 
     /**

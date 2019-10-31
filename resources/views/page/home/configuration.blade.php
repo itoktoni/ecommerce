@@ -3,6 +3,8 @@
 @endcomponent
 @component('component.summernote', ['array' => ['lite', 'basic']])
 @endcomponent
+@component('component.jscolor')
+@endcomponent
 @section('content')
 <div class="row">
     <div class="panel-body">
@@ -35,6 +37,8 @@
                             <input type="file" name="favicon" class="btn btn-default btn-sm btn-block">
                         </div>
                         <br>
+                        
+                        <br>
                         <br>
                         <hr>
                         <section class="panel">
@@ -54,6 +58,13 @@
                         <hr class="dotted short">
                         <div class="col-md-12 space">
                             <input type="file" name="logo" class="btn btn-default btn-sm btn-block">
+                        </div>
+                        <br>
+                        <br>
+                        <hr>
+                        <h5 class="text-center">Color</h5>
+                        <div class="col-md-12">
+                            {!! Form::text('color', config('website.color'), ['class' => 'form-control jscolor']) !!}
                         </div>
                     </div>
 
@@ -351,7 +362,7 @@
                                 </div>
                                 <div id="collapse1Four" class="accordion-body collapse">
                                     <div class="panel-body line">
-                                        
+
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label">SEO</label>
@@ -381,7 +392,7 @@
                                                         cols="50">{{ config('website.footer') }}</textarea>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>

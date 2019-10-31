@@ -503,8 +503,8 @@ class PublicController extends Controller
         $validate = [];
         if (request()->isMethod('POST')) {
 
+            $discount = Cart::getConditions()->first();
             $request = request()->all();
-
             $address = $request['sales_order_rajaongkir_address'];
             $email = $request['sales_order_email'];
             $name = $request['sales_order_rajaongkir_name'];
@@ -541,6 +541,14 @@ class PublicController extends Controller
 
             $order = new OrderRepository();
             $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
+            if ($discount) {
+
+                $request['sales_order_marketing_promo_code'] = $discount->getName();
+                $request['sales_order_marketing_promo_name'] = $discount->getAttributes()['name'];
+                $request['sales_order_marketing_promo_value'] = abs($discount->getValue());
+                $request['sales_order_total'] = Cart::getTotal() + $saveOngkir;
+            }
+
             $validate = Validator::make($request, $order->rules, $order->custom_attribute);
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;

@@ -70,7 +70,7 @@
 						@if (Cart::getConditions()->count() > 0)
 						<hr>
 						<li>
-							Voucher
+							{{ Cart::getConditions()->first()->getAttributes()['name'] }}
 							<span
 								id="calculate_voucher">{{ number_format(Cart::getConditions()->first()->getValue()) }}</span>
 						</li>

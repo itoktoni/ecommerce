@@ -106,6 +106,7 @@ class HomeController extends Controller
                 'footer' => request()->get('footer'),
                 'header' => htmlentities(request()->get('header')),
                 'service' => request()->get('service'),
+                'color' => request()->get('color'),
                 'backend' => request()->get('backend'),
                 'frontend' => request()->get('frontend'),
                 'owner' => request()->get('owner'),
