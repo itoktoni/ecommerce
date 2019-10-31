@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
 use Modules\Sales\Dao\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use Modules\Item\Dao\Models\Product;
-use Modules\Sales\Emails\OrderEmail;
+use Modules\Sales\Emails\CreateOrderEmail;
 use Illuminate\Support\Facades\Cache;
 use Modules\Item\Dao\Models\Wishlist;
 use Illuminate\Support\Facades\Config;
@@ -579,7 +579,7 @@ class PublicController extends Controller
             }
 
             $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
-            Mail::to($email)->send(new OrderEmail($data));
+            Mail::to($email)->send(new CreateOrderEmail($data));
 
             return redirect()->back()->with(['success' => true]);
         }
@@ -622,7 +622,7 @@ class PublicController extends Controller
     {
         $order = new OrderRepository();
         $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
-        return new OrderEmail($data);
+        return new CreateOrderEmail($data);
     }
 
     public function contact()

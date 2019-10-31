@@ -20,7 +20,7 @@
                                                 <div style="margin:10px 2px -25px">
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;font-weight:bold;margin:0;padding:0">
-                                                        Notification Order From
+                                                        Notification for Cancel Order From
                                                         {{ config('website.name') }},
                                                     </p>
 
@@ -266,32 +266,14 @@
                                                             </td>
                                                             
                                                         </tr>
-                                                        @foreach($account as $a)
-                                                        <tr>
-                                                            <td align="left" colspan="2" valign="top"
-                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
-                                                                bgcolor="#FFFFFF">
-                                                                <span
-                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $a->finance_bank_name }}</span>
-                                                            </td>
-                                                            <td>:</td>
-                                                            <td align="left" colspan="2" valign="top"
-                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
-                                                                bgcolor="#FFFFFF">
-                                                                <span
-                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $a->finance_bank_account_number }}
-                                                                    ( {{ $a->finance_bank_account_name }} )</span>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
+                                                        
                                                     </table>
 
                                                     <br>
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
-                                                        Segera lakukan konfirmasi order barang, untuk memberitahu bahwa
-                                                        kamu telah membayar order barang dengan benar. Jika ternyata
-                                                        order kamu bermasalah, silakan hubungi kami melalui halaman
+                                                        Order sudah dibatalkan karena tidak ada confirmasi pembayaran dalam 10 menit. Jika ingin membeli kembali
+                                                        , silakan order lagi kembali atau hubungi kami melalui halaman
                                                         <a href=""
                                                             style="font-family:Arial,sans-serif;color:#{{ config('website.color') }}!important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
                                                             target="_blank">

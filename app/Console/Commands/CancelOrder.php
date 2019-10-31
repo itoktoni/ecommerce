@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use Modules\Sales\Dao\Models\Order;
+use Illuminate\Support\Facades\Mail;
+use Modules\Sales\Emails\CancelOrderEmail;
 
 class CancelOrder extends Command {
 
@@ -38,7 +40,12 @@ class CancelOrder extends Command {
      */
     public function handle() {
 
-        Order::where('sales_order_status', 1)->where('sales_order_created_at', '<', Carbon::now()->subMinutes(10)->toDateTimeString())->limit(100)->update(['sales_order_status' => '0']);
+        $list = Order::where('sales_order_status', 1)->where('sales_order_created_at', '<', Carbon::now()->subMinutes(10)->toDateTimeString())->limit(10);
+        foreach ($list->all() as $order) {
+            $data = $order->showRepository($order->sales_order_id, ['customer', 'forwarder', 'detail', 'detail.product']);
+            Mail::to($order->sales_order_email)->send(new CancelOrderEmail($data));
+        }
+        $data = $list->update(['sales_order_status' => '0']);
         $this->info('The system has cancel order successfully!');
     }
 

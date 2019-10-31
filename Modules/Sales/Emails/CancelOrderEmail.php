@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Finance\Dao\Repositories\BankRepository;
 
-class OrderEmail extends Mailable implements ShouldQueue
+class CancelOrderEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -43,6 +43,6 @@ class OrderEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view(Helper::setViewEmail('order_email', 'sales'));
+        return $this->view(Helper::setViewEmail('cancel_order_email', 'sales'));
     }
 }
