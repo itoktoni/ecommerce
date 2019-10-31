@@ -254,21 +254,6 @@
                                                         </tbody>
                                                     </table>
 
-                                                    <table>
-                                                        <tr>
-                                                            <td align="left" colspan="2" valign="top"
-                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
-                                                                bgcolor="#FFFFFF">
-                                                                <span
-                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:14px;margin:0;padding:0;font-weight:bold">
-                                                                    Rekening :
-                                                                </span>
-                                                            </td>
-                                                            
-                                                        </tr>
-                                                        
-                                                    </table>
-
                                                     <br>
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
