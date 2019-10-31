@@ -38,7 +38,7 @@ class CancelOrder extends Command {
      */
     public function handle() {
 
-        Order::where('sales_order_status', 1)->where('sales_order_created_at', '<', Carbon::now()->subMinutes(1)->toDateTimeString())->limit(100)->update(['sales_order_status' => '0']);
+        Order::where('sales_order_status', 1)->where('sales_order_created_at', '<', Carbon::now()->subMinutes(10)->toDateTimeString())->limit(100)->update(['sales_order_status' => '0']);
         $this->info('The system has cancel order successfully!');
     }
 
