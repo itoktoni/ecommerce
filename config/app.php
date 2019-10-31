@@ -203,6 +203,7 @@ return [
         Alkhachatryan\LaravelWebConsole\LaravelWebConsoleServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
         rizalafani\rajaongkirlaravel\RajaOngkirServiceProvider::class,
+        Queueworker\SansDaemon\SansDaemonServiceProvider::class,
     ],
 
     /*

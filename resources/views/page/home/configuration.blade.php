@@ -351,13 +351,20 @@
                                 </div>
                                 <div id="collapse1Four" class="accordion-body collapse">
                                     <div class="panel-body line">
-
+                                        
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label">SEO</label>
                                                 <div class="col-md-10">
                                                     <textarea class="form-control" rows="3" name="seo"
                                                         cols="50">{{ config('website.seo') }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Header</label>
+                                                <div class="col-md-10">
+                                                    <textarea class="form-control basic" rows="3" name="header"
+                                                        cols="50">{{ html_entity_decode(config('website.header')) }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -374,13 +381,7 @@
                                                         cols="50">{{ config('website.footer') }}</textarea>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label">About</label>
-                                                <div class="col-md-10">
-                                                    <textarea class="form-control basic" rows="3" name="about"
-                                                        cols="50">{{ html_entity_decode(config('website.about')) }}</textarea>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -23,7 +23,15 @@
     }
 
     .invoice-box table tr td:nth-child(2) {
-        text-align: right;
+        text-align: right !important;
+    }
+
+    .invoice-box table tr td:nth-child(3) {
+        text-align: right !important;
+    }
+
+    .invoice-box table tr td:nth-child(4) {
+        text-align: right !important;
     }
 
     .invoice-box table tr.top table td {
@@ -47,7 +55,6 @@
     }
 
     .invoice-box table tr.voucher td {
-        background: #eee;
         border-bottom: 1px solid #ddd;
     }
 
@@ -69,37 +76,37 @@
     }
 
     .invoice-box table tr.total.last td {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.item td:nth-child(2) {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.item td:nth-child(3) {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.item td:nth-child(4) {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.heading td:nth-child(2) {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.heading td:nth-child(3) {
-        text-align: right;
+        text-align: right !important;
     }
 
     .invoice-box table tr.heading td:nth-child(4) {
-        text-align: right;
+        text-align: right !important;
     }
 
-    #title h4{
+    #title h4 {
         margin-top: 5px;
-        text-align:right;
-        font-size:1.5em;
+        text-align: right;
+        font-size: 1.5em;
     }
 
     @media only screen and (max-width: 600px) {
@@ -128,5 +135,20 @@
 
     .rtl table tr td:nth-child(2) {
         text-align: left;
+    }
+
+    #header p {
+        margin-top: 0px;
+    }
+
+    .date {
+        text-align: right;
+    }
+
+    #header p img {
+        margin-top: -100px !important;
+        margin-left: -40px;
+        width: 200px !important;
+        margin-bottom: -100px;
     }
 </style>

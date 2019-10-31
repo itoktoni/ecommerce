@@ -235,7 +235,7 @@
 				ongkir.empty();
 				ongkir.append('<option value=""></option>');
 				$.each(response, function (idx, obj) {
-					ongkir.append('<option value="' + obj.cost + '">' + obj.service + ' ( '+ obj.description + ' ) [ '+ obj.etd + ' ] - ' + obj.price+ ' </option>');
+					ongkir.append('<option data="'+obj.cost+'" value="' + obj.service + '">' + obj.service + ' ( '+ obj.description + ' ) [ '+ obj.etd + ' ] - ' + obj.price+ ' </option>');
 				});
 				ongkir.trigger("chosen:updated");
 			}
@@ -251,7 +251,7 @@
 
 		var numeralTotal = numeral(calculate_total.text());
 		var numeralVoucher = numeral(calculate_voucher.text());
-		var numeralOngkir = numeral(ongkir.val());
+		var numeralOngkir = numeral(ongkir.attr('data'));
 				
 		$('#mask_ongkir').val(ongkir.text());
 

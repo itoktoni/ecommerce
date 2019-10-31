@@ -10,6 +10,7 @@ use Helper;
 use App\Enums\OptionSlider;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Carbon;
 use Modules\Sales\Dao\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use Modules\Item\Dao\Models\Product;
@@ -520,24 +521,26 @@ class PublicController extends Controller
                 $post_to = $location;
                 $post_weight = request()->get('sales_order_rajaongkir_weight');
                 $post_courier = request()->get('sales_order_rajaongkir_courier');
-
+                $saveOngkir = 0;
                 $response = Curl::to(route('ongkir'))->withData([
                     'to' => $post_to,
                     'weight' => $post_weight,
                     'courier' => $post_courier,
                 ])->post();
                 $json  = json_decode($response);
-
                 if (isset($json) && !empty($json)) {
                     $int = 0;
+                    $service = $request['sales_order_rajaongkir_ongkir'];
+                    $saveOngkir = collect($json)->where('service', $service)->first()->cost ?? 0;
                     $ongkir[''] = 'Choose Ongkir';
                     foreach ($json as $value) {
-                        $ongkir[$value->cost] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
+                        $ongkir[$value->service] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
                     }
                 }
             }
 
             $order = new OrderRepository();
+            $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
             $validate = Validator::make($request, $order->rules, $order->custom_attribute);
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;
@@ -609,7 +612,6 @@ class PublicController extends Controller
 
     public function email($id)
     {
-
         $order = new OrderRepository();
         $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
         return new OrderEmail($data);

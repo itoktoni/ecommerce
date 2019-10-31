@@ -14,6 +14,7 @@ return [
         'owner' => 'Alexandro',
         'email' => 'itok.toni@gmail.com',
         'address' => '',
+        'header' => '',
         'footer' => 'footer laravel core',
         'phone' => '(+62 21) 345321',
         'install' => '0',

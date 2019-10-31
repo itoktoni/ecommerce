@@ -20,13 +20,12 @@
                 <td colspan="4">
                     <table id="title">
                         <tr>
-                            <td class="title">
-                                <img src="{{ Helper::files('logo/'.config('website.logo')) }}"
-                                    style="width:100%; max-width:300px;">
+                            <td id="header" class="title">
+                                <img src="{{ Helper::files('logo/'.config('website.logo')) }}" alt="">
                             </td>
 
                             <td>
-                                <span>Created: {{ $date->toFormattedDateString() }}</span>
+                                <span class="date">Created: {{ $date->toFormattedDateString() }}</span>
                                 <h4>Sales Order #{{ $master->sales_order_id }}</h4>
                             </td>
 
@@ -107,10 +106,10 @@
                 </td>
             
                 <td>
-                    {{ number_format($detail->sum($template_detail.'_total_order')) }}
+                    -{{ number_format($detail->sum($template_detail.'_total_order')) }}
                 </td>
             </tr>
-            <tr class="item last">
+            <tr class="item last heading">
                 <td colspan="3">
                     Total
                 </td>

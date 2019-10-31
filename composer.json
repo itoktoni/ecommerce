@@ -32,6 +32,7 @@
         "thedevsaddam/laravel-schema": "^2.0",
         "themsaid/laravel-mail-preview": "^2.0",
         "vkovic/laravel-custom-casts": "^1.1",
+        "queueworker/sansdaemon": "^1.1",
         "yajra/laravel-datatables-oracle": "^8.8"
     },
     "autoload": {

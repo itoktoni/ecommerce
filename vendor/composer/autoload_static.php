@@ -89,6 +89,10 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         array (
             'Ramsey\\Uuid\\' => 12,
         ),
+        'Q' => 
+        array (
+            'Queueworker\\SansDaemon\\' => 23,
+        ),
         'P' => 
         array (
             'Psy\\' => 4,
@@ -296,6 +300,10 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Queueworker\\SansDaemon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/queueworker/sansdaemon/src',
         ),
         'Psy\\' => 
         array (
@@ -577,6 +585,7 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'App\\Http\\Services\\EcommerceService' => __DIR__ . '/../..' . '/app/Http/Services/EcommerceService.php',
         'App\\Http\\Services\\MasterService' => __DIR__ . '/../..' . '/app/Http/Services/MasterService.php',
         'App\\Http\\Services\\TransactionService' => __DIR__ . '/../..' . '/app/Http/Services/TransactionService.php',
+        'App\\Notifications\\OrderNotification' => __DIR__ . '/../..' . '/app/Notifications/OrderNotification.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -3510,6 +3519,9 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'Psy\\VersionUpdater\\GitHubChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/GitHubChecker.php',
         'Psy\\VersionUpdater\\IntervalChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/IntervalChecker.php',
         'Psy\\VersionUpdater\\NoopChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/NoopChecker.php',
+        'Queueworker\\SansDaemon\\Console\\WorkCommand' => __DIR__ . '/..' . '/queueworker/sansdaemon/src/Console/WorkCommand.php',
+        'Queueworker\\SansDaemon\\SansDaemonServiceProvider' => __DIR__ . '/..' . '/queueworker/sansdaemon/src/SansDaemonServiceProvider.php',
+        'Queueworker\\SansDaemon\\Traits\\SansDaemonWorkerTrait' => __DIR__ . '/..' . '/queueworker/sansdaemon/src/Traits/SansDaemonWorkerTrait.php',
         'Ramsey\\Uuid\\BinaryUtils' => __DIR__ . '/..' . '/ramsey/uuid/src/BinaryUtils.php',
         'Ramsey\\Uuid\\Builder\\DefaultUuidBuilder' => __DIR__ . '/..' . '/ramsey/uuid/src/Builder/DefaultUuidBuilder.php',
         'Ramsey\\Uuid\\Builder\\DegradedUuidBuilder' => __DIR__ . '/..' . '/ramsey/uuid/src/Builder/DegradedUuidBuilder.php',
