@@ -86,6 +86,7 @@ Route::get('/brand/{brand}', 'PublicController@shop')->name('filter_brand');
 Route::match(['get', 'post'], 'cart', 'PublicController@cart')->name('cart');
 Route::match(['get', 'post'], 'checkout', 'PublicController@checkout')->name('checkout');
 Route::match(['get', 'post'], 'myaccount', 'PublicController@myaccount')->name('myaccount');
+Route::match(['get', 'post'], 'confirmation', 'PublicController@confirmation')->name('confirmation');
 
 Route::get('/delete/{id}', 'PublicController@delete')->name('delete');
 Route::get('/email/{id}', 'PublicController@email')->name('email');
@@ -98,7 +99,6 @@ Route::get('/page/{slug}', 'PublicController@page')->name('page');
 
 Route::match(['get', 'post'], '/product/{slug}', 'PublicController@product')->name('single_product');
 
-Route::get('/confirmation', 'PublicController@confirmation')->name('confirmation');
 
 Route::get('/about', 'PublicController@about')->name('about');
 Route::get('/jual/{slug}', 'PublicController@product')->name('product');

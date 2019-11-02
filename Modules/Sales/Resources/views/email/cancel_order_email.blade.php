@@ -254,7 +254,6 @@
                                                         </tbody>
                                                     </table>
 
-                                                    <br>
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
                                                         Order sudah dibatalkan karena tidak ada confirmasi pembayaran dalam 10 menit. Jika ingin membeli kembali

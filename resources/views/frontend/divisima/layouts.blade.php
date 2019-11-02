@@ -35,6 +35,11 @@
 <script>
 $(document).ready(function() {
     $("select.form-control.chosen").chosen();
+    $(".date").flatpickr({
+        altInput: true,
+        altFormat: "j F Y",
+        dateFormat: "Y-m-d",
+    });
 });
 </script>
 </html>

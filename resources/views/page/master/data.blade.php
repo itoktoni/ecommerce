@@ -74,12 +74,14 @@
                                 'Status',
                                 'Visible',
                                 'Homepage',
+                                'Total',
                                 ];
                                 @endphp
                                 @foreach($fields as $item => $value)<th 
                                 {!! strpos($value, 'Description' ) !== false ? ' id="description"' : '' !!}
                                 {!! $value=='Sort' ? ' id="sort"' : '' !!}
                                 {!! $value=='Type' ? ' id="type"' : '' !!}
+                                {!! $value=='Ongkir' ? ' id="ongkir"' : '' !!}
                                 {!! in_array($value, $status) ? ' id="status"' : '' !!}>
                                 <strong>{{ $value }}</strong></th>
                                 @endforeach

@@ -580,6 +580,7 @@ select[name=datatable_length] {
 #status {
     width: 80px !important;
     text-align: center;
+    vertical-align: middle !important;
 }
 
 #sort {
@@ -957,4 +958,12 @@ td img {
 
 #dropimage img:hover {
     opacity: 0.5;
+}
+
+#ongkir {
+    width: 17% !important;
+}
+
+.space {
+    margin-bottom: 10px;
 }

@@ -24,6 +24,8 @@ use Modules\Marketing\Dao\Models\Slider;
 use Illuminate\Support\Facades\Validator;
 use Modules\Marketing\Emails\ContactEmail;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
+use Modules\Finance\Dao\Repositories\BankRepository;
+use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\BrandRepository;
@@ -450,6 +452,27 @@ class PublicController extends Controller
             ]);
         }
         return true;
+    }
+
+    public function confirmation()
+    {
+        $bank = new BankRepository();
+        if (request()->isMethod('POST')) {
+
+            $request = request()->all();
+            $payment = new PaymentRepository();
+            $validate = Validator::make($request, $payment->rules);
+
+            if ($validate->fails()) {
+
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+
+            $payment->saveRepository($request);
+        }
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'bank' => Helper::shareOption($bank),
+        ]);
     }
 
     public function checkout(EcommerceService $service)

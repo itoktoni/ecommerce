@@ -208,6 +208,11 @@ class Helper
         return '<input type="checkbox" name="id[]" value="' . $id . '">';
     }
 
+    public static function createTotal($data, $comma = false)
+    {
+        return '<div align="center">' . number_format($data, $comma) . '</span>';
+    }
+
     public static function calculate($string)
     {
         if (self::$cal == null) {

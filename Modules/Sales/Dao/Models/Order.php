@@ -83,15 +83,19 @@ class Order extends Model
 
   public $searching = 'sales_order_id';
   public $datatable = [
-    'sales_order_id'             => [true => 'ID'],
-    'sales_order_date'           => [true => 'Order Date'],
-    'sales_order_name'           => [true => 'Name'],
-    'sales_order_email'           => [true => 'Email'],
-    'crm_customer_name'           => [true => 'Customer Name'],
-    'sales_order_total'           => [true => 'Total'],
-    'sales_order_status'           => [true => 'Status'],
-    'sales_order_created_at'     => [false => 'Created At'],
-    'sales_order_created_by'     => [false => 'Updated At'],
+    'sales_order_id'                  => [true => 'ID'],
+    'sales_order_date'                => [true => 'Order Date'],
+    'sales_order_rajaongkir_name'     => [true => 'Name'],
+    'sales_order_email'               => [false => 'Email'],
+    'crm_customer_name'               => [false => 'Customer Name'],
+    'sales_order_rajaongkir_phone'  => [true => 'Phone'],
+    'sales_order_rajaongkir_weight'  => [false => 'Weight'],
+    'sales_order_rajaongkir_courier'  => [false => 'Courier'],
+    'sales_order_rajaongkir_service'  => [true => 'Ongkir'],
+    'sales_order_total'               => [true => 'Total'],
+    'sales_order_status'              => [true => 'Status'],
+    'sales_order_created_at'          => [false => 'Created At'],
+    'sales_order_created_by'          => [false => 'Updated At'],
   ];
 
   protected $dates = [
@@ -157,23 +161,21 @@ class Order extends Model
 
       if (Auth::check()) {
         $model->sales_order_created_by = auth()->user()->username;
-      }
-      else{
-        
+      } else {
+
         $model->sales_order_created_by = 'no login';
-        
       }
-      
+
       if (!request()->has('sales_order_crm_customer_id')) {
         $model->sales_order_crm_customer_id = 0;
       }
-      
+
       if (!request()->has('sales_order_date')) {
         $model->sales_order_date = date('Y-m-d');
       }
-      
+
       $model->sales_order_status = 1;
-      $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO'.date('Ym'), config('website.autonumber'));
+      $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO' . date('Ym'), config('website.autonumber'));
     });
   }
 

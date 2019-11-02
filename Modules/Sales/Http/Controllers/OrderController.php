@@ -151,7 +151,7 @@ class OrderController extends Controller
     {
         if (request()->isMethod('POST')) {
             $datatable = $service
-                ->setRaw(['sales_order_status'])
+                ->setRaw(['sales_order_status', 'sales_order_total', 'sales_order_rajaongkir_service'])
                 ->setAction(
                     [
                         'update' => ['primary', 'edit'],
@@ -169,6 +169,12 @@ class OrderController extends Controller
             });
             $datatable->editColumn('sales_order_date', function ($field) {
                 return $field->sales_order_date->toDateString();
+            });
+            $datatable->editColumn('sales_order_rajaongkir_service', function ($field) {
+                return 'Courier '.strtoupper($field->sales_order_rajaongkir_courier).' <br> '.str_replace(') ', ' ', $field->sales_order_rajaongkir_service).' <br> Weight '.number_format(floatval($field->sales_order_rajaongkir_weight)).' g';
+            });
+            $datatable->editColumn('sales_order_total', function ($field) {
+                return Helper::createTotal($field->sales_order_total);
             });
             return $datatable->make(true);
         }
