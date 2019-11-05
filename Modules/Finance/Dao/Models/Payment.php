@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Finance\Dao\Models\Bank;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Finance\Dao\Models\Account;
+use Modules\Sales\Dao\Models\Order;
 
 class Payment extends Model
 {
@@ -39,16 +40,16 @@ class Payment extends Model
     'finance_payment_email',
   ];
 
-  public $with = ['account', 'bank'];
+  public $with = ['account', 'bank', 'order'];
   public $timestamps = true;
   public $incrementing = true;
   public $rules = [
     'finance_payment_amount' => 'required',
-    'finance_payment_sales_order_id' => 'required',
+    'finance_payment_sales_order_id' => 'required|exists:sales_order,sales_order_id',
     'finance_payment_person' => 'required',
-    'finance_payment_email' => 'required',
+    'finance_payment_email' => 'required|email',
     'finance_payment_date' => 'required',
-    'files' => 'required',
+    'files' => 'required|file',
     'finance_payment_to' => 'required',
   ];
 
@@ -95,6 +96,11 @@ class Payment extends Model
     return $this->hasOne(Bank::class, 'finance_bank_id', 'finance_payment_to');
   }
 
+  public function order()
+  {
+    return $this->hasOne(Order::class, 'sales_order_id', 'finance_payment_sales_order_id');
+  }
+
   public static function boot()
   {
     parent::boot();
@@ -137,6 +143,8 @@ class Payment extends Model
         $model->finance_payment_attachment = $name;
       }
 
+      $model->finance_payment_status = 1;
+      $model->finance_payment_payment_account_id = 1;
       $model->finance_payment_created_by = request()->get('finance_payment_person');
       $model->finance_payment_voucher = Helper::autoNumber($model->getTable(), 'finance_payment_voucher', 'VC' . date('Ym'), 13);
     });

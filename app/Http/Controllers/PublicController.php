@@ -468,7 +468,10 @@ class PublicController extends Controller
                 return redirect()->back()->withErrors($validate)->withInput();
             }
 
-            $payment->saveRepository($request);
+            $check = $payment->saveRepository($request);
+            if ($check['status']) {
+                return redirect()->back()->with('success', 'Data has been Success');
+            }
         }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'bank' => Helper::shareOption($bank),

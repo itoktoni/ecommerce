@@ -65,7 +65,8 @@
 
     <label class="col-md-2 control-label">File Attachment</label>
     <div class="col-md-4 {{ $errors->has('files') ? 'has-error' : ''}}">
-    <a class="btn btn-danger btn-sm btn-block" target="__blank" href="{{ Helper::files('payment/'.$model->finance_payment_attachment) }}">Download</a>
+        <a class="btn btn-danger btn-sm btn-block" target="__blank"
+            href="{{ Helper::files('payment/'.$model->finance_payment_attachment) }}">Download</a>
     </div>
 
 </div>
@@ -77,7 +78,7 @@
         {!! $errors->first($form.'amount', '<p class="help-block">:message</p>') !!}
     </div>
 
-   {!! Form::label('name', 'Amount Approve', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Amount Approve', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'approve_amount') ? 'has-error' : ''}}">
         {!! Form::text($form.'approve_amount', null, ['class' => 'form-control money']) !!}
         {!! $errors->first($form.'approve_amount', '<p class="help-block">:message</p>') !!}
@@ -86,7 +87,7 @@
 
 <div class="form-group">
 
-   {!! Form::label('name', 'Notes Customer', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Notes Customer', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'note') ? 'has-error' : ''}}">
         {!! Form::textarea($form.'note', null, ['class' => 'form-control', 'rows' => '3', 'readonly']) !!}
         {!! $errors->first($form.'note', '<p class="help-block">:message</p>') !!}
@@ -98,3 +99,9 @@
         {!! $errors->first($form.'description', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
+
+@if ($action['update'])
+<div class="col-md-12">
+    <h2>Total Order : {{ number_format($model->order->sales_order_total) ?? 0 }}</h2>
+</div>
+@endif

@@ -77,7 +77,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 						</div>
 						<div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 							<div class="panel-body">
-								<p>{!! html_entity_decode($single_product->item_product_description) !!}</p>
+								{!! html_entity_decode($single_product->item_product_description) !!}
 							</div>
 						</div>
 					</div>
@@ -88,9 +88,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 						</div>
 						<div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
 							<div class="panel-body">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so
-									dales. Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus.
-									Ut consectetur lacus leo, non scelerisque nulla euismod nec.</p>
+								{!! html_entity_decode($single_product->item_product_care) !!}
 							</div>
 						</div>
 					</div>
@@ -101,11 +99,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 						</div>
 						<div id="collapse3" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
 							<div class="panel-body">
-								<h4>7 Days Returns</h4>
-								<p>Cash on Delivery Available<br>Home Delivery <span>3 - 4 days</span></p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so
-									dales. Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus.
-									Ut consectetur lacus leo, non scelerisque nulla euismod nec.</p>
+								{!! html_entity_decode($single_product->item_product_return) !!}
 							</div>
 						</div>
 					</div>

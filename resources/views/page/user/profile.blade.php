@@ -1,5 +1,5 @@
 @extends(Helper::setExtendBackend())
-@component('component.date')
+@component('component.date', ['array' => ['date']])
 
 @endcomponent
 @section('content')

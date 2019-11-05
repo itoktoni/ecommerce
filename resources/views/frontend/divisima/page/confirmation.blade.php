@@ -23,7 +23,7 @@
 		<div class="col-md-12 text-center">
 			@if(session()->has('success'))
 			<div style="margin-top:-20px;" class="alert alert-success alert-dismissible fade show" role="alert">
-				<strong>Data Berhasil Dibuat, Segera lakukan Konfirmasi Pesanan !</strong>
+				<strong>Konfirmasi Pemesanan Telah Success, Harap menunggu !</strong>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -39,16 +39,23 @@
 			<div class="row address-inputs">
 				<div class="col-md-6">
 					<input class="{{ $errors->has('finance_payment_person') ? 'error' : ''}}"
-				name="finance_payment_person" type="text" value="{{ old('finance_payment_person') ?? '' }}" placeholder="Transfered By">
+						name="finance_payment_person" type="text" value="{{ old('finance_payment_person') ?? '' }}"
+						placeholder="Transfered By">
+
+					{!! $errors->first('finance_payment_person', '<p class="help-block">:message</p>') !!}
 				</div>
 				<div class="col-md-6">
 					<input type="text" class="{{ $errors->has('finance_payment_email') ? 'error' : ''}}"
-						name="finance_payment_email" value="{{ old('finance_payment_email') ?? '' }}" placeholder="Email">
+						name="finance_payment_email" value="{{ old('finance_payment_email') ?? '' }}"
+						placeholder="Email">
+					{!! $errors->first('finance_payment_email', '<p class="help-block">:message</p>') !!}
 				</div>
 
 				<div class="col-md-12">
 					<input type="text" class="{{ $errors->has('finance_payment_note') ? 'error' : ''}}"
-						name="finance_payment_note" value="{{ old('finance_payment_note') ?? '' }}" placeholder="Note for admin">
+						name="finance_payment_note" value="{{ old('finance_payment_note') ?? '' }}"
+						placeholder="Note for admin">
+						{!! $errors->first('finance_payment_note', '<p class="help-block">:message</p>') !!}
 				</div>
 			</div>
 
@@ -57,45 +64,53 @@
 
 				<div class="col-md-6">
 					<input class="{{ $errors->has('finance_payment_sales_order_id') ? 'error' : ''}}"
-						name="finance_payment_sales_order_id" type="text" value="{{ old('finance_payment_sales_order_id') ?? '' }}" placeholder="Order No.">
+						name="finance_payment_sales_order_id" type="text"
+						value="{{ old('finance_payment_sales_order_id') ?? '' }}" placeholder="Order No.">
+						{!! $errors->first('finance_payment_sales_order_id', '<p class="help-block">:message</p>') !!}
 				</div>
 
 				<div class="col-md-6">
 					<input class="date {{ $errors->has('finance_payment_date') ? 'error' : ''}}"
-						name="finance_payment_date" type="text" value="{{ old('finance_payment_date') ?? '' }}" placeholder="Payment Date">
+						name="finance_payment_date" type="text" value="{{ old('finance_payment_date') ?? '' }}"
+						placeholder="Payment Date">
+						{!! $errors->first('finance_payment_date', '<p class="help-block">:message</p>') !!}
 				</div>
 
 				<div class="col-md-6">
 					<input type="text" class="{{ $errors->has('finance_payment_from') ? 'error' : ''}}"
-						name="finance_payment_from" value="{{ old('finance_payment_from') ?? '' }}" placeholder="From Bank">
+						name="finance_payment_from" value="{{ old('finance_payment_from') ?? '' }}"
+						placeholder="From Bank">
+						{!! $errors->first('finance_payment_from', '<p class="help-block">:message</p>') !!}
 				</div>
 
 				<div class="col-md-6">
 					<div id="select" class="{{ $errors->has('finance_payment_to') ? 'error' : ''}}"">
 						{{ Form::select('finance_payment_to', $bank, null, ['class'=> 'form-control']) }}
 					</div>
+					{!! $errors->first('finance_payment_to', '<p class="help-block">:message</p>') !!}
+				</div>
+
+				<div class=" col-md-6">
+						<input type="text" class="money {{ $errors->has('finance_payment_amount') ? 'error' : ''}}"
+							name="finance_payment_amount" value="{{ old('finance_payment_amount') ?? '' }}"
+							placeholder="Payment Amount">
+							{!! $errors->first('finance_payment_amount', '<p class="help-block">:message</p>') !!}
+					</div>
+
+					<div class="col-md-6">
+						<input type="file" name="files"
+							class="{{ $errors->has('files') ? 'error' : ''}} btn btn-default btn-sm btn-block">
+						{!! $errors->first('files', '<p class="help-block">:message</p>') !!}
+					</div>
 
 				</div>
 
-				<div class="col-md-6">
-					<input type="text" class="money {{ $errors->has('finance_payment_amount') ? 'error' : ''}}"
-						name="finance_payment_amount" value="{{ old('finance_payment_amount') ?? '' }}" placeholder="Payment Amount">
-				</div>
+				<button type="submit" class="site-btn pull-right">Proceed</button>
 
-				<div class="col-md-6">
-					<input type="file" name="files"
-						class="{{ $errors->has('files') ? 'error' : ''}} btn btn-default btn-sm btn-block">
-					{!! $errors->first('files', '<p class="help-block">:message</p>') !!}
-				</div>
-
+				{!! Form::close() !!}
 			</div>
 
-			<button type="submit" class="site-btn pull-right">Proceed</button>
-
-			{!! Form::close() !!}
 		</div>
-
-	</div>
 </section>
 <!-- checkout section end -->
 

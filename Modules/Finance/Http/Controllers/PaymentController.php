@@ -68,7 +68,6 @@ class PaymentController extends Controller
         if (request()->has('code')) {
 
             $data = $service->show(self::$model);
-
             return view(Helper::setViewUpdate())->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName()
