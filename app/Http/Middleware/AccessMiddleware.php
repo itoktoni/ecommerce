@@ -132,7 +132,7 @@ class AccessMiddleware
         ];
         $segment = request()->segment(1) ?? '';
         $policy = $access->contains('action_code', Route::currentRouteName());
-        if (!$policy && Route::currentRouteName() && !in_array($segment, $white_list)) {
+        if (!$policy && Route::currentRouteName() && !in_array($segment, $white_list) || Auth::user()->group_user == 'customer') {
             return false;
         }
         return $access;

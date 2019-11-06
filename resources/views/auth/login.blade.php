@@ -128,19 +128,19 @@
     </svg>
 </div>
 
-{!! Form::open(['class' => 'form login']) !!}
+{!! Form::open(['class' => 'form login', 'id' => 'auth']) !!}
 
 <div class="form__field form__field--email">
     <div class="form__input-wrapper">
         {!! Form::text('login', null, ['autofocus', 'class' => 'form__input','id' => 'login__email','placeholder' =>
-        'Email']) !!}
+        'Username or Email']) !!}
     </div>
 </div>
 
 <div class="form__field form__field--password">
     <div class="form__input-wrapper">
         {!! Form::password('password', ['class' => 'form__input', 'id' => 'login__password','placeholder' =>
-        'Password']) !!}
+        'Secure Password']) !!}
     </div>
 </div>
 

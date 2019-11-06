@@ -101,7 +101,17 @@
 </div>
 
 @if ($action['update'])
-<div class="col-md-12">
-    <h2>Total Order : {{ number_format($model->order->sales_order_total) ?? 0 }}</h2>
+
+<div class="form-group">
+    {!! Form::label('name', 'Order Paid', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+        {{ Form::select('order_paid', ['0' => 'No', '1' => 'Yes'], null, ['class'=> 'form-control']) }}
+    </div>
+
+    @if ($model->order)
+    <div class="col-md-6">
+        <h2>Total Order : {{ $model->order ? number_format($model->order->sales_order_total) : 0 }}</h2>
+    </div>
+    @endif
 </div>
 @endif

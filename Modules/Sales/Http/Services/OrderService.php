@@ -16,10 +16,11 @@ class OrderService extends TransactionService
 {
     public function save(MasterInterface $repository)
     {
+
         $check = $this->saveDetail($repository);
-        $send = $check['data'];
-        $data = $repository->showRepository($send->{$repository->getKeyName()}, ['customer', 'forwarder', 'detail', 'detail.product']);
-        Mail::to(auth()->user()->email)->send(new OrderEmail($data));
+        // $send = $check['data'];
+        // $data = $repository->showRepository($send->{$repository->getKeyName()}, ['customer', 'forwarder', 'detail', 'detail.product']);
+        // Mail::to(auth()->user()->email)->send(new OrderEmail($data));
 
         if ($check['status']) {
             Alert::create();
@@ -27,6 +28,27 @@ class OrderService extends TransactionService
             Alert::error($check['data']);
         }
         return $check;
+    }
+
+    public function saveDetail(MasterInterface $repository){
+
+        DB::beginTransaction();
+        $check = $this->setRules(array_merge($repository->rules, ['temp_id' => 'required']))->validate($repository);
+        $check->saveRepository($this->data);
+        
+        if ($check['status']) {
+            $id = !DB::getPDO()->lastInsertId() ? $check['data']->{$repository->getKeyName()} : DB::getPDO()->lastInsertId();
+        }
+
+        foreach ($this->mapping($repository) as $value) {
+            $check_detail = $repository->saveDetailRepository($id, $value);
+            if (!$check_detail['status']) {
+                DB::rollback();
+                Notes::error($check_detail['data']);
+            }
+        }
+
+        DB::commit();
     }
 
     public function saveWo(MasterInterface $repository)

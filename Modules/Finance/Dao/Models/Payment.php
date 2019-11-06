@@ -8,6 +8,7 @@ use Modules\Finance\Dao\Models\Bank;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Finance\Dao\Models\Account;
 use Modules\Sales\Dao\Models\Order;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 
 class Payment extends Model
 {
@@ -118,7 +119,7 @@ class Payment extends Model
       }
 
       $model->finance_payment_amount = Helper::filterInput($model->finance_payment_amount);
-      if(request()->has('finance_payment_approve_amount')){
+      if (request()->has('finance_payment_approve_amount')) {
 
         $model->finance_payment_approve_amount = Helper::filterInput($model->finance_payment_approve_amount);
       }
@@ -127,11 +128,16 @@ class Payment extends Model
         $model->finance_payment_updated_by = auth()->user()->username;
       }
 
-      // if ($model->account->finance_account_type == 1) {
-      //   $model->finance_payment_in = $model->finance_payment_approve_amount;
-      // } else {
-      //   $model->finance_payment_out = $model->finance_payment_approve_amount;
-      // }
+      if (request()->has('order_paid') && request()->get('order_paid') == 1) {
+
+        $order = new OrderRepository();
+        $getOrder = $order->showRepository($model->finance_payment_sales_order_id);
+        if ($getOrder && $getOrder->sales_order_status < 2) {
+          $order->updateRepository($model->finance_payment_sales_order_id, [
+            'sales_order_status' => 2
+          ]);
+        }
+      }
     });
 
     parent::creating(function ($model) {

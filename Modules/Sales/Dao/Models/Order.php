@@ -2,6 +2,7 @@
 
 namespace Modules\Sales\Dao\Models;
 
+use App\User;
 use Plugin\Helper;
 use Illuminate\Support\Facades\Auth;
 use Modules\Crm\Dao\Models\Customer;
@@ -38,7 +39,7 @@ class Order extends Model
     'sales_order_created_at',
     'sales_order_updated_by',
     'sales_order_created_by',
-    'sales_order_crm_customer_id',
+    'sales_order_core_user_id',
     'sales_order_deleted_at',
     'sales_order_rajaongkir_province_id',
     'sales_order_rajaongkir_city_id',
@@ -58,16 +59,7 @@ class Order extends Model
   public $timestamps = true;
   public $incrementing = false;
   public $rules = [
-    'sales_order_rajaongkir_province_id' => 'required',
-    'sales_order_rajaongkir_city_id' => 'required',
-    'sales_order_rajaongkir_location' => 'required',
-    'sales_order_rajaongkir_courier' => 'required',
-    'sales_order_rajaongkir_ongkir' => 'required|numeric',
-    'sales_order_rajaongkir_address' => 'required',
-    'sales_order_email' => 'required|email',
-    'sales_order_rajaongkir_name' => 'required',
-    'sales_order_rajaongkir_phone' => 'required',
-    'sales_order_rajaongkir_weight' => 'required',
+    'sales_order_core_user_id' => 'required',
   ];
 
   public $validate = true;
@@ -87,7 +79,6 @@ class Order extends Model
     'sales_order_date'                => [true => 'Order Date'],
     'sales_order_rajaongkir_name'     => [true => 'Name'],
     'sales_order_email'               => [false => 'Email'],
-    'crm_customer_name'               => [false => 'Customer Name'],
     'sales_order_rajaongkir_phone'  => [true => 'Phone'],
     'sales_order_rajaongkir_weight'  => [false => 'Weight'],
     'sales_order_rajaongkir_courier'  => [false => 'Courier'],
@@ -108,11 +99,12 @@ class Order extends Model
   ];
 
   public $status = [
-    '0' => ['CANCEL', 'danger'],
     '1' => ['CREATE', 'warning'],
-    '2' => ['PREPARE', 'success'],
-    '3' => ['PRODUCTION', 'info'],
-    '4' => ['DELIVER', 'primary'],
+    '2' => ['APPROVE', 'primary'],
+    '3' => ['PREPARE', 'success'],
+    '4' => ['PICKUP', 'info'],
+    '5' => ['DELIVER', 'dark'],
+    '0' => ['CANCEL', 'danger'],
   ];
 
   public $custom_attribute = [
@@ -129,7 +121,7 @@ class Order extends Model
   ];
 
   public $custom_message = [
-    'sales_order_crm_customer_id.required' => 'Customer Data Require',
+    'sales_order_core_user_id.required' => 'Customer Data Require',
     'sales_order_forwarder_vendor_id.required'  => 'Forwarder Vendor Required',
     'temp_id.required'  => 'Data Product Required',
   ];
@@ -146,7 +138,7 @@ class Order extends Model
 
   public function customer()
   {
-    return $this->hasOne(Customer::class, 'crm_customer_id', 'sales_order_crm_customer_id');
+    return $this->hasOne(User::class, 'id', 'sales_order_core_user_id');
   }
 
   public function forwarder()
@@ -161,13 +153,10 @@ class Order extends Model
 
       if (Auth::check()) {
         $model->sales_order_created_by = auth()->user()->username;
+        $model->sales_order_core_user_id = auth()->user()->id;
       } else {
 
         $model->sales_order_created_by = 'no login';
-      }
-
-      if (!request()->has('sales_order_crm_customer_id')) {
-        $model->sales_order_crm_customer_id = 0;
       }
 
       if (!request()->has('sales_order_date')) {

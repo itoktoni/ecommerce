@@ -54,7 +54,10 @@ class PaymentController extends Controller
 
             $service->save(self::$model);
         }
-        return view(Helper::setViewCreate())->with($this->share());
+        
+        return view(Helper::setViewCreate())->with($this->share([
+            'model' => self::$model
+        ]));
     }
 
     public function update(MasterService $service)
@@ -92,11 +95,11 @@ class PaymentController extends Controller
                 return $data->bank->finance_bank_name;
             });
             $datatable->editColumn('finance_payment_amount', function ($data) {
-                return Helper::createNumber($data->finance_payment_amount, $data->account->finance_account_type);
+                return number_format($data->finance_payment_amount);
             });
 
             $datatable->editColumn('finance_payment_approve_amount', function ($data) {
-                return Helper::createNumber($data->finance_payment_approve_amount, $data->account->finance_account_type);
+                return number_format($data->finance_payment_approve_amount);
             });
 
             $datatable->editColumn('finance_payment_status', function ($data) {

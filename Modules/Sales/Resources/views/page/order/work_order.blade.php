@@ -1,4 +1,4 @@
-@extends(Helper::setViewContent())
+@extends(Helper::setExtendBackend())
 @component('component.select2')
 @endcomponent
 @component('component.mask', ['array' => ['number', 'money']])

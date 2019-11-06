@@ -50,7 +50,6 @@ class OrderController extends Controller
         $product = Helper::createOption((new ProductRepository()), false, true);
         $account = Helper::createOption((new AccountRepository()));
         $bank = Helper::createOption((new BankRepository()));
-
         $view = [
             'key'       => self::$model->getKeyName(),
             'customer'      => $customer,
@@ -63,21 +62,20 @@ class OrderController extends Controller
         return array_merge($view, $data);
     }
 
-    public function create(OrderService $service)
-    {
-        if (request()->isMethod('POST')) {
-            dd(request()->all());
-            $post = $service->save(self::$detail);
-            if ($post['status']) {
-                return Response::redirectToRoute($this->getModule() . '_data');
-            }
-            return Response::redirectBackWithInput();
-        }
-        return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
-            'data_product' => [],
-            'model' => self::$model,
-        ]));
-    }
+    // public function create(OrderService $service)
+    // {
+    //     if (request()->isMethod('POST')) {
+    //         $post = $service->save(self::$detail);
+    //         if ($post['status']) {
+    //             return Response::redirectToRoute($this->getModule() . '_data');
+    //         }
+    //         return Response::redirectBackWithInput();
+    //     }
+    //     return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+    //         'data_product' => [],
+    //         'model' => self::$model,
+    //     ]));
+    // }
 
     public function update(TransactionService $service)
     {
@@ -94,7 +92,7 @@ class OrderController extends Controller
             $data = $service->show(self::$model, ['detail', 'detail.product']);
             return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
                 'model'        => $data,
-                'detail'        => $data->detail,
+                'detail'       => $data->detail,
                 'key'          => self::$model->getKeyName()
             ]));
         }
@@ -154,10 +152,8 @@ class OrderController extends Controller
                 ->setRaw(['sales_order_status', 'sales_order_total', 'sales_order_rajaongkir_service'])
                 ->setAction(
                     [
-                        'update' => ['primary', 'edit'],
-                        'work_order' => ['warning', 'wo'],
-                        'payment' => ['info', 'payment'],
-                        'show'   => ['success', 'show'],
+                        'payment' => ['success', 'payment'],
+                        'work_order' => ['primary', 'prepare'],
                     ]
                 )
                 ->datatable(self::$model);

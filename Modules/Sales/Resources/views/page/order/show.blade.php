@@ -1,4 +1,4 @@
-@extends(Helper::setViewContent())
+@extends(Helper::setExtendBackend())
 @component('component.mask', ['array' => ['number', 'money']])@endcomponent
 @component('component.disable', ['array' => ['input', 'select'], 'selector' => '#transaction'])@endcomponent
 @section('content')

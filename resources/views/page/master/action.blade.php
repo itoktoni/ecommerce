@@ -30,7 +30,7 @@
                 @case('show')
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 @isset($action['update'])
-                <a id="linkMenu" href="{!! route(" {$module}_update", ["code"=> $model->{$key}]) !!}" class="btn
+                <a id="linkMenu" href="{!! route(trim(" {$module}_update"), ["code"=> $model->{$key}]) !!}" class="btn
                         btn-primary">Edit</a>
                 @endisset
                 @break

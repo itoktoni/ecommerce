@@ -3,11 +3,12 @@
 namespace Modules\Sales\Dao\Repositories;
 
 use Helper;
+use App\User;
 use Plugin\Notes;
 use Illuminate\Support\Facades\DB;
-use App\Dao\Interfaces\MasterInterface;
-use Modules\Crm\Dao\Models\Customer;
 use Modules\Sales\Dao\Models\Order;
+use Modules\Crm\Dao\Models\Customer;
+use App\Dao\Interfaces\MasterInterface;
 use Modules\Forwarder\Dao\Models\Vendor;
 
 class OrderRepository extends Order implements MasterInterface
@@ -19,15 +20,14 @@ class OrderRepository extends Order implements MasterInterface
     public function dataRepository()
     {
         if (self::$customer == null) {
-            self::$customer = new Customer();
+            self::$customer = new User();
         }
         if (self::$vendor == null) {
             self::$vendor = new Vendor();
         }
 
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        return $this->select($list)
-            ->leftJoin(self::$customer->getTable(), self::$customer->getKeyName(), 'sales_order_crm_customer_id');
+        return $this->select($list);
     }
 
     public function saveRepository($request)
@@ -50,7 +50,7 @@ class OrderRepository extends Order implements MasterInterface
         }
     }
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = null)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);

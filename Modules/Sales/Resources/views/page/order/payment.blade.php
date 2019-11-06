@@ -1,6 +1,4 @@
-@extends(Helper::setViewContent())
-@component('component.select2')
-@endcomponent
+@extends(Helper::setExtendBackend())
 @component('component.mask', ['array' => ['number', 'date', 'money']])
 @endcomponent
 @component('component.readonly', ['array' => ['input', 'select'], 'selector' => '#input-form'])

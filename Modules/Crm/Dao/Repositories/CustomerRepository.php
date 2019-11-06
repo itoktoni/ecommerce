@@ -12,7 +12,7 @@ class CustomerRepository extends Customer implements MasterInterface
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        return $this->select($list);
+        return $this->select($list)->where('group_user', 'customer');
     }
 
     public function saveRepository($request)

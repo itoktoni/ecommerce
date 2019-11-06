@@ -1,4 +1,4 @@
-@extends(Helper::setViewContent())
+@extends(Helper::setExtendBackend())
 @section('content')
 <div class="row">
     @isset($model->$key)
