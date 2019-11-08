@@ -10,9 +10,9 @@ class Location extends Model
   protected $primaryKey = 'inventory_location_id';
   protected $fillable = [
     'inventory_location_id',
+    'inventory_location_warehouse_id',
     'inventory_location_code',
     'inventory_location_name',
-    'inventory_location_inventory_id',
     'inventory_location_description',
     'inventory_location_created_at',
     'inventory_location_created_by',
@@ -47,4 +47,10 @@ class Location extends Model
   {
     return $this->hasOne('Modules\Inventory\Models\Inventory', 'inventory_inventory_id', 'inventory_location_inventory_id');
   }
+
+  public function warehouse()
+  {
+    return $this->hasOne(Warehouse::class, 'inventory_warehouse_id', 'inventory_location_warehouse_id');
+  }
+
 }

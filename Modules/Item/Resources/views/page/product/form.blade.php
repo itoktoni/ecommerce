@@ -22,8 +22,16 @@
             class="{{ $errors->has($form.'file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
         {!! $errors->first($form.'image', '<p class="help-block">:message</p>') !!}
     </div>
+    {!! Form::label('name', 'Active', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+        {{ Form::select($form.'status', ['1' => 'Yes', '0' => 'No'], null, ['class'=> 'form-control']) }}
+        {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
+    </div>
+</div>
+<div class="form-group">
+
     {!! Form::label('name', 'Tag', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
+    <div class="col-md-10 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
         {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control', 'multiple']) }}
         {!! $errors->first($form.'item_tag_json', '<p class="help-block">:message</p>') !!}
     </div>
@@ -74,10 +82,10 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', 'Active', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
-        {{ Form::select($form.'status', ['1' => 'Yes', '0' => 'No'], null, ['class'=> 'form-control']) }}
-        {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', 'Tax', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'item_tax_id') ? 'has-error' : ''}}">
+        {{ Form::select($form.'item_tax_id', $tax, null, ['class'=> 'form-control']) }}
+        {!! $errors->first($form.'item_tax_id', '<p class="help-block">:message</p>') !!}
     </div>
 
     {!! Form::label('name', 'Weight / Gram', ['class' => 'col-md-2 control-label']) !!}

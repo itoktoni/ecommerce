@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App;
+use App\Dao\Repositories\TeamRepository;
 use Auth;
 use Cart;
 use Helper;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Item\Dao\Models\Wishlist;
 use Illuminate\Support\Facades\Config;
 use App\Http\Services\EcommerceService;
+use Darryldecode\Cart\CartCondition;
 use Illuminate\Support\Facades\Artisan;
 use Modules\Marketing\Dao\Models\Slider;
 use Illuminate\Support\Facades\Validator;
@@ -33,6 +35,7 @@ use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Item\Dao\Repositories\TaxRepository;
 use Modules\Item\Dao\Repositories\WishlistRepository;
 use Modules\Marketing\Dao\Repositories\PageRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
@@ -229,7 +232,72 @@ class PublicController extends Controller
 
     public function myaccount()
     {
-        return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+        $user = new TeamRepository();
+        $province = Auth::user()->province;
+        $city = Auth::user()->city;
+        $location = Auth::user()->location;
+
+        $list_location = $list_city = [];
+
+        if (request()->isMethod('POST')) {
+
+            $request = request()->all();
+            $province = request()->get('province');
+            $city = request()->get('city');
+            $location = request()->get('location');
+
+            $validation = [
+                'name' => 'required',
+                'email' => 'required',
+                'address' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'location' => 'required',
+                'password' => 'required|min:6',
+            ];
+
+            $validate = Validator::make($request, $validation);
+            if ($validate->fails()) {
+                return redirect()->back()->withInput()->withErrors($validate);
+            }
+
+            if (request()->has('password')) {
+                $request['password'] = bcrypt(request()->get('password'));
+            }
+
+            $user->updateRepository(Auth::user()->id, $request);
+        }
+
+        if (Cache::has('province')) {
+            $list_province =  Cache::get('province');
+        } else {
+            $list_province = Cache::rememberForever('province', function () {
+                return DB::table('rajaongkir_provinces')->get()->sortBy('province')->pluck('province', 'province_id')->prepend(' Choose Province', '0')->toArray();
+            });
+        }
+
+        if ($province) {
+            $list_city = DB::table('rajaongkir_cities')->where('province_id', $province)->get()->sortBy('city_name')->pluck('city_name', 'city_id')->toArray();
+        }
+
+        if ($city) {
+            $list_location = DB::table('rajaongkir_districts')->where('city_id', $city)->get()->sortBy('subdistrict_name')->pluck('subdistrict_name', 'subdistrict_id')->toArray();
+        }
+        $data = $user->showRepository(Auth::user()->id);
+
+        $order = new OrderRepository();
+        $data_order = $order->userRepository(Auth::user()->id);
+
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'model' => $data,
+            'province' => $province,
+            'order' => $data_order->get(),
+            'city' => $city,
+            'location' => $location,
+            'list_province' => $list_province,
+            'list_city' => $list_city,
+            'list_location' => $list_location,
+        ]);
     }
 
     public function page($slug = false)
@@ -523,7 +591,7 @@ class PublicController extends Controller
 
             $province = Auth::user()->province;
             $city = Auth::user()->city;
-            $location = Auth::user()->district;
+            $location = Auth::user()->location;
         }
 
         $validate = [];
@@ -573,7 +641,7 @@ class PublicController extends Controller
                 $request['sales_order_marketing_promo_name'] = $discount->getAttributes()['name'];
                 $request['sales_order_marketing_promo_value'] = abs($discount->getValue());
             }
-            
+
             $rules = [
                 'sales_order_rajaongkir_province_id' => 'required',
                 'sales_order_rajaongkir_city_id' => 'required',
@@ -594,14 +662,25 @@ class PublicController extends Controller
             foreach (Cart::getContent() as $item) {
 
                 $stock = DB::table('view_stock_product')->where('id', $item->attributes['option'])->first();
+                $price_real = $item->price + $item->quantity;
+
+                $tax_name = $tax_value = null;
+                if (config('website.tax')) {
+                    $tax_name = $item->getConditions()->getName();
+                    $tax_value = $item->getConditions()->getValue() * $item->quantity;
+                    $price_real = ($item->price * $item->quantity) + $tax_value;
+                }
+
                 DB::table('sales_order_detail')->insert([
                     'sales_order_detail_sales_order_id' => $id,
                     'sales_order_detail_item_product_id' => $item->attributes['product'],
                     'sales_order_detail_qty_order' => $item->quantity,
                     'sales_order_detail_price_order' => $item->price,
-                    'sales_order_detail_total_order' => $item->price * $item->quantity,
+                    'sales_order_detail_total_order' => $price_real,
                     'sales_order_detail_option' => $stock->id,
                     'sales_order_detail_item_size' => $stock->size,
+                    'sales_order_detail_tax_name' => $tax_name,
+                    'sales_order_detail_tax_value' => $tax_value,
                     'sales_order_detail_item_color' => $stock->color,
                     'sales_order_detail_gram' => $item->attributes['gram'],
                     'sales_order_detail_discount' => $item->attributes['discount'],
@@ -805,7 +884,17 @@ class PublicController extends Controller
                 'gram' => $product->item_product_gram,
             ];
 
-            Cart::add($parse->id, $product->item_product_name, $product->item_product_sell - $discount, request()->get('qty'), $additional);
+            $condition = [];
+            $dataTax = $product->tax;
+            if (config('website.tax') && $dataTax) {
+                $condition = new CartCondition(array(
+                    'name' => $dataTax->item_tax_name,
+                    'type' => $dataTax->item_tax_type ? 'Percent' : 'Value',
+                    'value' => $dataTax->item_tax_type ? (($product->item_product_sell - $discount) * $dataTax->item_tax_value) / 100 : ($product->item_product_sell - $discount) - $dataTax->item_tax_value,
+                ));
+            }
+
+            Cart::add($parse->id, $product->item_product_name, $product->item_product_sell - $discount, request()->get('qty'), $additional, $condition);
         }
 
         $product->item_product_counter = $product->item_product_counter + 1;

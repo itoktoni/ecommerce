@@ -213,6 +213,11 @@ class Helper
         return '<div align="center">' . number_format($data, $comma) . '</span>';
     }
 
+    public static function createCenter($data)
+    {
+        return '<div align="center">' . $data . '</span>';
+    }
+
     public static function calculate($string)
     {
         if (self::$cal == null) {

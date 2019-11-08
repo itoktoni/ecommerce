@@ -114,3 +114,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 <!-- product section end -->
 {!! Form::close() !!}
 @endsection
+
+@push('javascript')
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5db9018ce37b7743"></script>
+@endpush

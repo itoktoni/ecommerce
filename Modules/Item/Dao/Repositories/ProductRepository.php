@@ -48,6 +48,22 @@ class ProductRepository extends Product implements MasterInterface
         return $query;
     }
 
+    public function stockRepository()
+    {
+        $brand = self::getBrand();
+        $category = self::getCategory();
+        $color = new ColorRepository();
+
+        $list = Helper::dataColumn($this->stock, $this->primaryKey);
+        $query = $this->select($list)
+            ->leftJoin('view_stock_product', 'product', 'item_product_id')
+            ->leftJoin($brand->getTable(), $brand->getKeyName(), 'item_product_item_brand_id')
+            ->leftJoin($color->getTable(), $color->getKeyName(), 'color')
+            ->leftJoin($category->getTable(), $category->getKeyName(), 'item_product_item_category_id')
+            ->orderBy('item_product_created_at', 'DESC')->orderBy('item_product_name', 'ASC');
+        return $query;
+    }
+
     public function saveRepository($request)
     {
         try {

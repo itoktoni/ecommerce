@@ -593,6 +593,11 @@ select[name=datatable_length] {
     text-align: center;
 }
 
+#fullname {
+    width: 30% !important;
+    text-align: left;
+}
+
 #type {
     width: 50px !important;
     text-align: center;

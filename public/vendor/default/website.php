@@ -33,6 +33,7 @@ return [
         'session' => '',
         'env' => 'local',
         'editor' => false,
+        'tax' => true,
         'latitude' => '-7.791972',
         'langitude' => '110.467309',
 ];

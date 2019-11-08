@@ -67,7 +67,7 @@ class Order extends Model
   public $prefix = 'SO';
   public $order = 'sales_order_date';
 
-  // public $with = ['detail', 'detail.product'];
+  public $with = ['detail', 'detail.product'];
 
   const CREATED_AT = 'sales_order_created_at';
   const UPDATED_AT = 'sales_order_updated_at';

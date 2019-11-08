@@ -27,7 +27,7 @@ class Module extends Model
 	public $incrementing = false;
 	public $timestamps = false;
 	public $rules = [
-		'module_code' => 'required|unique:modules|min:3',
+		'module_code' => 'required|unique:core_modules|min:3',
 		'module_name' => 'required|min:3',
 		'module_controller' => 'required|min:3',
 	];

@@ -170,7 +170,10 @@
                                                                 <td align="left" valign="middle" width="50%"
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                                                                     bgcolor="#FFFFFF">
-                                                                    {{ $item->product->item_product_name }}
+                                                                    {{ $item->product->item_product_name }} 
+                                                                    @if (config('website.tax'))
+                                                                    + {{ $item->sales_order_detail_tax_name }}
+                                                                    @endif
                                                                 </td>
                                                                 <td align="center" valign="middle" width="10%"
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"

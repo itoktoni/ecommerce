@@ -36,7 +36,7 @@ class User extends Authenticatable
         'api_token',
         'province',
         'city',
-        'district',
+        'location',
         'postcode',
     ];
     public $timestamps    = true; //timestamp will true

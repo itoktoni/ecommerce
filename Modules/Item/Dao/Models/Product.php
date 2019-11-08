@@ -26,6 +26,7 @@ class Product extends Model
     'item_product_image',
     'item_product_sell',
     'item_product_gram',
+    'item_product_item_tax_id',
     'item_product_item_category_id',
     'item_product_item_brand_id',
     'item_product_item_color_json',
@@ -47,12 +48,15 @@ class Product extends Model
 
   public $timestamps = true;
   public $incrementing = true;
+  public $keyType = 'string';
   public $rules = [
     'item_product_name' => 'required|min:3',
     'item_product_sell' => 'required',
     'item_product_gram' => 'required|numeric',
     'item_product_file' => 'file|image|mimes:jpeg,png,jpg|max:2048',
   ];
+
+  public $with = ['tax'];
 
   const CREATED_AT = 'item_product_created_at';
   const UPDATED_AT = 'item_product_updated_at';
@@ -75,12 +79,24 @@ class Product extends Model
     'item_wishlist_user_id'        => [false => 'User'],
     'item_product_discount_type'        => [false => 'Slug'],
     'item_product_discount_value'        => [false => 'Slug'],
-    'item_product_item_size_json'        => [false => 'Slug'],
-    'item_product_item_color_json'        => [false => 'Slug'],
     'item_product_item_tag_json'        => [false => 'Tag'],
     'item_product_description' => [false => 'Description'],
     'item_product_created_at'  => [false => 'Created At'],
     'item_product_created_by'  => [false => 'Updated At'],
+  ];
+
+  public $stock = [
+    'item_product_id'          => [false => 'ID'],
+    'item_brand_name'        => [true => 'Brand'],
+    'item_category_name'        => [true => 'Category'],
+    'item_category_slug'        => [false => 'Category'],
+    'item_product_name'        => [true => 'Full Name'],
+    'item_color_name'                    => [true => 'Color'],
+    'item_brand_slug'        => [false => 'Brand'],
+    'size'                    => [true => 'Size'],
+    'qty'                    => [true => 'Qty'],
+    'hex'                    => [false => 'Qty'],
+    'item_product_gram'        => [false => 'Gram'],
   ];
 
   public $status = [
@@ -93,6 +109,12 @@ class Product extends Model
     '1' => ['Percent', 'primary'],
     '2' => ['Amount', 'success'],
   ];
+
+
+  public function tax()
+  {
+    return $this->hasOne(Tax::class, 'item_tax_id', 'item_product_item_tax_id');
+  }
 
   public static function boot()
   {

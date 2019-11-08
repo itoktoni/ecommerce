@@ -76,18 +76,12 @@
                                 'Homepage',
                                 'Total',
                                 ];
-                                $sort = [
-                                    'Sort',
-                                    'Qty',
-                                    'Size',
-                                ];
                                 @endphp
                                 @foreach($fields as $item => $value)<th 
                                 {!! strpos($value, 'Description' ) !== false ? ' id="description"' : '' !!}
-                                {!! in_array($value, $sort) ? ' id="sort"' : '' !!}
+                                {!! $value=='Sort' ? ' id="sort"' : '' !!}
                                 {!! $value=='Type' ? ' id="type"' : '' !!}
                                 {!! $value=='Ongkir' ? ' id="ongkir"' : '' !!}
-                                {!! $value=='Full Name' ? ' id="fullname"' : '' !!}
                                 {!! in_array($value, $status) ? ' id="status"' : '' !!}>
                                 <strong>{{ $value }}</strong></th>
                                 @endforeach

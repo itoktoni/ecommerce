@@ -6,7 +6,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label" for="inputDefault">Order Date</label>
         <div class="col-md-4">
-             {!! Form::text('sales_order_date', $model->sales_order_date ? $model->sales_order_date->format('Y-m-d') : null, ['class' => 'date'])
+             {!! Form::text('sales_order_date', $model->sales_order_date ? $model->sales_order_date->format('Y-m-d') : date('Y-m-d'), ['class' => 'date'])
                 !!}
         </div>
         {!! Form::label('name', 'Customer', ['class' => 'col-md-2 control-label']) !!}

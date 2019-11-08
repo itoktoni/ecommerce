@@ -43,7 +43,6 @@ class ModuleController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->save(self::$model);
             Response::redirectBack();
         }

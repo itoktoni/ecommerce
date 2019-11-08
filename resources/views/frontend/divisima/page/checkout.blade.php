@@ -52,9 +52,13 @@
 							</div>
 							<h6>{{ $item_cart->name }} {{ $item_cart->attributes['size'] }} {{ $item_cart->attributes['color'] }}</h6>
 							<p>Qty : {{ number_format($item_cart->quantity) }}</p>
-							<p>Weight : {{ number_format($gram) }}gr</p>
 							<p>Price : {{ number_format($item_cart->price) }}</p>
-							<p>Total : {{ number_format($item_cart->quantity * $item_cart->price) }}</p>
+							@if (config('website.tax'))
+							<p>{{ $item_cart->getConditions()->getName() }} : {{ number_format(($item_cart->getConditions()->getValue() * $item_cart->quantity)) }}</p>
+							@else	
+							<p>Weight : {{ number_format($gram) }}gr</p>
+							@endif
+							<p>Total : {{ config('website.tax') ? number_format(($item_cart->quantity * $item_cart->price) + ($item_cart->getConditions()->getValue() * $item_cart->quantity)) : number_format($item_cart->quantity * $item_cart->price) }}</p>
 						</li>
 						@endforeach
 					</ul>
@@ -84,7 +88,7 @@
 
 			<div id="billing" class="col-lg-8 order-2 order-lg-1">
 				{!!Form::open(['route' => 'checkout', 'class' => 'checkout-form', 'files' => true]) !!}
-				<div class="cf-title">Billing Address : <span id="delivery">{{ number_format($total_gram) }}</span>gr
+				<div class="cf-title">Billing Address : Weight <span id="delivery">{{ number_format($total_gram) }}</span>gr
 				</div>
 				<input type="hidden" id="weight" name="sales_order_rajaongkir_weight">
 				<div class="row">

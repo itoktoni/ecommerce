@@ -16,6 +16,7 @@ use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Item\Dao\Repositories\TaxRepository;
 
 class ProductController extends Controller
 {
@@ -41,6 +42,7 @@ class ProductController extends Controller
     {
         $brand = Helper::createOption((new BrandRepository()));
         $category = Helper::createOption((new CategoryRepository()));
+        $tax = Helper::createOption((new TaxRepository()));
         $tag = Helper::shareTag((new TagRepository()), 'item_tag_slug');
         $color = Helper::shareOption((new ColorRepository()), false);
         $size = Helper::shareTag((new SizeRepository()), 'item_size_code');
@@ -51,6 +53,7 @@ class ProductController extends Controller
             'brand'      => $brand,
             'category'  => $category,
             'tag'  => $tag,
+            'tax'  => $tax,
             'color'  => $color,
             'size'  => $size,
             'type'  => $type,
@@ -63,8 +66,8 @@ class ProductController extends Controller
     {
         if (request()->isMethod('POST')) {
             $check = $service->save(self::$model);
-            if($check['status']){
-                return redirect()->route($this->getModule().'_update', ['code' => $check['data']->item_product_id]);
+            if ($check['status']) {
+                return redirect()->route($this->getModule() . '_update', ['code' => $check['data']->item_product_id]);
             }
             return redirect()->back();
         }

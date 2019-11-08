@@ -45,7 +45,7 @@ class TeamRepository extends User implements MasterInterface
         }
     }
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = null)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);

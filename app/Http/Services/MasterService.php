@@ -23,7 +23,8 @@ class MasterService
     public $prefix;
     public $raw = [];
 
-    public function reset(){
+    public function reset()
+    {
         $this->data = null;
         $this->code = null;
         $this->prefix = null;
@@ -105,8 +106,7 @@ class MasterService
         } else {
             Validator::make($this->data, $this->rules)->validate();
         }
-
-        if (!$repository->incrementing && !isset($this->data[$repository->getKeyName()])) {
+        if (!$repository->incrementing && $repository->keyType == 'string' && !isset($this->data[$repository->getKeyName()])) {
 
             if ($this->length == null) {
                 if (isset($repository->length)) {
@@ -128,7 +128,6 @@ class MasterService
             }
             $this->data[$repository->getKeyName()] = $autonumber;
         }
-       
         return $repository;
         // valdiate rules
     }
@@ -149,7 +148,10 @@ class MasterService
 
     public function setModel(MasterInterface $repository)
     {
-        $this->model = $repository->dataRepository();
+        if ($this->model == null) {
+            $this->model = $repository->dataRepository();
+        }
+
         return $this;
     }
 

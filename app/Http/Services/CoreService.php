@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class CoreService extends MasterService
 {
     public $visible = [
-        'create', 'list', 'create', 'data'
+        'create', 'list', 'create', 'data', 'stock'
     ];
 
     public function getGroupModuleAction($model)

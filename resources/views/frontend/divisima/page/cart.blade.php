@@ -66,6 +66,9 @@
 												</a>
 											</h4>
 											<p>{{ number_format($item_cart->price) }}</p>
+											@if (config('website.tax'))
+										<p>{{ number_format($item_cart->getConditions()->getValue() * $item_cart->quantity) }} {{ $item_cart->getConditions()->getName() }}</p> 
+											@endif
 											<a onclick="return confirm('Are you sure to delete product ?');"
 												class="btn btn-danger btn-xs"
 												href="{{ route('delete', ['id' => $item_cart->id ]) }}">Delete</a>
@@ -83,7 +86,7 @@
 										<h4 class="text-center">Stock ( {{ $item_cart->attributes['stock'] }} )</h4>
 									</td>
 									<td class="total-col">
-										<h4 class="text-right">{{ number_format($item_cart->quantity * $item_cart->price) }}</h4>
+										<h4 class="text-right">{{ config('website.tax') ? number_format(($item_cart->quantity * $item_cart->price) + ($item_cart->getConditions()->getValue() * $item_cart->quantity)) : number_format($item_cart->quantity * $item_cart->price) }}</h4> 
 									</td>
 								</tr>
 								@endforeach

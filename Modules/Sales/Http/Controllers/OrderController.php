@@ -62,20 +62,21 @@ class OrderController extends Controller
         return array_merge($view, $data);
     }
 
-    // public function create(OrderService $service)
-    // {
-    //     if (request()->isMethod('POST')) {
-    //         $post = $service->save(self::$detail);
-    //         if ($post['status']) {
-    //             return Response::redirectToRoute($this->getModule() . '_data');
-    //         }
-    //         return Response::redirectBackWithInput();
-    //     }
-    //     return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
-    //         'data_product' => [],
-    //         'model' => self::$model,
-    //     ]));
-    // }
+    public function create(OrderService $service)
+    {
+        if (request()->isMethod('POST')) {
+            $post = $service->save(self::$detail);
+            if ($post['status']) {
+                return Response::redirectToRoute($this->getModule() . '_data');
+            }
+            return Response::redirectBackWithInput();
+        }
+        return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+            'data_product' => [],
+            'customer' => [0 => 'Customer Cash'],
+            'model' => self::$model,
+        ]));
+    }
 
     public function update(TransactionService $service)
     {
