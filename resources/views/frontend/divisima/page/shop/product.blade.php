@@ -3,9 +3,9 @@
     <div class="col-lg-4 col-sm-6">
         <div class="product-item">
             <div class="pi-pic">
-                @isset($item_product->item_product_flag)
+                @if($item_product->item_product_flag)
                 <div class="tag-sale">{{ $item_product->item_product_flag }}</div>
-                @endisset
+                @endif
                 <a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
                     <img src="{{ Helper::files('product/'.$item_product->item_product_image) }}"
                         alt="{{ $item_product->item_product_name }}">

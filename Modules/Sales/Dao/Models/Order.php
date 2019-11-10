@@ -67,7 +67,7 @@ class Order extends Model
   public $prefix = 'SO';
   public $order = 'sales_order_date';
 
-  public $with = ['detail', 'detail.product'];
+  public $with = ['detail', 'detail.product', 'detail.color'];
 
   const CREATED_AT = 'sales_order_created_at';
   const UPDATED_AT = 'sales_order_updated_at';
@@ -82,7 +82,11 @@ class Order extends Model
     'sales_order_rajaongkir_phone'  => [true => 'Phone'],
     'sales_order_rajaongkir_weight'  => [false => 'Weight'],
     'sales_order_rajaongkir_courier'  => [false => 'Courier'],
-    'sales_order_rajaongkir_service'  => [true => 'Ongkir'],
+    'sales_order_rajaongkir_service'  => [false => 'Ongkir'],
+    'sales_order_marketing_promo_value'  => [false => 'Voucher'],
+    'sales_order_marketing_promo_name'  => [false => 'Promo'],
+    'sales_order_rajaongkir_service'  => [false => 'Service'],
+    'sales_order_rajaongkir_ongkir'  => [false => 'Ongkir'],
     'sales_order_total'               => [true => 'Total'],
     'sales_order_status'              => [true => 'Status'],
     'sales_order_created_at'          => [false => 'Created At'],

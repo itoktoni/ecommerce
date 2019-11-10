@@ -132,53 +132,195 @@
 											<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
 												data-parent="#collapseTwo">
 												<div class="card-body">
-													<div class="row">
-														<table id="force-responsive" class="table table-table table-bordered table-striped table-hover">
-															<thead>
-																<tr>
-																	<th scope="col">No. Order</th>
-																	<th scope="col">Date</th>
-																	<th scope="col">Name</th>
-																	<th scope="col">Ongkir</th>
-																	<th style="text-align:right" scope="col">Total</th>
-																	<th style="text-align:right" scope="col">Status</th>
-																	<th style="text-align:right" scope="col">Detail</th>
-																</tr>
-															</thead>
-														
-														</table>
+													<table id="force-responsive"
+														class="table table-table table-bordered">
+														<thead>
+															<tr>
+																<th scope="col">No. Order</th>
+																<th scope="col">Date</th>
+																<th scope="col">Name</th>
+																<th scope="col">Email</th>
+																<th scope="col">Phone</th>
+																<th style="text-align:right" scope="col">Total</th>
+																<th style="text-align:right" scope="col">Status</th>
+																<th style="text-align:center" scope="col">Detail</th>
+															</tr>
+														</thead>
+														<tbody>
+															@forelse ($order as $item)
+															<tr style="position:relative">
+																<td data-header="Order No.">
+																	{{ $item->sales_order_id ?? '' }}
+																</td>
+																<td data-header="Order Date">
+																	{{ $item->sales_order_date->format('d M y') }}
+																</td>
+																<td data-header="Ongkir">
+																	{{ $item->sales_order_rajaongkir_name ?? '' }}
+																</td>
+																<td data-header="Email">
+																	{{ $item->sales_order_email ?? '' }}
+																</td>
+																<td data-header="Phone">
+																	{{ $item->sales_order_rajaongkir_phone ?? '' }}
+																</td>
+																<td data-header="Total" align="right">
+																	{{ number_format($item->sales_order_total) ?? '' }}
+																</td>
+																<td data-header="Status" align="right">
+																	{{ $status[$item->sales_order_status] ?? '' }}
+																</td>
+																<td data-header="Detail" align="center">
+																	<button type="button" class="btn btn-success btn-sm"
+																		data-toggle="modal"
+																		data-target="#{{ $item->sales_order_id ?? '' }}">
+																		Show
+																	</button>
+																</td>
 
-													</div>
+															</tr>
+															<!-- Modal -->
+															<div class="modal fade"
+																id="{{ $item->sales_order_id ?? '' }}" tabindex="-1"
+																role="dialog" aria-labelledby="exampleModalLabel"
+																aria-hidden="true">
+																<div class="modal-dialog modal-lg" role="document">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="modal-title"
+																				id="exampleModalLabel">No. Order :
+																				{{ $item->sales_order_id ?? '' }}
+																			</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<div class="modal-body">
+
+																			<ul class="list-group">
+																				@if ($item->detail->count() > 0)
+																				@foreach ($item->detail as $detail)
+																				<li
+																					class="list-group-item d-flex justify-content-between align-items-center">
+
+																					{{ $detail->product->item_product_name }}
+																					{{ $detail->sales_order_detail_item_size ?? '' }}
+																					{{ $detail->color->item_color_name ?? '' }}
+																					<br>
+																					[
+																					{{ $detail->sales_order_detail_qty_order }}
+																					pcs *
+																					{{ number_format($detail->sales_order_detail_price_order) }}
+																					]
+																					@if (config('website.tax'))
+																					<br>
+																					VAT
+																					{{ $detail->sales_order_detail_tax_name }}
+																					:
+																					{{ number_format($detail->sales_order_detail_tax_value) }}
+																					@endif
+																					<span>{{ number_format($detail->sales_order_detail_total_order) }}</span>
+																				</li>
+																				@endforeach
+																				@endif
+																				<li class="list-group-item d-flex justify-content-between align-items-center">
+																					{{ $item->sales_order_rajaongkir_service }}
+																					<span>{{ number_format($item->sales_order_rajaongkir_ongkir) }}</span>
+																				</li>
+																			</ul>
+																		</div>
+																		<div class="modal-footer">
+																			<div class="row">
+																				<div style="position:absolute;bottom:20px;left:20px;">
+																					Voucher
+																					{{ $item->sales_order_marketing_promo_name }}
+																					:
+																					- {{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
+																				</div>
+																				<div class="pull-right"
+																					style="margin-left:5px;margin-right:30px;">
+																					Total :
+																					{{ number_format($item->sales_order_total) ?? '' }}
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															@empty
+															<tr>
+																<td colspan="7" data-header="Empty Order">
+																	Empty Order
+																</td>
+															</tr>
+															@endforelse
+														</tbody>
+													</table>
 												</div>
 											</div>
 										</div>
 										<div class="card">
 											<div class="card-header" id="headingThree">
 												<h2 class="mb-0">
-													<button class="btn btn-link collapsed" type="button"
+												<button class="btn btn-link collapsed" type="button"
 														data-toggle="collapse" data-target="#collapseThree"
 														aria-expanded="false" aria-controls="collapseThree">
 														Wish List - (Loved Product)
 													</button>
 												</h2>
 											</div>
-											<div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+											<div id="collapseThree" class="collapse {{ request()->get('page') ? 'show' : '' }}" aria-labelledby="headingThree"
 												data-parent="#collapseThree">
 												<div class="card-body">
-													Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-													terry richardson ad squid. 3 wolf
-													moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-													quinoa nesciunt laborum eiusmod.
-													Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
-													single-origin coffee nulla assumenda
-													shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-													anderson cred nesciunt sapiente ea
-													proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat
-													craft
-													beer farm-to-table, raw denim
-													aesthetic synth nesciunt you probably haven't heard of them
-													accusamus
-													labore sustainable VHS.
+													<div class="row">
+														@foreach ($my_wishlist as $item_product)
+														<div class="col-lg-2 col-sm-3">
+															<div class="product-item">
+																
+
+																<div class="pi-pic">
+																	@if($item_product->item_product_flag)
+																	<div class="tag-sale">{{ $item_product->item_product_flag }}</div>
+																	@endif
+																	<a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
+																		<img src="{{ Helper::files('product/'.$item_product->item_product_image) }}"
+																			alt="{{ $item_product->item_product_name }}">
+																	</a>
+																</div>
+
+																<div style="margin-top:10px;" class="col-md-12">
+																	@if ($item_product->item_product_discount_type)
+																	<h6 class="coret row">{{ number_format($item_product->item_product_sell) }}</h6>
+																	<h6 class="text-right" style="position:absolute;top:0px;right:0px;">
+																		{{ number_format($item_product->item_product_discount_type == 1 ? $item_product->item_product_sell - ($item_product->item_product_discount_value * $item_product->item_product_sell) : $item_product->item_product_sell - $item_product->item_product_discount_value ) }}
+																	</h6>
+																	@else
+																	<h6 class="row text-right">{{ number_format($item_product->item_product_sell) }}</h6>
+																	@endif
+																</div>
+
+																<a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
+																	<div class="pi-text">
+																		<div class="row">
+																			<div class="col-md-12">
+																				<p>{{ $item_product->item_product_name }}</p>
+																			</div>
+													
+																			
+																		</div>
+																	</div>
+																</a>
+															</div>
+														</div>
+														@endforeach
+													
+														<div class="text-xs-center text-center pagination pagination-centered w-100 pt-3">
+													
+															{{ $my_wishlist->render("pagination::bootstrap-4") }}
+													
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -193,9 +335,11 @@
 @endsection
 
 @push('javascript')
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
 <script>
 	$(document).ready(function() {
-	
+		$('#force-responsive').DataTable();
 		$('#province').change(function() { // Jika Select Box id provinsi dipilih
 			var data = $("#province option:selected");
 			var province = data.val(); // Ciptakan variabel provinsi
@@ -241,10 +385,20 @@
 @endpush
 
 @push('css')
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <style>
+	#force-responsive_wrapper {
+		width: 100%;
+	}
+
+	#force-responsive_filter input {
+		border: 0.5px solid #ced4da;
+	}
+
 	@media screen and (max-width: 520px) {
-		#force-responsive table {
-			width: 100%;
+		table {
+			width: 100% !important;
 		}
 
 		#force-responsive thead {

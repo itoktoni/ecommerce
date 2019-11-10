@@ -233,11 +233,16 @@ class PublicController extends Controller
     public function myaccount()
     {
         $user = new TeamRepository();
-        $province = Auth::user()->province;
-        $city = Auth::user()->city;
-        $location = Auth::user()->location;
 
+        $province = $city = $location = false;
         $list_location = $list_city = [];
+
+        if (Auth::check()) {
+
+            $province = Auth::user()->province;
+            $city = Auth::user()->city;
+            $location = Auth::user()->location;
+        };
 
         if (request()->isMethod('POST')) {
 
@@ -288,15 +293,19 @@ class PublicController extends Controller
         $order = new OrderRepository();
         $data_order = $order->userRepository(Auth::user()->id);
 
+        $my_wishlist = DB::table('view_wishlist')->where('item_wishlist_user_id', Auth::user()->id)->paginate(6);
+
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'model' => $data,
             'province' => $province,
             'order' => $data_order->get(),
             'city' => $city,
             'location' => $location,
+            'status' => Helper::shareStatus($order->status),
             'list_province' => $list_province,
             'list_city' => $list_city,
             'list_location' => $list_location,
+            'my_wishlist' => $my_wishlist,
         ]);
     }
 
