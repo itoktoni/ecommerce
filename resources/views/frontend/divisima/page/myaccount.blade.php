@@ -144,7 +144,7 @@
 																<th style="text-align:right" scope="col">Total</th>
 																<th style="text-align:right" scope="col">Status</th>
 																<th style="text-align:center" scope="col">Resi</th>
-																<th style="text-align:center" scope="col">Detail</th>
+																<th style="text-align:center;width:100px;" scope="col">Detail</th>
 															</tr>
 														</thead>
 														<tbody>
