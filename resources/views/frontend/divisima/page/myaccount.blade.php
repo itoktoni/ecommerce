@@ -139,8 +139,7 @@
 																<th scope="col">No. Order</th>
 																<th scope="col">Date</th>
 																<th scope="col">Name</th>
-																<th scope="col">Email</th>
-																<th scope="col">Phone</th>
+																<th style="width:70px;" scope="col">Email</th>
 																<th style="text-align:right" scope="col">Total</th>
 																<th style="text-align:right" scope="col">Status</th>
 																<th style="text-align:center" scope="col">Resi</th>
@@ -161,9 +160,6 @@
 																</td>
 																<td data-header="Email">
 																	{{ $item->sales_order_email ?? '' }}
-																</td>
-																<td data-header="Phone">
-																	{{ $item->sales_order_rajaongkir_phone ?? '' }}
 																</td>
 																<td data-header="Total" align="right">
 																	{{ number_format($item->sales_order_total) ?? '' }}
