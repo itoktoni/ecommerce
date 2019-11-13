@@ -82,6 +82,7 @@ Route::match(['get', 'post'], 'shop', 'PublicController@shop')->name('shop');
 Route::get('/shop/{type}/{slug}', 'PublicController@shop')->name('filters');
 
 Route::get('/brand/{brand}', 'PublicController@shop')->name('filter_brand');
+Route::get('/track/{code}', 'PublicController@track')->name('track');
 
 Route::match(['get', 'post'], 'cart', 'PublicController@cart')->name('cart');
 Route::match(['get', 'post'], 'checkout', 'PublicController@checkout')->name('checkout');

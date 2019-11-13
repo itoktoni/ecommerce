@@ -16,7 +16,6 @@ class VehicleController extends Controller
     public function __construct()
     {
         if (self::$model == null) {
-            self::$model = new VehicleRepository();
         }
         $this->template  = Helper::getTemplate(__class__);
     }

@@ -28,7 +28,7 @@
 											<button class="btn btn-link" type="button" data-toggle="collapse"
 												data-target="#collapseOne" aria-expanded="true"
 												aria-controls="collapseOne">
-												Personal Data [ {{ Auth::user()->username }} ]
+												Personal Data [ {{ Auth::user()->username ?? '' }} ]
 											</button>
 										</h2>
 									</div>
@@ -143,6 +143,7 @@
 																<th scope="col">Phone</th>
 																<th style="text-align:right" scope="col">Total</th>
 																<th style="text-align:right" scope="col">Status</th>
+																<th style="text-align:center" scope="col">Resi</th>
 																<th style="text-align:center" scope="col">Detail</th>
 															</tr>
 														</thead>
@@ -170,16 +171,26 @@
 																<td data-header="Status" align="right">
 																	{{ $status[$item->sales_order_status] ?? '' }}
 																</td>
+																<td data-header="Courier" align="center">
+																	{{ strtoupper($item->sales_order_rajaongkir_courier) ?? '' }}
+																</td>
 																<td data-header="Detail" align="center">
 																	<button type="button" class="btn btn-success btn-sm"
 																		data-toggle="modal"
 																		data-target="#{{ $item->sales_order_id ?? '' }}">
 																		Show
 																	</button>
+																	@if ($item->sales_order_rajaongkir_waybill)
+																	<a id="track" target="__blank"
+																		href="{{ route('track', ['code' => $item->sales_order_id]) }}"
+																		class="btn btn-danger btn-sm">
+																		Track
+																	</a>
+																	@endif
 																</td>
 
 															</tr>
-															<!-- Modal -->
+															<!-- Modal Order -->
 															<div class="modal fade"
 																id="{{ $item->sales_order_id ?? '' }}" tabindex="-1"
 																role="dialog" aria-labelledby="exampleModalLabel"
@@ -224,7 +235,8 @@
 																				</li>
 																				@endforeach
 																				@endif
-																				<li class="list-group-item d-flex justify-content-between align-items-center">
+																				<li
+																					class="list-group-item d-flex justify-content-between align-items-center">
 																					{{ $item->sales_order_rajaongkir_service }}
 																					<span>{{ number_format($item->sales_order_rajaongkir_ongkir) }}</span>
 																				</li>
@@ -232,11 +244,13 @@
 																		</div>
 																		<div class="modal-footer">
 																			<div class="row">
-																				<div style="position:absolute;bottom:20px;left:20px;">
+																				<div
+																					style="position:absolute;bottom:20px;left:20px;">
 																					Voucher
 																					{{ $item->sales_order_marketing_promo_name }}
 																					:
-																					- {{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
+																					-
+																					{{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
 																				</div>
 																				<div class="pull-right"
 																					style="margin-left:5px;margin-right:30px;">
@@ -248,6 +262,8 @@
 																	</div>
 																</div>
 															</div>
+															<!-- end modal order -->
+
 															@empty
 															<tr>
 																<td colspan="7" data-header="Empty Order">
@@ -263,27 +279,29 @@
 										<div class="card">
 											<div class="card-header" id="headingThree">
 												<h2 class="mb-0">
-												<button class="btn btn-link collapsed" type="button"
+													<button class="btn btn-link collapsed" type="button"
 														data-toggle="collapse" data-target="#collapseThree"
 														aria-expanded="false" aria-controls="collapseThree">
 														Wish List - (Loved Product)
 													</button>
 												</h2>
 											</div>
-											<div id="collapseThree" class="collapse {{ request()->get('page') ? 'show' : '' }}" aria-labelledby="headingThree"
-												data-parent="#collapseThree">
+											<div id="collapseThree"
+												class="collapse {{ request()->get('page') ? 'show' : '' }}"
+												aria-labelledby="headingThree" data-parent="#collapseThree">
 												<div class="card-body">
 													<div class="row">
 														@foreach ($my_wishlist as $item_product)
 														<div class="col-lg-2 col-sm-3">
 															<div class="product-item">
-																
 
 																<div class="pi-pic">
 																	@if($item_product->item_product_flag)
-																	<div class="tag-sale">{{ $item_product->item_product_flag }}</div>
+																	<div class="tag-sale">
+																		{{ $item_product->item_product_flag }}</div>
 																	@endif
-																	<a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
+																	<a
+																		href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
 																		<img src="{{ Helper::files('product/'.$item_product->item_product_image) }}"
 																			alt="{{ $item_product->item_product_name }}">
 																	</a>
@@ -291,34 +309,40 @@
 
 																<div style="margin-top:10px;" class="col-md-12">
 																	@if ($item_product->item_product_discount_type)
-																	<h6 class="coret row">{{ number_format($item_product->item_product_sell) }}</h6>
-																	<h6 class="text-right" style="position:absolute;top:0px;right:0px;">
+																	<h6 class="coret row">
+																		{{ number_format($item_product->item_product_sell) }}
+																	</h6>
+																	<h6 class="text-right"
+																		style="position:absolute;top:0px;right:0px;">
 																		{{ number_format($item_product->item_product_discount_type == 1 ? $item_product->item_product_sell - ($item_product->item_product_discount_value * $item_product->item_product_sell) : $item_product->item_product_sell - $item_product->item_product_discount_value ) }}
 																	</h6>
 																	@else
-																	<h6 class="row text-right">{{ number_format($item_product->item_product_sell) }}</h6>
+																	<h6 class="row text-right">
+																		{{ number_format($item_product->item_product_sell) }}
+																	</h6>
 																	@endif
 																</div>
 
-																<a href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
+																<a
+																	href="{{ route('single_product', ['slug' => $item_product->item_product_slug]) }}">
 																	<div class="pi-text">
 																		<div class="row">
 																			<div class="col-md-12">
-																				<p>{{ $item_product->item_product_name }}</p>
+																				<p>{{ $item_product->item_product_name }}
+																				</p>
 																			</div>
-													
-																			
 																		</div>
 																	</div>
 																</a>
 															</div>
 														</div>
 														@endforeach
-													
-														<div class="text-xs-center text-center pagination pagination-centered w-100 pt-3">
-													
-															{{ $my_wishlist->render("pagination::bootstrap-4") }}
-													
+
+														<div
+															class="text-xs-center text-center pagination pagination-centered w-100 pt-3">
+
+															{{ $my_wishlist ? $my_wishlist->render("pagination::bootstrap-4") : '' }}
+
 														</div>
 													</div>
 												</div>
@@ -355,6 +379,24 @@
 						city.append('<option postcode="'+obj.postal_code+'" value="' + obj.city_id + '">' + obj.city_name + '</option>');
 					});
 					city.trigger("chosen:updated");
+				}
+			});
+		});
+
+		$("#force-responsive").on('#track',function(){
+		var userid = $(this).attr('data');
+		alert(userid);
+		return false;
+			$.ajax({
+				url: 'ajaxfile.php',
+				type: 'post',
+				data: {userid: userid},
+				success: function(response){ 
+				// Add response in Modal body
+				$('.modal-body').html(response);
+
+				// Display Modal
+				$('#empModal').modal('show'); 
 				}
 			});
 		});

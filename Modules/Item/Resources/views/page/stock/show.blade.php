@@ -66,9 +66,11 @@
 
                 </div>
             </div>
-
-            @include($template_action)
-
+            <div class="navbar-fixed-bottom" id="menu_action">
+                <div class="text-right" style="padding:5px">
+                    <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -89,6 +89,7 @@ class Order extends Model
     'sales_order_marketing_promo_name'  => [false => 'Promo'],
     'sales_order_rajaongkir_service'  => [false => 'Service'],
     'sales_order_rajaongkir_ongkir'  => [false => 'Ongkir'],
+    'sales_order_rajaongkir_waybill'  => [false => 'Waybill'],
     'sales_order_total'               => [true => 'Total'],
     'sales_order_status'              => [true => 'Status'],
     'sales_order_created_at'          => [false => 'Created At'],

@@ -298,8 +298,8 @@
                                                         <a href=""
                                                             style="font-family:Arial,sans-serif;color:#{{ config('website.color') }}!important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
                                                             target="_blank">
-                                                            Hubungi {{ config('website.name') }} (Telp
-                                                            {{ config('website.phone') }}).
+                                                            Hubungi {{ config('website.name') }} Telp
+                                                            {{ config('website.phone') }}.
                                                         </a>
                                                     </p>
                                                     <br>

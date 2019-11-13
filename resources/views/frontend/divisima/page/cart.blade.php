@@ -67,7 +67,10 @@
 											</h4>
 											<p>{{ number_format($item_cart->price) }}</p>
 											@if (config('website.tax'))
-										<p>{{ number_format($item_cart->getConditions()->getValue() * $item_cart->quantity) }} {{ $item_cart->getConditions()->getName() }}</p> 
+											<p>
+												{{ number_format($item_cart->getConditions()->getValue() * $item_cart->quantity) }}
+												{{ $item_cart->getConditions()->getName() }}
+											</p>
 											@endif
 											<a onclick="return confirm('Are you sure to delete product ?');"
 												class="btn btn-danger btn-xs"
@@ -77,16 +80,20 @@
 									<td class="quy-col">
 										<div class="quantity">
 											<div class="pro-qty">
-												{!! Form::text("cart[$loop->index][qty]", old("cart[$loop->index][qty]") ?? $item_cart->quantity) !!}
+												{!! Form::text("cart[$loop->index][qty]", old("cart[$loop->index][qty]")
+												?? $item_cart->quantity) !!}
 											</div>
 										</div>
 									</td>
 									<td class="size-col">
-										<input type="hidden" value="{{ $item_cart->attributes['option'] }}" name="cart[{{ $loop->index }}][option]">
+										<input type="hidden" value="{{ $item_cart->attributes['option'] }}"
+											name="cart[{{ $loop->index }}][option]">
 										<h4 class="text-center">Stock ( {{ $item_cart->attributes['stock'] }} )</h4>
 									</td>
 									<td class="total-col">
-										<h4 class="text-right">{{ config('website.tax') ? number_format(($item_cart->quantity * $item_cart->price) + ($item_cart->getConditions()->getValue() * $item_cart->quantity)) : number_format($item_cart->quantity * $item_cart->price) }}</h4> 
+										<h4 class="text-right">
+											{{ config('website.tax') ? number_format(($item_cart->quantity * $item_cart->price) + ($item_cart->getConditions()->getValue() * $item_cart->quantity)) : number_format($item_cart->quantity * $item_cart->price) }}
+										</h4>
 									</td>
 								</tr>
 								@endforeach
@@ -115,7 +122,7 @@
 
 			<div style="margin-top:20px;" class="col-lg-12 card-right">
 				<div class="row">
-					<div class="col-lg-7" >
+					<div class="col-lg-7">
 						<div class="row">
 							<div class="col-md-6 col-sm-12 col-sx-12">
 								<a style="margin-left:-10px;" href="{{ route('shop') }}"
@@ -125,7 +132,8 @@
 								<button type="submit" class="site-btn">Update</button>
 							</div>
 							<div class="col-md-3 col-sm-12 col-sx-12">
-							<a style="margin-left:-25px;" class="site-btn sb-dark" href="{{ route('checkout') }}">Checkout</a>
+								<a style="margin-left:-25px;" class="site-btn sb-dark"
+									href="{{ route('checkout') }}">Checkout</a>
 							</div>
 						</div>
 					</div>

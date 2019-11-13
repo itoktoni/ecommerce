@@ -283,10 +283,8 @@ class Helper
 
     public static function createStatus($data, $status = false)
     {
-
         $color = 'default';
         $label = 'Unknows';
-
         if ($status) {
             $value = $data;
             if ($status[$value]) {
@@ -312,7 +310,7 @@ class Helper
                 }
             }
         }
-        return '<span class="btn btn-xs btn-block btn-' . $color . '">' . $label . '</span>';
+        return '<span class="toltip btn btn-xs btn-block btn-' . $color . '">' . $label . '<span class="tultip">Seach with input [ '.$value.' ] </span></span>';
     }
 
     public static function snakeToLabel($value)

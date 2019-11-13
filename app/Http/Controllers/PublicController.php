@@ -42,11 +42,13 @@ use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
 use Modules\Marketing\Dao\Repositories\ContactRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth')->only(['myaccount']);
         view()->share('public_category', Helper::createOption((new CategoryRepository()), false, true, true))->where('item_category_status', 1);
         view()->share('public_sosmed', Helper::createOption((new SosmedRepository()), false, true, true));
         view()->share('public_product', Helper::createOption((new ProductRepository()), false, true, true));
@@ -230,18 +232,46 @@ class PublicController extends Controller
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
     }
 
+    public function track($code)
+    {
+        $model = new OrderRepository();
+        $data = $model->showRepository($code);
+        if ($data) {
+
+            $response = Curl::to(route('waybill'))->withData([
+                'waybill' => $data->sales_order_rajaongkir_waybill,
+                'courier' => $data->sales_order_rajaongkir_courier,
+            ])->post();
+            $waybill  = json_decode($response);
+            if (isset($waybill) && !empty($waybill->rajaongkir) && $waybill->rajaongkir->status->code == 200) {
+
+                return View(Helper::setViewFrontend(__FUNCTION__))->with([
+                    'data' => $data,
+                    'waybill' => $waybill->rajaongkir->result,
+                ]);
+            } else {
+                abort(403, $waybill->rajaongkir->status->description);
+            }
+        }
+    }
+
     public function myaccount()
     {
         $user = new TeamRepository();
+        $order = new OrderRepository();
 
-        $province = $city = $location = false;
-        $list_location = $list_city = [];
+        $province = $city = $location = $data = false;
+        $list_location = $list_city  = $data_order = $my_wishlist = [];
 
         if (Auth::check()) {
 
             $province = Auth::user()->province;
             $city = Auth::user()->city;
             $location = Auth::user()->location;
+            $data = $user->showRepository(Auth::user()->id);
+
+            $data_order = $order->userRepository(Auth::user()->id)->get();
+            $my_wishlist = DB::table('view_wishlist')->where('item_wishlist_user_id', Auth::user()->id)->paginate(6);
         };
 
         if (request()->isMethod('POST')) {
@@ -288,17 +318,11 @@ class PublicController extends Controller
         if ($city) {
             $list_location = DB::table('rajaongkir_districts')->where('city_id', $city)->get()->sortBy('subdistrict_name')->pluck('subdistrict_name', 'subdistrict_id')->toArray();
         }
-        $data = $user->showRepository(Auth::user()->id);
-
-        $order = new OrderRepository();
-        $data_order = $order->userRepository(Auth::user()->id);
-
-        $my_wishlist = DB::table('view_wishlist')->where('item_wishlist_user_id', Auth::user()->id)->paginate(6);
 
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'model' => $data,
             'province' => $province,
-            'order' => $data_order->get(),
+            'order' => $data_order,
             'city' => $city,
             'location' => $location,
             'status' => Helper::shareStatus($order->status),
