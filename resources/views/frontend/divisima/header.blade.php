@@ -22,7 +22,7 @@
                         <div class="up-item">
                             <i class="flaticon-profile"></i>
                             <a href="{{ route('myaccount') }}">My Account</a> or
-                            <a class="text-danger" href="{{ route('reset') }}">Logout</a>
+                            <a href="{{ route('reset') }}">Logout</a>
                         </div>
                         @endauth
                         @guest

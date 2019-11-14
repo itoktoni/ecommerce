@@ -62,10 +62,18 @@
                         <br>
                         <br>
                         <hr>
-                        <h5 class="text-center">Color</h5>
+                        <h5 class="text-center">Primary</h5>
                         <div class="col-md-12">
                             {!! Form::text('color', config('website.color'), ['class' => 'form-control jscolor']) !!}
                         </div>
+
+                        <br>
+                        <hr>
+                        <h5 class="text-center">Secondary</h5>
+                        <div class="col-md-12">
+                            {!! Form::text('colors', config('website.colors'), ['class' => 'form-control jscolor']) !!}
+                        </div>
+
                     </div>
 
                     <div class="col-md-8 col-lg-9">
