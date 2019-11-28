@@ -48,7 +48,7 @@ class GroupUserController extends Controller
     {
         if (request()->isMethod('POST')) {
 
-            $service->save(self::$model);
+            $data = $service->save(self::$model);
             Response::redirectBack();
         }
         return view(Helper::setViewCreate())->with($this->share());

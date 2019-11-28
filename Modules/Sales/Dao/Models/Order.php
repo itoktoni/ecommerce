@@ -4,8 +4,11 @@ namespace Modules\Sales\Dao\Models;
 
 use App\User;
 use Plugin\Helper;
+use Modules\Sales\Dao\Models\Area;
+use Modules\Sales\Dao\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Modules\Crm\Dao\Models\Customer;
+use Modules\Sales\Dao\Models\Province;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Finance\Dao\Models\Payment;
 use Modules\Forwarder\Dao\Models\Vendor;
@@ -44,7 +47,7 @@ class Order extends Model
     'sales_order_deleted_at',
     'sales_order_rajaongkir_province_id',
     'sales_order_rajaongkir_city_id',
-    'sales_order_rajaongkir_location',
+    'sales_order_rajaongkir_area_id',
     'sales_order_rajaongkir_courier',
     'sales_order_rajaongkir_expedition',
     'sales_order_rajaongkir_ongkir',
@@ -60,7 +63,7 @@ class Order extends Model
   public $timestamps = true;
   public $incrementing = false;
   public $rules = [
-    'sales_order_core_user_id' => 'required',
+    'sales_order_email' => 'required',
   ];
 
   public $validate = true;
@@ -114,11 +117,29 @@ class Order extends Model
     '0' => ['CANCEL', 'danger'],
   ];
 
+  public $courier = [
+    '' => 'Choose Expedition',
+    'pos' => 'POS Indonesia (POS)',
+    'jne' => 'Jalur Nugraha Ekakurir (JNE)',
+    'tiki' => 'Citra Van Titipan Kilat (TIKI)',
+    'rpx' => 'RPX Holding (RPX)',
+    'wahana' => 'Wahana Prestasi Logistik (WAHANA)',
+    'sicepat' => 'SiCepat Express (SICEPAT)',
+    'jnt' => 'J&T Express (J&T)',
+    'sap' => 'SAP Express (SAP)',
+    'jet' => 'JET Express (JET)',
+    'indah' => 'Indah Logistic (INDAH)',
+    'ninja' => 'Ninja Express (NINJA)',
+    'first' => 'First Logistics (FIRST)',
+    'lion' => 'Lion Parcel (LION)',
+    'rex' => 'Royal Express Indonesia (REX)',
+  ];
+
   public $custom_attribute = [
 
     'sales_order_rajaongkir_province_id' => 'Province',
     'sales_order_rajaongkir_city_id' => 'City',
-    'sales_order_rajaongkir_location' => 'Location',
+    'sales_order_rajaongkir_area' => 'Area',
     'sales_order_rajaongkir_courier' => 'Courier',
     'sales_order_rajaongkir_ongkir' => 'Ongkir',
     'sales_order_rajaongkir_address' => 'Address',
@@ -146,6 +167,21 @@ class Order extends Model
   public function customer()
   {
     return $this->hasOne(User::class, 'id', 'sales_order_core_user_id');
+  }
+
+  public function Province()
+  {
+    return $this->hasOne(Province::class, 'rajaongkir_province_id', 'sales_order_rajaongkir_province_id');
+  }
+
+  public function City()
+  {
+    return $this->hasOne(City::class, 'rajaongkir_city_id', 'sales_order_rajaongkir_city_id');
+  }
+
+  public function Area()
+  {
+    return $this->hasOne(Area::class, 'rajaongkir_area_id', 'sales_order_rajaongkir_area_id');
   }
 
   public function forwarder()

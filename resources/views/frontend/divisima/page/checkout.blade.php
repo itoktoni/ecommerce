@@ -110,8 +110,8 @@
 					<div class="col-md-2">
 						<h5 class="text-right m-l-10">Location </h5>
 					</div>
-					<div class="col-md-4 {{ $errors->has('sales_order_rajaongkir_location') ? 'active' : ''}}">
-						{{ Form::select("sales_order_rajaongkir_location", $list_location, $location, ['id' => 'location', 'class' => 'form-control chosen', 'data-placeholder' => 'Choose a Location' ]) }}
+					<div class="col-md-4 {{ $errors->has('sales_order_rajaongkir_area_id') ? 'active' : ''}}">
+						{{ Form::select("sales_order_rajaongkir_area_id", $list_location, $location, ['id' => 'location', 'class' => 'form-control chosen', 'data-placeholder' => 'Choose a Location' ]) }}
 					</div>
 
 					<div class="col-md-1">
@@ -193,7 +193,7 @@
 				city.empty();
 				city.append('<option value=""></option>');
 				$.each(response, function (idx, obj) {
-					city.append('<option postcode="'+obj.postal_code+'" value="' + obj.city_id + '">' + obj.city_name + '</option>');
+					city.append('<option postcode="'+obj.rajaongkir_city_postal_code+'" value="' + obj.rajaongkir_city_id + '">' + obj.rajaongkir_city_name + '</option>');
 				});
 				city.trigger("chosen:updated");
 			}
@@ -214,7 +214,7 @@
 				location.empty();
 				location.append('<option value=""></option>');
 				$.each(response, function (idx, obj) {
-					location.append('<option value="' + obj.subdistrict_id + '">' + obj.subdistrict_name + '</option>');
+					location.append('<option value="' + obj.rajaongkir_area_id + '">' + obj.rajaongkir_area_name + '</option>');
 				});
 				$("#location").trigger("chosen:updated");
 			}

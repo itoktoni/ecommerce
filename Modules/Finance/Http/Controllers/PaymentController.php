@@ -11,6 +11,7 @@ use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Finance\Dao\Repositories\FlagRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
+use Plugin\Alert;
 
 class PaymentController extends Controller
 {
@@ -54,7 +55,7 @@ class PaymentController extends Controller
 
             $service->save(self::$model);
         }
-        
+
         return view(Helper::setViewCreate())->with($this->share([
             'model' => self::$model
         ]));
@@ -65,12 +66,28 @@ class PaymentController extends Controller
         if (request()->isMethod('POST')) {
 
             $service->update(self::$model);
+            if (request()->has('order_paid')) {
+                self::$model->paidRepository(request()->get('finance_payment_sales_order_id'));
+            }
             return redirect()->route($this->getModule() . '_data');
         }
 
         if (request()->has('code')) {
 
             $data = $service->show(self::$model);
+            return view(Helper::setViewUpdate())->with($this->share([
+                'model'        => $data,
+                'key'          => self::$model->getKeyName()
+            ]));
+        }
+
+        if (request()->has('so')) {
+            $id = request()->get('so');
+            $data = self::$model->soRepository($id);
+            if(!$data){
+                Alert::error('SO '.$id.' Belum dibayar');
+                return redirect()->back();
+            }
             return view(Helper::setViewUpdate())->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName()

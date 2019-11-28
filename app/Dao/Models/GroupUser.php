@@ -17,18 +17,16 @@ class GroupUser extends Model
         'group_user_visible',
         'group_user_level',
         'group_user_dashboard',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
     ];
 
     public $timestamps   = false;
     public $incrementing = false;
     public $rules        = [
-        'group_user_code' => 'required|min:3|unique:group_users',
+        'group_user_code' => 'required|min:3|unique:core_group_users',
         'group_user_name' => 'required|min:3',
     ];
+
+    protected $keyType = 'string';
 
     public function scopeById($query, $id)
     {

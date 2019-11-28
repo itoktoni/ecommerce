@@ -6,6 +6,7 @@ use Plugin\Notes;
 use Helper;
 use Modules\Finance\Dao\Models\Payment;
 use App\Dao\Interfaces\MasterInterface;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 
 class PaymentRepository extends Payment implements MasterInterface
 {
@@ -21,6 +22,17 @@ class PaymentRepository extends Payment implements MasterInterface
             $activity = $this->create($request);
             return Notes::create($activity);
         } catch (\Illuminate\Database\QueryException $ex) {
+            return Notes::error($ex->getMessage());
+        }
+    }
+
+    public function paidRepository($id)
+    {
+        try {
+            $order = new OrderRepository();
+            $activity = $order->updateRepository($id, ['sales_order_status' => 2]);
+            return Notes::update($activity);
+        } catch (QueryExceptionAlias $ex) {
             return Notes::error($ex->getMessage());
         }
     }
@@ -45,11 +57,19 @@ class PaymentRepository extends Payment implements MasterInterface
         }
     }
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = null)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);
         }
         return $this->findOrFail($id);
+    }
+
+    public function soRepository($id, $relation = null)
+    {
+        if ($relation) {
+            return $this->with($relation)->where('finance_payment_sales_order_id', $id)->first();
+        }
+        return $this->where('finance_payment_sales_order_id', $id)->first();
     }
 }

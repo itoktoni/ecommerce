@@ -204,6 +204,7 @@ return [
         Darryldecode\Cart\CartServiceProvider::class,
         rizalafani\rajaongkirlaravel\RajaOngkirServiceProvider::class,
         Queueworker\SansDaemon\SansDaemonServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
     ],
 
     /*
@@ -266,6 +267,8 @@ return [
         'Notification' => Gloudemans\Notify\Notifications\NotificationFacade::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
         'RajaOngkir' => rizalafani\rajaongkirlaravel\RajaOngkirFacade::class,
+        'BARCODE1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'BARCODE2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ],
 
 ];

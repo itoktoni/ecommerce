@@ -26,7 +26,7 @@
                     </li>
                     @else
                     @if($menu->module_visible == '1' && $menu->module_enable == '1')
-                    <li class="nav-parent {{ Request::segment(2) === $menu->module_link ? 'nav-expanded nav-active' : '' }}">
+                    <li class="nav-parent {{ $module === $menu->action_module ? 'nav-expanded nav-active' : '' }}">
                         <a id="linkMenu">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span class="text-capitalize"> {{ $menu->module_name }}</span>
@@ -34,7 +34,7 @@
                         <ul class="nav nav-children">
                             @foreach ($action_list as $data_action)
                             @if($menu->module_code === $data_action->module_code && $data_action->action_visible == '1')
-                            <li {{ $data_action->action_function === Request::segment(3) && Request::segment(2) === $menu->module_link ? " class=nav-active" : '' }}>
+                            <li {{ $action_code == $data_action->action_code ? " class=nav-active" : '' }}>
                                 <a id="childMenu" href="{!! route("$data_action->action_code") !!}">
                                     {{ $data_action->action_name }}
                                 </a>

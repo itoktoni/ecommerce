@@ -32,7 +32,3 @@ function convertNumber(strg) {
     strg = strg.replace(',', '.');
     return parseFloat(strg);
 }
-
-$(document).ready(function() {
-    $("select.form-control").chosen();
-});

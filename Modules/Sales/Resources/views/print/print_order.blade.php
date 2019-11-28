@@ -27,7 +27,7 @@ $total = 0;
                                     Customer Name
                                 </td>
                                 <td align='left' colspan='5' valign='top'>
-                                    {{ $customer->crm_customer_name }}
+                                    {{ $master->sales_order_rajaongkir_name }}
                                 </td>
                             </tr>
                             <tr>
@@ -35,7 +35,7 @@ $total = 0;
                                     Contact Person
                                 </td>
                                 <td align='left' colspan='5' valign='top'>
-                                    {{ $customer->crm_customer_description }}
+                                   
                                 </td>
                             </tr>
                             <tr>
@@ -43,7 +43,7 @@ $total = 0;
                                     Vendor
                                 </td>
                                 <td align='left' colspan='5' valign='top'>
-                                    {{ $forwarder->forwarder_vendor_name }}
+                                   
                                 </td>
                             </tr>
                             <tr>

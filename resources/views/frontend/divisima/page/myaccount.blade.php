@@ -106,7 +106,7 @@
 														{{ Form::select('city', $list_city, $city, ['id' => 'city','class'=> 'form-control chosen']) }}
 													</div>
 													<div class="form-group">
-														<label>Location</label>
+														<label>Area</label>
 														{{ Form::select('location', $list_location, $location, ['id' => 'location','class'=> 'form-control chosen '.($errors->has('location') ? 'error':'')]) }}
 													</div>
 													<div class="pull-right">
@@ -372,7 +372,7 @@
 					city.empty();
 					city.append('<option value=""></option>');
 					$.each(response, function (idx, obj) {
-						city.append('<option postcode="'+obj.postal_code+'" value="' + obj.city_id + '">' + obj.city_name + '</option>');
+						city.append('<option postcode="'+obj.rajaongkir_city_postal_code+'" value="' + obj.rajaongkir_city_id + '">' + obj.rajaongkir_city_name + '</option>');
 					});
 					city.trigger("chosen:updated");
 				}
@@ -411,7 +411,7 @@
 					location.empty();
 					location.append('<option value=""></option>');
 					$.each(response, function (idx, obj) {
-						location.append('<option value="' + obj.subdistrict_id + '">' + obj.subdistrict_name + '</option>');
+						location.append('<option value="' + obj.rajaongkir_area_id + '">' + obj.rajaongkir_area_name + '</option>');
 					});
 					$("#location").trigger("chosen:updated");
 				}

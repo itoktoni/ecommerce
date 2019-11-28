@@ -564,6 +564,13 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
                 0 => __DIR__ . '/..' . '/orangehill/iseed/src',
             ),
         ),
+        'M' => 
+        array (
+            'Milon\\Barcode' => 
+            array (
+                0 => __DIR__ . '/..' . '/milon/barcode/src',
+            ),
+        ),
         'D' => 
         array (
             'Detection' => 
@@ -2629,6 +2636,15 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
         'MailPreviewTest' => __DIR__ . '/..' . '/themsaid/laravel-mail-preview/tests/MailPreviewTest.php',
+        'Milon\\Barcode\\BarcodeServiceProvider' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/BarcodeServiceProvider.php',
+        'Milon\\Barcode\\DNS1D' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/DNS1D.php',
+        'Milon\\Barcode\\DNS2D' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/DNS2D.php',
+        'Milon\\Barcode\\Datamatrix' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Datamatrix.php',
+        'Milon\\Barcode\\Facades\\DNS1DFacade' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Facades/DNS1DFacade.php',
+        'Milon\\Barcode\\Facades\\DNS2DFacade' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Facades/DNS2DFacade.php',
+        'Milon\\Barcode\\PDF417' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/PDF417.php',
+        'Milon\\Barcode\\QRcode' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/QRcode.php',
+        'Milon\\Barcode\\WrongCheckDigitException' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/WrongCheckDigitException.php',
         'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
         'ModuleConnectionActionTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ModuleConnectionActionTableSeeder.php',
         'ModulesTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ModulesTableSeeder.php',
@@ -2766,8 +2782,11 @@ class ComposerStaticInitec153ae97542422ebd7f95238a1bc36e
         'Modules\\Production\\Http\\Controllers\\WorkOrderController' => __DIR__ . '/../..' . '/Modules/Production/Http/Controllers/WorkOrderController.php',
         'Modules\\Production\\Providers\\ModuleServiceProvider' => __DIR__ . '/../..' . '/Modules/Production/Providers/ModuleServiceProvider.php',
         'Modules\\Production\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Production/Providers/RouteServiceProvider.php',
+        'Modules\\Sales\\Dao\\Models\\Area' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Models/Area.php',
+        'Modules\\Sales\\Dao\\Models\\City' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Models/City.php',
         'Modules\\Sales\\Dao\\Models\\Order' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Models/Order.php',
         'Modules\\Sales\\Dao\\Models\\OrderDetail' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Models/OrderDetail.php',
+        'Modules\\Sales\\Dao\\Models\\Province' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Models/Province.php',
         'Modules\\Sales\\Dao\\Repositories\\OrderCreateRepository' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Repositories/OrderCreateRepository.php',
         'Modules\\Sales\\Dao\\Repositories\\OrderRepository' => __DIR__ . '/../..' . '/Modules/Sales/Dao/Repositories/OrderRepository.php',
         'Modules\\Sales\\Emails\\CancelOrderEmail' => __DIR__ . '/../..' . '/Modules/Sales/Emails/CancelOrderEmail.php',

@@ -1,6 +1,8 @@
 document.addEventListener("pjax:error", function(e) {
     console.log(e);
     window.location.replace(e.request.responseURL);
+
+    $("select.form-control").chosen();
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -9,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         selectors: ["body"],
         cacheBust: false
     });
+
 });
 
 $(document).on('click', '#childMenu', function() {

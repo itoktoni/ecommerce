@@ -81,10 +81,12 @@ class UserController extends Controller
             $file = request()->file('gambar');
             $this->model->ubah($id, request()->all(), $file);
         }
-        
+
         $group_module = new GroupModuleRepository();
         $group_list = $group_module->getGroupByUser(Auth()->user()->group_user)->get();
-        session()->put(Auth()->user()->username . '_group_access', $group_list->first()->conn_gu_group_user);
+        if ($group_list->count() > 0) {
+            session()->put(Auth()->user()->username . '_group_access', $group_list->first()->conn_gu_group_user);
+        }
 
         return view('page.' . $this->template . '.profile')->with([
             'key'  => Auth::user()->user_id,
@@ -137,5 +139,4 @@ class UserController extends Controller
 
         return redirect()->to('/');
     }
-
 }

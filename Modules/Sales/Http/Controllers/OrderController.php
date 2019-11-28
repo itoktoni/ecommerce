@@ -7,17 +7,18 @@ use Helper;
 use Plugin\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Services\TransactionService;
+use Modules\Sales\Http\Services\OrderService;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Crm\Dao\Repositories\CustomerRepository;
-use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
-use Modules\Sales\Http\Services\OrderService;
-use Modules\Forwarder\Dao\Repositories\VendorRepository as ForwarderRepository;
-use Modules\Production\Dao\Repositories\WorkOrderCreateRepository;
-use Modules\Production\Dao\Repositories\VendorRepository as ProductionRepository;
+use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Sales\Dao\Repositories\OrderCreateRepository;
+use Modules\Production\Dao\Repositories\WorkOrderCreateRepository;
+use Modules\Forwarder\Dao\Repositories\VendorRepository as ForwarderRepository;
+use Modules\Production\Dao\Repositories\VendorRepository as ProductionRepository;
 
 class OrderController extends Controller
 {
@@ -78,7 +79,7 @@ class OrderController extends Controller
         ]));
     }
 
-    public function update(TransactionService $service)
+    public function update(MasterService $service)
     {
         if (request()->isMethod('POST')) {
 
@@ -90,11 +91,100 @@ class OrderController extends Controller
         }
         if (request()->has('code')) {
 
-            $data = $service->show(self::$model, ['detail', 'detail.product']);
+            $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
             return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
                 'model'        => $data,
                 'detail'       => $data->detail,
                 'key'          => self::$model->getKeyName()
+            ]));
+        }
+    }
+
+    public function prepare(MasterService $service)
+    {
+        if (request()->isMethod('POST')) {
+
+            $post = $service->update(self::$detail);
+            if ($post['status']) {
+                return Response::redirectToRoute($this->getModule() . '_data');
+            }
+            return Response::redirectBackWithInput();
+        }
+        if (request()->has('code')) {
+
+            $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
+            return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+                'model'        => $data,
+                'detail'       => $data->detail,
+                'key'          => self::$model->getKeyName()
+            ]));
+        }
+    }
+
+    public function print_prepare_do(TransactionService $service)
+    {
+        if (request()->has('code')) {
+            $data = $service->show(self::$model, ['detail', 'detail.product']);
+            $id = request()->get('code');
+            $pasing = [
+                'master' => $data,
+                'customer' => $data->customer,
+                'detail' => $data->detail,
+            ];
+
+            $pdf = PDF::loadView(Helper::setViewPrint('print_prepare_so', $this->folder), $pasing);
+            return $pdf->stream();
+            // return $pdf->download($id . '.pdf');
+        }
+    }
+
+    public function print_do(TransactionService $service)
+    {
+        if (request()->has('code')) {
+            $data = $service->show(self::$model, ['forwarder', 'customer', 'detail', 'detail.product']);
+            $id = request()->get('code');
+            $pasing = [
+                'master' => $data,
+                'customer' => $data->customer,
+                'forwarder' => $data->forwarder,
+                'detail' => $data->detail,
+            ];
+
+            $pdf = PDF::loadView(Helper::setViewPrint('print_order', $this->folder), $pasing);
+            return $pdf->download($id . '.pdf');
+        }
+    }
+
+    public function do(MasterService $service)
+    {
+        if (request()->isMethod('POST')) {
+
+            $post = $service->update(self::$detail);
+            if ($post['status']) {
+                return Response::redirectToRoute($this->getModule() . '_data');
+            }
+            return Response::redirectBackWithInput();
+        }
+        if (request()->has('code')) {
+
+            $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
+            return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+                'model'        => $data,
+                'detail'       => $data->detail,
+                'key'          => self::$model->getKeyName()
+            ]));
+        }
+    }
+
+    public function show_do(TransactionService $service)
+    {
+        if (request()->has('code')) {
+            $data = $service->show(self::$model, ['forwarder', 'customer', 'detail', 'detail.product']);
+            return view(Helper::setViewShow($this->template, $this->folder))->with($this->share([
+                'fields' => Helper::listData(self::$model->datatable),
+                'model'   => $data,
+                'detail'  => $data->detail,
+                'key'   => self::$model->getKeyName()
             ]));
         }
     }
@@ -168,10 +258,30 @@ class OrderController extends Controller
                 return $field->sales_order_date->toDateString();
             });
             $datatable->editColumn('sales_order_rajaongkir_service', function ($field) {
-                return 'Courier '.strtoupper($field->sales_order_rajaongkir_courier).' <br> '.str_replace(') ', ' ', $field->sales_order_rajaongkir_service).' <br> Weight '.number_format(floatval($field->sales_order_rajaongkir_weight)).' g';
+                return 'Courier ' . strtoupper($field->sales_order_rajaongkir_courier) . ' <br> ' . str_replace(') ', ' ', $field->sales_order_rajaongkir_service) . ' <br> Weight ' . number_format(floatval($field->sales_order_rajaongkir_weight)) . ' g';
             });
             $datatable->editColumn('sales_order_total', function ($field) {
-                return Helper::createTotal($field->sales_order_total);
+                if (!Auth::user()->group_user == 'warehouse') {
+                    return Helper::createTotal($field->sales_order_total);
+                }
+            });
+            $module = $this->getModule();
+            $datatable->editColumn('action', function ($select) use ($module) {
+
+                $header = '<div class="action text-center">';
+                if (Auth::user()->group_user == 'warehouse') {
+                    $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module. '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
+                    $prepare = '<a class="btn btn-success btn-xs" href="' . route($module . '_prepare', ['code' => $select->sales_order_id]) . '">prepare</a>';
+                    $do = '<a class="btn btn-primary btn-xs" href="' . route($module . '_do', ['code' => $select->sales_order_id]) . '">delivery</a>';
+
+                    $html = $header . $print . $prepare . $do . '</div>';
+                } else {
+
+                    $payment = '<a target="_blank" class="btn btn-success btn-xs" href="' . route('finance_payment_update', ['so' => $select->sales_order_id]) . '">payment</a> ';
+                    $update = '<a class="btn btn-primary btn-xs" href="' . route($module . '_update', ['code' => $select->sales_order_id]) . '">update</a>';
+                    $html = $header . $payment . $update . '</div>';
+                }
+                return $html;
             });
             return $datatable->make(true);
         }
@@ -198,17 +308,17 @@ class OrderController extends Controller
     public function print_order(TransactionService $service)
     {
         if (request()->has('code')) {
-            $data = $service->show(self::$model, ['forwarder', 'customer', 'detail', 'detail.product']);
+            $data = $service->show(self::$model, ['detail', 'detail.product']);
             $id = request()->get('code');
             $pasing = [
                 'master' => $data,
                 'customer' => $data->customer,
-                'forwarder' => $data->forwarder,
                 'detail' => $data->detail,
             ];
 
-            $pdf = PDF::loadView(Helper::setViewPrint('print_order', $this->folder), $pasing);
-            return $pdf->download($id . '.pdf');
+            $pdf = PDF::loadView(Helper::setViewPrint('print_sales_order', $this->folder), $pasing);
+            return $pdf->stream();
+            // return $pdf->download($id . '.pdf');
         }
     }
 

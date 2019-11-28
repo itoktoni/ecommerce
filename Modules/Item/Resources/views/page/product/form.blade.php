@@ -32,7 +32,7 @@
 
     {!! Form::label('name', 'Tag', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
-        {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control', 'multiple']) }}
+        {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control choosen', 'multiple']) }}
         {!! $errors->first($form.'item_tag_json', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

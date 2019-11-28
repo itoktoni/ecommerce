@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use DB;
 use App;
-use App\Dao\Repositories\TeamRepository;
 use Auth;
 use Cart;
 use Helper;
@@ -12,32 +11,36 @@ use App\Enums\OptionSlider;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Carbon;
+use Modules\Sales\Dao\Models\Area;
+use Modules\Sales\Dao\Models\City;
 use Modules\Sales\Dao\Models\Order;
+use Darryldecode\Cart\CartCondition;
 use Illuminate\Support\Facades\Mail;
 use Modules\Item\Dao\Models\Product;
-use Modules\Sales\Emails\CreateOrderEmail;
 use Illuminate\Support\Facades\Cache;
 use Modules\Item\Dao\Models\Wishlist;
 use Illuminate\Support\Facades\Config;
+use Modules\Sales\Dao\Models\Province;
 use App\Http\Services\EcommerceService;
-use Darryldecode\Cart\CartCondition;
 use Illuminate\Support\Facades\Artisan;
+use App\Dao\Repositories\TeamRepository;
 use Modules\Marketing\Dao\Models\Slider;
 use Illuminate\Support\Facades\Validator;
 use Modules\Marketing\Emails\ContactEmail;
+use Modules\Sales\Emails\CreateOrderEmail;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
-use Modules\Finance\Dao\Repositories\BankRepository;
-use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Item\Dao\Repositories\TagRepository;
+use Modules\Item\Dao\Repositories\TaxRepository;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
+use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
-use Modules\Item\Dao\Repositories\TaxRepository;
 use Modules\Item\Dao\Repositories\WishlistRepository;
 use Modules\Marketing\Dao\Repositories\PageRepository;
+use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
@@ -307,16 +310,16 @@ class PublicController extends Controller
             $list_province =  Cache::get('province');
         } else {
             $list_province = Cache::rememberForever('province', function () {
-                return DB::table('rajaongkir_provinces')->get()->sortBy('province')->pluck('province', 'province_id')->prepend(' Choose Province', '0')->toArray();
+                return DB::table('rajaongkir_provinces')->get()->sortBy('rajaongkir_province_name')->pluck('rajaongkir_province_name', 'rajaongkir_province_id')->prepend(' Choose Province', '0')->toArray();
             });
         }
 
         if ($province) {
-            $list_city = DB::table('rajaongkir_cities')->where('province_id', $province)->get()->sortBy('city_name')->pluck('city_name', 'city_id')->toArray();
+            $list_city = DB::table('rajaongkir_cities')->where('rajaongkir_city_province_id', $province)->get()->sortBy('rajaongkir_city_name')->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->toArray();
         }
 
         if ($city) {
-            $list_location = DB::table('rajaongkir_districts')->where('city_id', $city)->get()->sortBy('subdistrict_name')->pluck('subdistrict_name', 'subdistrict_id')->toArray();
+            $list_location = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city)->get()->sortBy('rajaongkir_area_name')->pluck('rajaongkir_area_name', 'rajaongkir_area_id')->toArray();
         }
 
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
@@ -595,24 +598,9 @@ class PublicController extends Controller
 
         $list_city = [];
         $list_location = [];
+        $order = new OrderRepository();
 
-        $courier = [
-            '' => 'Choose Expedition',
-            'pos' => 'POS Indonesia (POS)',
-            'jne' => 'Jalur Nugraha Ekakurir (JNE)',
-            'tiki' => 'Citra Van Titipan Kilat (TIKI)',
-            'rpx' => 'RPX Holding (RPX)',
-            'wahana' => 'Wahana Prestasi Logistik (WAHANA)',
-            'sicepat' => 'SiCepat Express (SICEPAT)',
-            'jnt' => 'J&T Express (J&T)',
-            'sap' => 'SAP Express (SAP)',
-            'jet' => 'JET Express (JET)',
-            'indah' => 'Indah Logistic (INDAH)',
-            'ninja' => 'Ninja Express (NINJA)',
-            'first' => 'First Logistics (FIRST)',
-            'lion' => 'Lion Parcel (LION)',
-            'rex' => 'Royal Express Indonesia (REX)',
-        ];
+        $courier = $order->courier;
 
         if (Auth::check()) {
 
@@ -641,7 +629,7 @@ class PublicController extends Controller
 
             $province = $request['sales_order_rajaongkir_province_id'];
             $city = $request['sales_order_rajaongkir_city_id'];
-            $location = $request['sales_order_rajaongkir_location'];
+            $location = $request['sales_order_rajaongkir_area'];
 
             if (request()->has('sales_order_rajaongkir_ongkir')) {
 
@@ -666,7 +654,6 @@ class PublicController extends Controller
                 }
             }
 
-            $order = new OrderRepository();
             $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
             if ($discount) {
 
@@ -678,7 +665,7 @@ class PublicController extends Controller
             $rules = [
                 'sales_order_rajaongkir_province_id' => 'required',
                 'sales_order_rajaongkir_city_id' => 'required',
-                'sales_order_rajaongkir_location' => 'required',
+                'sales_order_rajaongkir_area' => 'required',
                 'sales_order_rajaongkir_courier' => 'required',
                 'sales_order_rajaongkir_ongkir' => 'required|numeric',
                 'sales_order_rajaongkir_address' => 'required',
@@ -735,18 +722,18 @@ class PublicController extends Controller
         }
 
         if ($province) {
-            $list_city = DB::table('rajaongkir_cities')->where('province_id', $province)->get()->sortBy('city_name')->pluck('city_name', 'city_id')->toArray();
+            $list_city = City::where('rajaongkir_city_province_id', $province)->get()->sortBy('rajaongkir_city_name')->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->toArray();
         }
 
         if ($city) {
-            $list_location = DB::table('rajaongkir_districts')->where('city_id', $city)->get()->sortBy('subdistrict_name')->pluck('subdistrict_name', 'subdistrict_id')->toArray();
+            $list_location = Area::where('rajaongkir_area_city_id', $city)->get()->sortBy('rajaongkir_area_name')->pluck('rajaongkir_area_name', 'rajaongkir_area_id')->toArray();
         }
 
         if (Cache::has('province')) {
             $list_province =  Cache::get('province');
         } else {
             $list_province = Cache::rememberForever('province', function () {
-                return DB::table('rajaongkir_provinces')->get()->sortBy('province')->pluck('province', 'province_id')->prepend(' Choose Province', '0')->toArray();
+                return Province::get()->sortBy('province')->pluck('rajaongkir_province_name', 'rajaongkir_province_id')->prepend(' Choose Province', '0')->toArray();
             });
         }
 

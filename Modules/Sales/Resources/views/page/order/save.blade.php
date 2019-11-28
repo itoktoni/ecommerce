@@ -24,8 +24,8 @@
             </div>
         </div>
     </div>
-    @include($folder.'::page.'.$template.'.detail')
-    @include($template_action)
+    @include($folder.'::page.'.$template.'.update')
+    @include($folder.'::page.'.$template.'.action')
     {!! Form::close() !!}
 </div>
 

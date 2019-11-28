@@ -27,10 +27,9 @@
 </div>
 
 <div class="form-group">
-
-    {!! Form::label('name', 'Key', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Order', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has('finance_payment_sales_order_id') ? 'has-error' : ''}}">
-        {{ Form::select('finance_payment_sales_order_id',$order, null, ['class'=> 'form-control' ,'id' => 'reference']) }}
+        {{ Form::select('finance_payment_sales_order_id',$order, request()->get('so') ?? null, ['class'=> 'form-control' ,'id' => 'reference']) }}
         {!! $errors->first('finance_payment_sales_order_id', '<p class="help-block">:message</p>') !!}
     </div>
 

@@ -426,7 +426,6 @@ class Helper
     public static function getTranslate($table, $merge = null)
     {
         $column = self::getTable($table);
-        // dd($column);
         $data = [];
         foreach ($column as $key => $value) {
             $split = explode('_', $value);
@@ -529,7 +528,6 @@ class Helper
                 return $data;
             }
         }
-
         return false;
     }
 
@@ -570,7 +568,7 @@ class Helper
 
     public static function include($template, $folder = false)
     {
-        $folder = config('action')['create'] ?? false;
+        $folder = config('action') ? array_values(config('action'))[0] : false;
         if ($folder) {
             return ucfirst($folder) . '::page.' . $template . '.form';
         }

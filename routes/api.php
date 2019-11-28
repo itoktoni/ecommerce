@@ -35,7 +35,7 @@ Route::match(
         
         $query = DB::table('rajaongkir_cities');
         if($province){
-            $query->where('province_id', $province);
+            $query->where('rajaongkir_city_province_id', $province);
         }
 
         return $query->get();
@@ -53,9 +53,9 @@ Route::match(
         $input = request()->get('q');
         $city = request()->get('city');
 
-        $query = DB::table('rajaongkir_districts');
+        $query = DB::table('rajaongkir_areas');
         if ($city) {
-            $query->where('city_id', $city);
+            $query->where('rajaongkir_area_city_id', $city);
         }
 
         return $data = $query->get();

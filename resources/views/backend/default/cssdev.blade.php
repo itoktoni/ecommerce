@@ -7,5 +7,5 @@
 @endif
 @if(config('website.pjax'))
 <link rel="stylesheet" href="{{ Helper::backend('vendor/flatpickr/flatpickr.min.css') }}">
-<link rel="stylesheet" href="{{ Helper::backend('vendor/summernote/summernote-lite.css') }}">
+<link rel="stylesheet" href="{{ Helper::backend('vendor/summernote/summernote-lite.min.css') }}">
 @endif

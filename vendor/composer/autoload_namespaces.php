@@ -10,6 +10,7 @@ return array(
     'Sabberworm\\CSS' => array($vendorDir . '/sabberworm/php-css-parser/lib'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Orangehill\\Iseed' => array($vendorDir . '/orangehill/iseed/src'),
+    'Milon\\Barcode' => array($vendorDir . '/milon/barcode/src'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
     'ChrisKonnertz\\StringCalc' => array($vendorDir . '/chriskonnertz/string-calc/src'),
 );

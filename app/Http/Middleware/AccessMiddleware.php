@@ -25,6 +25,7 @@ class AccessMiddleware
      * @return mixed
      */
     public static $groupUser;
+    public static $groupAccess;
     public static $username;
     public static $action;
     public static $module;
@@ -32,6 +33,9 @@ class AccessMiddleware
     public static $group_module_connection_module;
     public static $group_module;
     public static $list_group_module;
+    public $white_list = [
+        'home', 'dashboard', 'console', 'configuration', 'route', 'file', 'livewire', 'user'
+    ];
 
     public function __construct(Action $action, Module $module, ModuleConnectionAction $module_connection_action, GroupModuleConnectionModule $group_module_connection_module, GroupModuleRepository $group_module)
     {
@@ -44,6 +48,7 @@ class AccessMiddleware
         if (self::$username == null) {
             self::$username  = Auth::user()->username ?? null;
             self::$groupUser = Auth::user()->group_user ?? null;
+            self::$groupAccess = session()->get(Auth::User()->username . '_group_access') ?? null;
         }
 
         if (self::$list_group_module == null) {
@@ -68,24 +73,35 @@ class AccessMiddleware
         $route = request()->route() ?? false;
         $module          = request()->segment(2) ?? false;
         $action_code     = $route->getName() ?? false;
+        $data_action = $access->where('action_code', $action_code)->first();
         $action_function = $route->getActionMethod() ?? false;
         $arrayController = explode('@', $route->getAction()['controller']);
         $template        = Helper::getTemplate($arrayController[0]);
-        $group           = session(self::$username . '_group_access') ?? false;
-        // dump($access->where('action_code', $action_code));
-        if (!$group) {
-            $group = $access->where('action_code', $action_code)->first()->conn_gm_group_module ?? self::$list_group_module->first()->conn_gu_group_module;
-            session()->put(self::$username . '_group_access', $group);
+
+        if ($action_code == 'access_group' || in_array($action_code, $this->white_list)) {
+            if (self::$groupAccess && self::$list_group_module->where('conn_gu_group_module', self::$groupAccess)->first()) {
+                $data_group = self::$list_group_module->where('conn_gu_group_module', self::$groupAccess)->first();
+            } else {
+                $data_group = self::$list_group_module->first();
+            }
+            if($data_group){
+                $folder = $data_group->group_module_folder;
+                $group = $data_group->conn_gu_group_module;
+            }
+        } else {
+            if (!$data_action && $action_code != 'home') {
+                abort(403);
+            }
+            $folder = $data_action->module_folder;
+            $group = $data_action->conn_gm_group_module;
         }
+
+        session()->put(self::$username . '_group_access', $group);
 
         $action_list = $access->where('conn_gm_group_module', $group)->unique('action_code');
         $menu_list = $action_list->unique('module_code');
-        // dd($action_list);
         $action      = $action_list->where('module_code', $module)->pluck('module_folder', 'action_function');
-        $folder =  $action->first() ?? false;
-        if(!$folder){
-            session()->put(self::$username . '_group_access', $group);
-        }
+
         view()->share([
             'module'          => $module,
             'action'          => $action,
@@ -127,12 +143,10 @@ class AccessMiddleware
 
     public function gate($access)
     {
-        $white_list = [
-            'home', 'dashboard', 'console', 'configuration', 'route', 'file', 'livewire', 'user'
-        ];
+        
         $segment = request()->segment(1) ?? '';
         $policy = $access->contains('action_code', Route::currentRouteName());
-        if (!$policy && Route::currentRouteName() && !in_array($segment, $white_list) || Auth::user()->group_user == 'customer') {
+        if (!$policy && Route::currentRouteName() && !in_array($segment, $this->white_list) || Auth::user()->group_user == 'customer') {
             return false;
         }
         return $access;

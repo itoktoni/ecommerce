@@ -64,6 +64,14 @@ class OrderRepository extends Order implements MasterInterface
         return $this->findOrFail($id);
     }
 
+    public function findRepository($id, $relation = null)
+    {
+        if ($relation) {
+            return $this->with($relation)->find($id);
+        }
+        return $this->find($id);
+    }
+
     public function deleteRepository($data)
     {
         try {

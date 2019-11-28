@@ -8,6 +8,7 @@
 <script src="{{ Helper::backend('vendor/loading/pace.min.js') }}"></script>
 @endif	
 @if(config('website.pjax'))
+<script src="{{ Helper::backend('vendor/summernote/summernote-lite.min.js') }}"></script>
 <script src="{{ Helper::backend('vendor/flatpickr/flatpickr.min.js') }}"></script>
 <script src="{{ Helper::backend('vendor/jquery-datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ Helper::backend('vendor/pjax/pjax.min.js') }}"></script>

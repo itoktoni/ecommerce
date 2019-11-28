@@ -1,8 +1,9 @@
 <header class="header">
     <div class="logo-container">
-        <a href="{{ url('/') }}" target="_blank" class="logo"><img
+        <div onclick="window.open('{{ Helper::base_url() }}','_blank')" href="{{ url('/') }}" target="_blank" class="logo"><img
                 src="{{ Helper::asset('/files/logo') }}/{{ config('website.logo','default_favicon.png') }}"
-                style="height: 45px;margin-left: 0px;" alt="{{ config('app.name') }}" /></a>
+                style="height: 45px;margin-left: 0px;cursor:pointer" alt="{{ config('app.name') }}" />
+        </div>
         <div id="leftMenu" class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened"
             data-target="html" data-fire-event="sidebar-left-opened">
             <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
@@ -140,24 +141,27 @@
                     config('website.menu_setting') ==
                     Auth::user()->group_user)
                     <li>
-                        <div role="menuitem" tabindex="-1" class="header-menu" onclick="location.href ='{{ route('route') }}';">
+                        <div role="menuitem" tabindex="-1" class="header-menu"
+                            onclick="location.href ='{{ route('route') }}';">
                             <i class="fa fa-list-alt"></i> &nbsp;
                             List Routes</div>
                     </li>
                     @endif
                     <li class="divider"></li>
                     <li>
-                        <a role="menuitem" tabindex="-1" href="{{ route('profile') }}">&nbsp;<i class="fa fa-user"></i> 
+                        <a role="menuitem" tabindex="-1" href="{{ route('profile') }}">&nbsp;<i class="fa fa-user"></i>
                             &nbsp;&nbsp;&nbsp;My Profile</a>
                     </li>
                     <li>
-                        <a role="menuitem" tabindex="-1" href="{{ route('resetpassword') }}">&nbsp;<i class="fa fa-lock"></i>
+                        <a role="menuitem" tabindex="-1" href="{{ route('resetpassword') }}">&nbsp;<i
+                                class="fa fa-lock"></i>
                             &nbsp;&nbsp; Reset Password</a>
                     </li>
                     <li class="divider"></li>
                     <li>
                         <div id="logout" class="header-menu" role="menuitem" tabindex="-1"
-                            onclick="location.href ='{{ route('reset') }}';">&nbsp;<i class="fa fa-power-off"></i> &nbsp;
+                            onclick="location.href ='{{ route('reset') }}';">&nbsp;<i class="fa fa-power-off"></i>
+                            &nbsp;
                             Logout</div>
                     </li>
                     @endauth

@@ -11,6 +11,10 @@
             color: #{{ config('website.colors') }} !important;
         }
 
+        .footer-widget h2{
+            color:#ffffff !important;
+        }
+
         .main-navbar, .footer-section,
         .cf-title, 
         .site-btn.sb-dark {
