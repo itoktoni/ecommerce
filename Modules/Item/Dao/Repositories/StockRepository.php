@@ -14,10 +14,25 @@ class StockRepository extends Stock implements MasterInterface
     public function dataRepository()
     {
         $product = new ProductRepository();
-        $table = $product->select([DB::raw('IFNULL(view_stock_product.id, item_product.item_product_id) AS item_product_id'), 'item_color_name', 'item_product_name as product_id' ,'item_product_name', 'view_stock_product.*'])
+        $table = $product->select([DB::raw('IFNULL(view_stock_product.id, item_product.item_product_id) AS item_product_id'), 'item_color_name', 'item_product_name as product_id', 'item_product_name', 'view_stock_product.*'])
             ->leftJoin('view_stock_product', 'product', 'item_product_id')
             ->leftJoin('item_color', 'color', 'item_color_id');
         return $table;
+    }
+
+    public function dataStockRepository($product = [])
+    {
+        $table = $this->select(['item_stock.*', 'item_color_name', 'item_product_name', 'item_product_name'])
+            ->join('item_product', 'item_product_id', 'item_stock_product')
+            ->leftJoin('item_color', 'item_stock_color', 'item_color_id');
+        if ($product) {
+            if (is_array($product)) {
+                $table->whereIn('item_stock_option', $product);
+            } elseif (is_string($product)) {
+                $table->where('item_stock_option', $product);
+            }
+        }
+        return $table->orderBy('item_stock_qty', 'ASC');
     }
 
     public function saveRepository($request)
@@ -59,7 +74,7 @@ class StockRepository extends Stock implements MasterInterface
     }
 
 
-    public function showRepository($id, $relation)
+    public function showRepository($id, $relation = null)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);
@@ -71,6 +86,12 @@ class StockRepository extends Stock implements MasterInterface
     {
         return DB::table('view_stock')->where(['item_product_id' => $id])->first();
     }
+
+    public function barcodeRepository($id, $relation = null)
+    {
+        return $this->where('item_stock_barcode', $id)->first();
+    }
+
 
     public function stockDetailRepository($product, $color = null, $size = null)
     {
@@ -91,9 +112,8 @@ class StockRepository extends Stock implements MasterInterface
                 'item_stock_size' => $size,
             ]);
         } else {
-            $data = $this->where('item_stock_product', $product);
+            $data = $this->where('item_stock_product', $product)->where('item_stock_size', '!=', '')->where('item_stock_color', '!=', '');
         }
-
         return $data->get();
     }
 }

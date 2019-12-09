@@ -72,6 +72,7 @@
                                 'Active',
                                 'Default',
                                 'Status',
+                                'Paid',
                                 'Visible',
                                 'Homepage',
                                 'Total',

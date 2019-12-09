@@ -20,7 +20,7 @@
         </div>
         <div class="panel-body line">
             <div class="col-md-12 col-lg-12">
-                @include($folder.'::page.'.$template.'.list_update')
+                @include($folder.'::page.'.$template.'.update_table')
             </div>
         </div>
 

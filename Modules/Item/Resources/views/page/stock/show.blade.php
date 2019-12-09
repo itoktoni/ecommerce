@@ -20,6 +20,7 @@
                                 <th scope="col">Updated</th>
                                 <th style="text-align:right" scope="col">Barcode</th>
                                 <th style="text-align:right" scope="col">Stock</th>
+                                <th style="text-align:right" scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,20 +40,22 @@
                                 <td data-header="Created">{{ $item->item_stock_created_by ?? '' }}</td>
                                 <td data-header="Updated">{{ $item->item_stock_updated_by ?? '' }}</td>
                                 <td align="right" data-header="Barcode">{{ $item->item_stock_barcode }}</td>
-                                <td align="right" data-header="Stock">
-                                    @if (Auth::user()->group_user == 'developer')
-                                    <a class="btn btn-primary btn-xs btn-block"
-                                        href="{{ route($module.'_update', ['code' => $item->item_stock_id ]) }}">
-                                        {{ number_format($item->item_stock_qty) }}
+                                <td align="right" data-header="Barcode">{{ number_format($item->item_stock_qty) }}</td>
+                                <td align="right" data-header="Action">
+                                    <a target="__blank" class="btn btn-danger btn-xs" href="{{ route($module.'_print_barcode', ['code' => $item->item_stock_barcode ]) }}">
+                                        print
                                     </a>
-                                    @else
-                                    {{ number_format($item->item_stock_qty) }}
+                                    @if (Auth::user()->group_user == 'developer')
+                                    <a class="btn btn-primary btn-xs"
+                                        href="{{ route($module.'_update', ['code' => $item->item_stock_id ]) }}">
+                                        edit
+                                    </a>
                                     @endif
                                 </td>
                             </tr>
                             @if ($loop->last)
                             <tr>
-                                <td colspan="7" align="right"><strong>Total</strong></td>
+                                <td colspan="8" align="right"><strong>Total</strong></td>
                                 <td align="right"><strong>{{ number_format($total) }}</strong></td>
                             </tr>
                             @endif

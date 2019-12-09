@@ -42,7 +42,7 @@ class GroupModule extends Model
     public $datatable = [
         'group_module_code'        => [true => 'Code'],
         'group_module_name'        => [true => 'Name'],
-        'group_module_link'        => [true => 'Link'],
+        'group_module_link'        => [false => 'Link'],
         'group_module_description' => [true => 'Description'],
         'group_module_folder'      => [true => 'Folder'],
         'group_module_enable'      => [true => 'Active'],

@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use DataTables;
 use Plugin\Alert;
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Facades\Validator;
 use App\Dao\Interfaces\MasterInterface;
 

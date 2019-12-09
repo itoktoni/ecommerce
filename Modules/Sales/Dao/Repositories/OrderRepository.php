@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Sales\Dao\Models\Order;
 use Modules\Crm\Dao\Models\Customer;
 use App\Dao\Interfaces\MasterInterface;
+use Illuminate\Database\QueryException;
 use Modules\Forwarder\Dao\Models\Vendor;
 
 class OrderRepository extends Order implements MasterInterface
@@ -51,7 +52,7 @@ class OrderRepository extends Order implements MasterInterface
         try {
             $activity = $this->findOrFail($id)->update($request);
             return Notes::update($activity);
-        } catch (QueryExceptionAlias $ex) {
+        } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
     }
@@ -112,6 +113,6 @@ class OrderRepository extends Order implements MasterInterface
 
     public function getStatusCreate()
     {
-        return $this->statusCreate()->latest()->get()->pluck($this->getRouteKeyName(), $this->getRouteKeyName())->prepend('- Select Sales Order -', '');
+        return $this->statusCreate()->get()->pluck($this->getRouteKeyName(), $this->getRouteKeyName())->prepend('- Select Sales Order -', '');
     }
 }

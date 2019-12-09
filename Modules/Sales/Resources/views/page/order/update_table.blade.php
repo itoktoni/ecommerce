@@ -1,7 +1,7 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-left" style="width:50px;">ID</th>
+            <th class="text-left" style="width:100px;">ID</th>
             <th class="text-left col-md-4">Product Name</th>
             <th class="text-left col-md-2">Tax</th>
             <th class="text-left col-md-1">Color</th>

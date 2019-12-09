@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use Plugin\Alert;
 use Plugin\Notes;
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Facades\DB;
 use App\Http\Services\MasterService;
 use App\Dao\Interfaces\MasterInterface;
@@ -19,7 +19,7 @@ class TransactionService extends MasterService
             # mapping for detail become key array 
             foreach ($repository->mapping['detail'] as $key => $val) {
                 # mapping for detail become value
-                $detail[$i][$key] = Helper::filterInput($this->data[$val][$i]);
+                $detail[$i][$key] = isset($this->data[$val][$i]) && $this->data[$val][$i] != '0' ? Helper::filterInput($this->data[$val][$i]) : null;
             }
         }
         return $detail;
@@ -42,6 +42,9 @@ class TransactionService extends MasterService
         $check = $this->setRules(array_merge($repository->rules, ['temp_id' => 'required']))->validate($repository)->saveRepository($this->data);
         if ($check['status']) {
             $id = !DB::getPDO()->lastInsertId() ? $check['data']->{$repository->getKeyName()} : DB::getPDO()->lastInsertId();
+        } else {
+            DB::rollback();
+            return $check;
         }
 
         foreach ($this->mapping($repository) as $value) {
@@ -73,15 +76,14 @@ class TransactionService extends MasterService
         DB::beginTransaction();
         $check = $this->setCode($id)->validate($repository)->updateRepository($id, $this->data);
         foreach ($this->mapping($repository) as $value) {
-            $check = $repository->updateDetailRepository($id, $value);
-            if (!$check['status']) {
+            $check_detail = $repository->updateDetailRepository($id, $value);
+            if (!$check_detail['status']) {
                 DB::rollback();
-                Notes::error($check['data']);
+                return Notes::error($check_detail['data']);
             }
         }
-
-        $check = DB::commit();
-        return Notes::create();
+        DB::commit();
+        return Notes::create($check['data']);
     }
 
     public  function deleteDetail(MasterInterface $repository)
@@ -113,7 +115,7 @@ class TransactionService extends MasterService
     {
         $check = $this->deleteDetail($repository);
         if ($check['status']) {
-            if($check['data'] == 'master'){
+            if ($check['data'] == 'master') {
                 Alert::delete();
             }
         } else {

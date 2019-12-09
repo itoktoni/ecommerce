@@ -4,10 +4,10 @@ namespace Plugin;
 
 class Notes
 {
-    private const create = 'Create';
-    private const update = 'Update';
-    private const delete = 'Delete';
-    private const error = 'Error';
+    const create = 'Create';
+    const update = 'Update';
+    const delete = 'Delete';
+    const error = 'Error';
 
     public static function create($data = null)
     {

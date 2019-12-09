@@ -3,7 +3,7 @@
 namespace App\Dao\Repositories;
 
 use Plugin\Notes;
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Str;
 use App\Dao\Models\GroupModule;
 use Illuminate\Support\Facades\DB;

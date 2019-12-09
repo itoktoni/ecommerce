@@ -3,7 +3,7 @@
 namespace App\Dao\Repositories;
 
 use Plugin\Notes;
-use Plugin\Helper;
+use Helper;
 use App\Dao\Models\Action;
 use App\Dao\Interfaces\MasterInterface;
 

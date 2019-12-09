@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Repositories\GroupModuleRepository;
 use Helper;
+use Plugin\Alert;
+use Plugin\Notes;
 use Plugin\Response;
-use App\Dao\Repositories\GroupUserRepository;
+use App\Dao\Models\GroupUser;
 use App\Http\Services\CoreService;
 use App\Http\Services\MasterService;
+use App\Dao\Repositories\GroupUserRepository;
+use App\Dao\Repositories\GroupModuleRepository;
 
 class GroupUserController extends Controller
 {
@@ -31,7 +34,7 @@ class GroupUserController extends Controller
 
     private function share($data = [])
     {
-        $group = Helper::createOption((new GroupModuleRepository()), false, true, true)
+        $group = Helper::createOption((new GroupModuleRepository()), false, true, false)
             ->pluck('group_module_name', 'group_module_code')
             ->prepend('- Select Group -', '');
 
@@ -47,8 +50,10 @@ class GroupUserController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
-            $data = $service->save(self::$model);
+            $request = request()->all();
+            request()->validate(self::$model->rules);
+            $data = GroupUser::create($request);
+            // $data = $service->save(self::$model);
             Response::redirectBack();
         }
         return view(Helper::setViewCreate())->with($this->share());

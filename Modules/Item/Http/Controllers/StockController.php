@@ -4,17 +4,19 @@ namespace Modules\Item\Http\Controllers;
 
 use Helper;
 use Plugin\Response;
+use PDF;
 use App\Http\Controllers\Controller;
-use Modules\Item\Dao\Repositories\StockRepository;
 use App\Http\Services\MasterService;
-use Modules\Inventory\Dao\Repositories\LocationRepository;
-use Modules\Item\Dao\Repositories\ColorRepository;
-use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\SizeRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\StockRepository;
+use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Inventory\Dao\Repositories\LocationRepository;
 
 class StockController extends Controller
 {
     public $template;
+    public $folder;
     public static $model;
 
     public function __construct()
@@ -22,7 +24,8 @@ class StockController extends Controller
         if (self::$model == null) {
             self::$model = new StockRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->folder = 'Item';
+        $this->template  = Helper::getTemplate(__CLASS__);
     }
 
     public function index()
@@ -32,26 +35,54 @@ class StockController extends Controller
 
     private function share($data = [])
     {
+        $product = Helper::shareOption((new ProductRepository()));
+        $size = Helper::shareOption((new SizeRepository()));
+        $color = Helper::shareOption((new ColorRepository()));
+        $location = new LocationRepository();
+        $data_location = $location->dataRepository()->get()->mapWithKeys(function ($item) {
+            return [$item->inventory_location_id => 'Loc ' . $item->inventory_location_name . ' - WH : ' . $item->inventory_warehouse_name];
+        });
+
         $view = [
             'template' => $this->template,
+            'product'      => $product,
+            'size'         => $size,
+            'color'        => $color,
+            'location'     => $data_location,
         ];
 
         return array_merge($view, $data);
     }
 
+    public function print_barcode()
+    {
+        if (request()->has('code')) {
+            $code = request()->get('code');
+            $check = self::$model->barcodeRepository($code);
+            $pdf = PDF::loadView(Helper::setViewPrint(__FUNCTION__, $this->folder), [
+                'data' => $check
+            ])->setPaper('A7');
+            return $pdf->stream();
+            // return $pdf->download($id . '.pdf');
+        }
+    }
+
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
-            $service->save(self::$model);
+            $check = $service->save(self::$model);
+            if($check['status']){
+                return redirect()->refresh();
+            }
         }
-        return view(Helper::setViewCreate())->with($this->share());
+        return view(Helper::setViewCreate())->with($this->share([
+            'barcode' => Helper::autoNumber(self::$model->getTable(), 'item_stock_barcode', date('Ymd'), config('website.autonumber')),
+        ]));
     }
 
     public function update(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->update(self::$model);
             return redirect()->route($this->getModule() . '_data');
         }
@@ -59,19 +90,8 @@ class StockController extends Controller
         if (request()->has('code')) {
 
             $data = $service->show(self::$model);
-            $product = Helper::shareOption((new ProductRepository()));
-            $size = Helper::shareOption((new SizeRepository()));
-            $color = Helper::shareOption((new ColorRepository()));
-            $location = new LocationRepository();
-            $data_location = $location->dataRepository()->get()->map(function($item){
-                return $item['inventory_location_id'] = 'Loc '.$item->inventory_location_name.' - WH : '.$item->inventory_warehouse_name;
-            });
             return view(Helper::setViewUpdate())->with($this->share([
                 'model'        => $data,
-                'product'      => $product,
-                'size'         => $size,
-                'color'        => $color,
-                'location'     => $data_location,
                 'key'          => self::$model->getKeyName()
             ]));
         }

@@ -3,7 +3,7 @@
 namespace Modules\Sales\Dao\Models;
 
 use App\User;
-use Plugin\Helper;
+use Helper;
 use Modules\Sales\Dao\Models\Area;
 use Modules\Sales\Dao\Models\City;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +58,7 @@ class Order extends Model
     'sales_order_rajaongkir_phone',
     'sales_order_rajaongkir_notes',
     'sales_order_rajaongkir_weight',
+    'sales_order_rajaongkir_waybill',
   ];
 
   public $timestamps = true;
@@ -112,8 +113,7 @@ class Order extends Model
     '1' => ['CREATE', 'warning'],
     '2' => ['APPROVE', 'primary'],
     '3' => ['PREPARE', 'success'],
-    '4' => ['PICKUP', 'info'],
-    '5' => ['DELIVER', 'dark'],
+    '4' => ['DELIVERED', 'dark'],
     '0' => ['CANCEL', 'danger'],
   ];
 

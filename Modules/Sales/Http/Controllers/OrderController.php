@@ -18,7 +18,11 @@ use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Sales\Dao\Repositories\OrderCreateRepository;
 use Modules\Production\Dao\Repositories\WorkOrderCreateRepository;
 use Modules\Forwarder\Dao\Repositories\VendorRepository as ForwarderRepository;
+use Modules\Item\Dao\Repositories\StockRepository;
 use Modules\Production\Dao\Repositories\VendorRepository as ProductionRepository;
+use Modules\Sales\Dao\Models\OrderDelivery;
+use Modules\Sales\Dao\Repositories\OrderDeliveryRepository;
+use Modules\Sales\Dao\Repositories\OrderPrepareRepository;
 
 class OrderController extends Controller
 {
@@ -26,6 +30,8 @@ class OrderController extends Controller
     public $folder;
     public static $model;
     public static $detail;
+    public static $prepare;
+    public static $delivery;
 
     public function __construct()
     {
@@ -35,8 +41,14 @@ class OrderController extends Controller
         if (self::$detail == null) {
             self::$detail = new OrderCreateRepository();
         }
+        if (self::$prepare == null) {
+            self::$prepare = new OrderPrepareRepository();
+        }
+        if (self::$delivery == null) {
+            self::$delivery = new OrderDeliveryRepository();
+        }
         $this->folder = 'sales';
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
     }
 
     public function index()
@@ -104,18 +116,25 @@ class OrderController extends Controller
     {
         if (request()->isMethod('POST')) {
 
-            $post = $service->update(self::$detail);
+            $post = $service->update(self::$prepare);
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
             return Response::redirectBackWithInput();
         }
+
         if (request()->has('code')) {
 
             $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
-            return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+            $stock = new StockRepository();
+            $product = $data->detail->pluck('sales_order_detail_option')->toArray();
+            $data_stock = $stock->dataStockRepository($product)->get();
+            $delivery = OrderDelivery::whereIn('so_delivery_option', $product)->where('so_delivery_order', request()->get('code'))->get();
+            return view(Helper::setViewForm($this->template, __FUNCTION__, $this->folder))->with($this->share([
                 'model'        => $data,
+                'stock'        => $data_stock,
                 'detail'       => $data->detail,
+                'delivery'       => $delivery,
                 'key'          => self::$model->getKeyName()
             ]));
         }
@@ -125,6 +144,7 @@ class OrderController extends Controller
     {
         if (request()->has('code')) {
             $data = $service->show(self::$model, ['detail', 'detail.product']);
+
             $id = request()->get('code');
             $pasing = [
                 'master' => $data,
@@ -132,7 +152,7 @@ class OrderController extends Controller
                 'detail' => $data->detail,
             ];
 
-            $pdf = PDF::loadView(Helper::setViewPrint('print_prepare_so', $this->folder), $pasing);
+            $pdf = PDF::loadView(Helper::setViewPrint(__FUNCTION__, $this->folder), $pasing);
             return $pdf->stream();
             // return $pdf->download($id . '.pdf');
         }
@@ -150,16 +170,23 @@ class OrderController extends Controller
                 'detail' => $data->detail,
             ];
 
-            $pdf = PDF::loadView(Helper::setViewPrint('print_order', $this->folder), $pasing);
-            return $pdf->download($id . '.pdf');
+            $pdf = PDF::loadView(Helper::setViewPrint('print_do', $this->folder), $pasing);
+            return $pdf->stream();
+
+            // return $pdf->download($id . '.pdf');
         }
     }
 
-    public function do(MasterService $service)
+    public function do(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
 
-            $post = $service->update(self::$detail);
+            request()->validate([
+                'sales_order_rajaongkir_waybill' => 'required'
+            ],[
+                'sales_order_rajaongkir_waybill.required' => 'Masukan No Resi' 
+            ]);
+            $post = $service->update(self::$delivery);
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
@@ -168,7 +195,7 @@ class OrderController extends Controller
         if (request()->has('code')) {
 
             $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
-            return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+            return view(Helper::setViewForm($this->template, 'delivery', $this->folder))->with($this->share([
                 'model'        => $data,
                 'detail'       => $data->detail,
                 'key'          => self::$model->getKeyName()
@@ -270,7 +297,7 @@ class OrderController extends Controller
 
                 $header = '<div class="action text-center">';
                 if (Auth::user()->group_user == 'warehouse') {
-                    $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module. '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
+                    $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module . '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
                     $prepare = '<a class="btn btn-success btn-xs" href="' . route($module . '_prepare', ['code' => $select->sales_order_id]) . '">prepare</a>';
                     $do = '<a class="btn btn-primary btn-xs" href="' . route($module . '_do', ['code' => $select->sales_order_id]) . '">delivery</a>';
 

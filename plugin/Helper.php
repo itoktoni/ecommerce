@@ -1,11 +1,9 @@
 <?php
 
-namespace Plugin;
-
-use DB;
-use Curl;
-use File;
-use Route;
+use Illuminate\Support\Facades\DB;
+use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use App\Dao\Models\Filters;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
@@ -336,7 +334,7 @@ class Helper
     public static function createNumber($data, $active = true)
     {
         $status = $active ? 'success' : 'danger';
-        $class = '<span class="text-' . $status . '">' . number_format($data) . '</span>';
+        $class = '<h6 class="text-center text-' . $status . '">' . number_format($data) . '</h6>';
         return $class;
     }
 
@@ -355,10 +353,12 @@ class Helper
         $button = 0;
         foreach ($data['action'] as $key => $value) {
             $val    = isset($value[1]) ? $value[1] : $key;
+            $list_action = config('action') ?? [];
+            $print = $val == 'print' ? 'target=__blank' : '';
             if (array_key_exists($key, config('action'))) {
                 $button++;
                 $route  = route($data['route'] . '_' . $key, ['code' => $id]);
-                $action = $action . '<a id="linkMenu" href="' . $route . '" class="btn btn-xs btn-' . $value[0] . '">' . $val . '</a> ';
+                $action = $action . '<a '.$print.' id="linkMenu" href="' . $route . '" class="btn btn-xs btn-' . $value[0] . '">' . $val . '</a> ';
             }
         }
         session()->put('button', $button);
@@ -420,7 +420,7 @@ class Helper
             return $arrayTable[$table];
         }
 
-        return \Schema::getColumnListing($table);
+        return \Illuminate\Support\Facades\Schema::getColumnListing($table);
     }
 
     public static function getTranslate($table, $merge = null)
@@ -568,7 +568,8 @@ class Helper
 
     public static function include($template, $folder = false)
     {
-        $folder = config('action') ? array_values(config('action'))[0] : false;
+        $list_action = array_values(config('action'));
+        $folder = $list_action ? $list_action[0] : false;
         if ($folder) {
             return ucfirst($folder) . '::page.' . $template . '.form';
         }

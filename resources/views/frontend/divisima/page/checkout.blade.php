@@ -234,13 +234,20 @@
 			url: '{{ route("ongkir") }}',
 			data: {'to':to, 'weight' : weight, 'courier' : courier.val()}, // Data yang akan dikirim ke file pemroses
 			success: function(response) { // Jika berhasil
+				if(response[0].id){
 
-				console.log(response);
-				ongkir.empty();
-				ongkir.append('<option value=""></option>');
-				$.each(response, function (idx, obj) {
-					ongkir.append('<option data="'+obj.cost+'" value="' + obj.service + '">' + obj.service + ' ( '+ obj.description + ' ) [ '+ obj.etd + ' ] - ' + obj.price+ ' </option>');
-				});
+					console.log(response);
+					ongkir.empty();
+					ongkir.append('<option value=""></option>');
+					$.each(response, function (idx, obj) {
+						ongkir.append('<option data="'+obj.cost+'" value="' + obj.service + '">' + obj.service + ' ( '+ obj.description + ' ) [ '+ obj.etd + ' ] - ' + obj.price+ ' </option>');
+					});
+				}
+				else{
+					console.log(response);
+					ongkir.append('<option value="">'+response[0].text+'</option>');
+				}
+				
 				ongkir.trigger("chosen:updated");
 			}
 		});

@@ -4,15 +4,15 @@ namespace Plugin;
 
 class Alert
 {
-    private const create = 'Created';
-    private const update = 'Succeed';
-    private const delete = 'Deleted';
-    private const failed = 'Failed';
-    private const error = 'Error';
-    private const success = 'success';
-    private const warning = 'warning';
-    private const danger = 'danger';
-    private const primary = 'primary';
+    const create = 'Created';
+    const update = 'Succeed';
+    const delete = 'Deleted';
+    const failed = 'Failed';
+    const error = 'Error';
+    const success = 'success';
+    const warning = 'warning';
+    const danger = 'danger';
+    const primary = 'primary';
 
     public static function create($data = null)
     {

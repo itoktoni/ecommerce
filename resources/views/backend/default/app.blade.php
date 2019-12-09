@@ -30,7 +30,7 @@
        <div id="screen" class="screen">
             @yield('content')
         </div>
-        <div style="padding-bottom: 20px;"></div>
+        <div style="padding-bottom: 50px;"></div>
     </section>
     </div>
 

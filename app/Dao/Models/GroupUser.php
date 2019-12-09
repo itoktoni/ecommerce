@@ -18,7 +18,6 @@ class GroupUser extends Model
         'group_user_level',
         'group_user_dashboard',
     ];
-
     public $timestamps   = false;
     public $incrementing = false;
     public $rules        = [

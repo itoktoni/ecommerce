@@ -10,6 +10,7 @@ use App\Http\Services\MasterService;
 use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Finance\Dao\Repositories\FlagRepository;
+use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 use Plugin\Alert;
 
@@ -23,7 +24,7 @@ class PaymentController extends Controller
         if (self::$model == null) {
             self::$model = new PaymentRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
     }
 
     public function index()
@@ -35,14 +36,16 @@ class PaymentController extends Controller
     {
         $flag = Helper::createOption((new FlagRepository()), false);
         $account = Helper::createOption((new AccountRepository()));
-        $bank = Helper::createOption((new BankRepository()));
+        $bank = Helper::createOption((new BankRepository()),false, true)->pluck('finance_bank_name', 'finance_bank_name');
         $order = Helper::createOption((new OrderRepository()));
+        $purchase = Helper::createOption((new PurchaseRepository()));
         $view = [
             'template' => $this->template,
             'status' => Helper::shareStatus(self::$model->status),
             'account' => $account,
             'bank' => $bank,
             'order' => $order,
+            'purchase' => $purchase,
             'flag' => $flag,
         ];
 
@@ -52,7 +55,6 @@ class PaymentController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->save(self::$model);
         }
 
@@ -105,12 +107,10 @@ class PaymentController extends Controller
     {
         if (request()->isMethod('POST')) {
             $datatable = $service->setRaw(['finance_payment_status', 'finance_payment_payment_account_id', 'finance_payment_amount', 'finance_payment_approve_amount'])->datatable(self::$model);
-            $datatable->editColumn('finance_payment_payment_account_id', function ($data) {
+            $datatable->editColumn('finance_payment_account_id', function ($data) {
                 return $data->account->finance_account_name;
             });
-            $datatable->editColumn('finance_payment_to', function ($data) {
-                return $data->bank->finance_bank_name;
-            });
+           
             $datatable->editColumn('finance_payment_amount', function ($data) {
                 return number_format($data->finance_payment_amount);
             });

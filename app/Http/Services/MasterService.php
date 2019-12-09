@@ -2,9 +2,9 @@
 
 namespace App\Http\Services;
 
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use Plugin\Alert;
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Facades\Validator;
 use App\Dao\Interfaces\MasterInterface;
 
@@ -106,8 +106,7 @@ class MasterService
         } else {
             Validator::make($this->data, $this->rules)->validate();
         }
-        if (!$repository->incrementing && $repository->keyType == 'string' && !isset($this->data[$repository->getKeyName()])) {
-
+        if (!$repository->incrementing && $repository->getKeyType() == 'string' && !isset($this->data[$repository->getKeyName()])) {
             if ($this->length == null) {
                 if (isset($repository->length)) {
                     $this->setLenght($repository->length);
@@ -136,8 +135,14 @@ class MasterService
     {
         // save to database
         $repo = $this->validate($repository);
-        $check = $repo->saveRepository($this->data);
+        try {
+            $check = $repo->saveRepository($this->data);
+        } catch (\Throwable $th) {
+            Alert::error($th->getMessage());
+            return $th->getMessage();
+        }
         // check if status status success or failed
+
         if ($check['status']) {
             Alert::create();
         } else {
@@ -221,7 +226,11 @@ class MasterService
             $this->setSearching($repository);
         }
         // set action
-        if ($this->action == null) {
+
+        if (isset($repository->action) && $this->action == null) {
+            $this->action = $repository->action;
+        }
+        else if ($this->action == null) {
             $action  = [
                 'update' => ['primary', 'edit'],
                 'show'   => ['success', 'show'],
@@ -229,6 +238,7 @@ class MasterService
             $this->setAction($action);
         }
         $model = $this->searching->getModel();
+
         $key = $model->getKeyName();
         $attribute = [
             'key'       => $key,
@@ -237,6 +247,7 @@ class MasterService
             'searching' => $model->searching,
             'raw'       => [],
         ];
+
         //start datatable
         $datatable = Datatables::of($this->searching);
         // $datatable->setTotalRecords(count($table));

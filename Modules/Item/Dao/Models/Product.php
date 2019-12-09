@@ -14,6 +14,8 @@ use Modules\Item\Dao\Repositories\SizeRepository;
 
 class Product extends Model
 {
+
+  use SoftDeletes;
   protected $table = 'item_product';
   protected $primaryKey = 'item_product_id';
   protected $fillable = [
@@ -47,7 +49,7 @@ class Product extends Model
   ];
 
   public $timestamps = true;
-  public $incrementing = true;
+  public $incrementing = false;
   public $keyType = 'string';
   public $rules = [
     'item_product_name' => 'required|min:3',
@@ -71,6 +73,7 @@ class Product extends Model
     'item_product_flag'        => [false => 'Flag'],
     'item_brand_name'        => [true => 'Brand'],
     'item_brand_slug'        => [false => 'Brand'],
+    'item_product_buy'        => [false => 'Buy'],
     'item_product_sell'        => [true => 'Price'],
     'item_product_gram'        => [false => 'Gram'],
     'item_product_image'        => [true => 'Images'],
@@ -119,6 +122,10 @@ class Product extends Model
   public static function boot()
   {
     parent::boot();
+
+    parent::creating(function ($model) {
+      $model->item_product_id = Helper::autoNumber($model->getTable(), 'item_product_id', 'P' . date('ymd'), 10);
+    });
     parent::saving(function ($model) {
 
       $file = 'item_product_file';

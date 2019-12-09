@@ -2,9 +2,10 @@
 
 namespace Modules\Sales\Dao\Models;
 
+use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Product;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Item\Dao\Models\Color;
+use Modules\Sales\Dao\Models\OrderDelivery;
 
 class OrderDetail extends Model
 {
@@ -17,6 +18,7 @@ class OrderDetail extends Model
     'sales_order_detail_qty_order',
     'sales_order_detail_price_order',
     'sales_order_detail_total_order',
+    'sales_order_detail_qty_prepare',
     'sales_order_detail_option',
     'sales_order_detail_item_color',
     'sales_order_detail_item_size',
@@ -25,6 +27,7 @@ class OrderDetail extends Model
     'sales_order_detail_price_real',
     'sales_order_detail_tax_name',
     'sales_order_detail_tax_value',
+    'sales_order_detail_notes'
   ];
 
   public $timestamps = false;
@@ -43,5 +46,10 @@ class OrderDetail extends Model
   public function color()
   {
     return $this->hasOne(Color::class, 'item_color_id', 'sales_order_detail_item_color');
+  }
+
+  public function delivery()
+  {
+    return $this->hasMany(OrderDelivery::class, 'item_product_id', 'sales_order_detail_item_product_id');
   }
 }

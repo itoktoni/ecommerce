@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Dao\Repositories\GroupModuleRepository;
 use Closure;
-use Plugin\Helper;
+use Helper;
 use App\Dao\Models\Action;
 use App\Dao\Models\GroupModuleConnectionModule;
 use App\Dao\Models\Module;
@@ -70,6 +70,7 @@ class AccessMiddleware
         if (!$access) {
             abort(403);
         }
+
         $route = request()->route() ?? false;
         $module          = request()->segment(2) ?? false;
         $action_code     = $route->getName() ?? false;
@@ -84,7 +85,7 @@ class AccessMiddleware
             } else {
                 $data_group = self::$list_group_module->first();
             }
-            if($data_group){
+            if ($data_group) {
                 $folder = $data_group->group_module_folder;
                 $group = $data_group->conn_gu_group_module;
             }
@@ -92,8 +93,15 @@ class AccessMiddleware
             if (!$data_action && $action_code != 'home') {
                 abort(403);
             }
-            $folder = $data_action->module_folder;
-            $group = $data_action->conn_gm_group_module;
+
+            $groupping = $access->where('action_code', $action_code)->where('conn_gm_group_module', self::$groupAccess)->first();
+            if ($groupping) {
+                $folder = $groupping->module_folder;
+                $group = $groupping->conn_gm_group_module;
+            } else {
+                $folder = $data_action->module_folder;
+                $group = $data_action->conn_gm_group_module;
+            }
         }
 
         session()->put(self::$username . '_group_access', $group);
@@ -101,7 +109,6 @@ class AccessMiddleware
         $action_list = $access->where('conn_gm_group_module', $group)->unique('action_code');
         $menu_list = $action_list->unique('module_code');
         $action      = $action_list->where('module_code', $module)->pluck('module_folder', 'action_function');
-
         view()->share([
             'module'          => $module,
             'action'          => $action,
@@ -110,7 +117,7 @@ class AccessMiddleware
             'action_function' => $action_function,
             'group_list'      => self::$list_group_module,
             'menu_list'       => $menu_list,
-            'folder'          => $folder,
+            'folder'          => ucfirst($folder),
             'form'            => Str::snake($folder) . '_' . $template . '_',
             'template'        => $template,
             'template_action' => 'page.master.action',
@@ -143,7 +150,7 @@ class AccessMiddleware
 
     public function gate($access)
     {
-        
+
         $segment = request()->segment(1) ?? '';
         $policy = $access->contains('action_code', Route::currentRouteName());
         if (!$policy && Route::currentRouteName() && !in_array($segment, $this->white_list) || Auth::user()->group_user == 'customer') {

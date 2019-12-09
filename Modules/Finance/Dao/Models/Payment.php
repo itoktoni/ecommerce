@@ -2,11 +2,12 @@
 
 namespace Modules\Finance\Dao\Models;
 
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Facades\Auth;
 use Modules\Finance\Dao\Models\Bank;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Finance\Dao\Models\Account;
+use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 use Modules\Sales\Dao\Models\Order;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 
@@ -20,7 +21,7 @@ class Payment extends Model
     'finance_payment_to',
     'finance_payment_sales_order_id',
     'finance_payment_reference',
-    'finance_payment_payment_account_id',
+    'finance_payment_account_id',
     'finance_payment_date',
     'finance_payment_person',
     'finance_payment_amount',
@@ -41,16 +42,13 @@ class Payment extends Model
     'finance_payment_email',
   ];
 
-  public $with = ['account', 'bank', 'order'];
+  public $with = ['account', 'order'];
   public $timestamps = true;
   public $incrementing = true;
   public $rules = [
-    'finance_payment_amount' => 'required',
-    'finance_payment_sales_order_id' => 'required|exists:sales_order,sales_order_id',
+    'finance_payment_approve_amount' => 'required',
     'finance_payment_person' => 'required',
-    'finance_payment_email' => 'required|email',
     'finance_payment_date' => 'required',
-    'files' => 'required|file',
     'finance_payment_to' => 'required',
   ];
 
@@ -62,10 +60,11 @@ class Payment extends Model
     'finance_payment_id'             => [false => 'ID'],
     'finance_payment_voucher'           => [true => 'Voucher'],
     'finance_payment_sales_order_id'         => [true => 'Order No'],
-    'finance_payment_reference'         => [false => 'Reference'],
+    'finance_payment_reference'         => [true => 'Reference'],
     'finance_payment_email'         => [false => 'Email'],
-    'finance_payment_to'         => [true => 'Bank'],
-    'finance_payment_payment_account_id'         => [true => 'Account'],
+    'finance_payment_from'         => [false => 'From'],
+    'finance_payment_to'         => [false => 'To'],
+    'finance_payment_account_id'         => [true => 'Account'],
     'finance_payment_amount'  => [true => 'Amount'],
     'finance_payment_approve_amount'  => [true => 'Approve'],
     'finance_payment_status'  => [true => 'Status'],
@@ -89,12 +88,7 @@ class Payment extends Model
 
   public function account()
   {
-    return $this->hasOne(Account::class, 'finance_account_id', 'finance_payment_payment_account_id');
-  }
-
-  public function bank()
-  {
-    return $this->hasOne(Bank::class, 'finance_bank_id', 'finance_payment_to');
+    return $this->hasOne(Account::class, 'finance_account_id', 'finance_payment_account_id');
   }
 
   public function order()
@@ -130,11 +124,22 @@ class Payment extends Model
 
       if (request()->has('order_paid') && request()->get('order_paid') == 1) {
 
-        $order = new OrderRepository();
-        $getOrder = $order->showRepository($model->finance_payment_sales_order_id);
-        if ($getOrder && $getOrder->sales_order_status < 2) {
-          $order->updateRepository($model->finance_payment_sales_order_id, [
-            'sales_order_status' => 2
+        if ($model->finance_payment_sales_order_id) {
+
+          $order = new OrderRepository();
+          $getOrder = $order->showRepository($model->finance_payment_sales_order_id);
+          if ($getOrder && $getOrder->sales_order_status < 2) {
+            $order->updateRepository($model->finance_payment_sales_order_id, [
+              'sales_order_status' => 2
+            ]);
+          }
+        }
+
+        if ($model->finance_payment_reference) {
+
+          $purchase = new PurchaseRepository();
+          $purchase->updateRepository($model->finance_payment_reference, [
+            'purchase_paid' => 1
           ]);
         }
       }
@@ -149,9 +154,12 @@ class Payment extends Model
         $model->finance_payment_attachment = $name;
       }
 
-      $model->finance_payment_status = 1;
-      $model->finance_payment_payment_account_id = 1;
-      $model->finance_payment_created_by = request()->get('finance_payment_person');
+      if ($model->finance_payment_sales_order_id) {
+        $model->finance_payment_status = 1;
+        $model->finance_payment_account_id = 1;
+        $model->finance_payment_created_by = request()->get('finance_payment_person');
+      }
+
       $model->finance_payment_voucher = Helper::autoNumber($model->getTable(), 'finance_payment_voucher', 'VC' . date('Ym'), 13);
     });
   }

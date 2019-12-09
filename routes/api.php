@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 // use Helper;
 // use Curl;
 /*

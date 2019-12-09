@@ -35,7 +35,7 @@ class PromoController extends Controller
             'status' => Helper::shareStatus(self::$model->status),
             'default' => Helper::shareStatus(self::$model->default),
             'type' => Helper::shareStatus(self::$model->type),
-            'user' => $user->pluck('user_id', 'name')->all(),
+            'user' => $user->pluck('name','id')->all(),
         ];
 
         return array_merge($view, $data);

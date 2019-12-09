@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use App;
-use Auth;
-use Cart;
+use Illuminate\Support\Facades\Auth;
 use Helper;
-use App\Enums\OptionSlider;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Carbon;
@@ -24,6 +22,7 @@ use Modules\Sales\Dao\Models\Province;
 use App\Http\Services\EcommerceService;
 use Illuminate\Support\Facades\Artisan;
 use App\Dao\Repositories\TeamRepository;
+use Exception;
 use Modules\Marketing\Dao\Models\Slider;
 use Illuminate\Support\Facades\Validator;
 use Modules\Marketing\Emails\ContactEmail;
@@ -46,6 +45,7 @@ use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
 use Modules\Marketing\Dao\Repositories\ContactRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Cart;
 
 class PublicController extends Controller
 {
@@ -565,7 +565,16 @@ class PublicController extends Controller
 
             $request = request()->all();
             $payment = new PaymentRepository();
-            $validate = Validator::make($request, $payment->rules);
+            $rules = [
+                'finance_payment_amount' => 'required',
+                'finance_payment_sales_order_id' => 'required|exists:sales_order,sales_order_id',
+                'finance_payment_person' => 'required',
+                'finance_payment_email' => 'required|email',
+                'finance_payment_date' => 'required',
+                'files' => 'required|file',
+                'finance_payment_to' => 'required',
+            ];
+            $validate = Validator::make($request, $rules);
 
             if ($validate->fails()) {
 
@@ -578,7 +587,7 @@ class PublicController extends Controller
             }
         }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            'bank' => Helper::shareOption($bank),
+            'bank' => Helper::shareOption($bank, false,true)->pluck('finance_bank_name', 'finance_bank_name'),
         ]);
     }
 
@@ -629,7 +638,7 @@ class PublicController extends Controller
 
             $province = $request['sales_order_rajaongkir_province_id'];
             $city = $request['sales_order_rajaongkir_city_id'];
-            $location = $request['sales_order_rajaongkir_area'];
+            $location = $request['sales_order_rajaongkir_area_id'];
 
             if (request()->has('sales_order_rajaongkir_ongkir')) {
 
@@ -665,7 +674,7 @@ class PublicController extends Controller
             $rules = [
                 'sales_order_rajaongkir_province_id' => 'required',
                 'sales_order_rajaongkir_city_id' => 'required',
-                'sales_order_rajaongkir_area' => 'required',
+                'sales_order_rajaongkir_area_id' => 'required',
                 'sales_order_rajaongkir_courier' => 'required',
                 'sales_order_rajaongkir_ongkir' => 'required|numeric',
                 'sales_order_rajaongkir_address' => 'required',
@@ -678,7 +687,6 @@ class PublicController extends Controller
             $validate = Validator::make($request, $rules, $order->custom_attribute);
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;
-
             foreach (Cart::getContent() as $item) {
 
                 $stock = DB::table('view_stock_product')->where('id', $item->attributes['option'])->first();
@@ -811,16 +819,6 @@ class PublicController extends Controller
         return View('frontend.' . config('website.frontend') . '.pages.cara_belanja');
     }
 
-    public function marketing()
-    {
-        $site = new \App\Site();
-        $user = DB::table('users')->where('group_user', '=', 'sales')->get();
-        return View('frontend.' . config('website.frontend') . '.pages.marketing')->with([
-            'site' => $site->all(),
-            'user' => $user,
-        ]);;
-    }
-
     public function konfirmasi()
     {
         if (request()->isMethod('POST')) {
@@ -929,18 +927,8 @@ class PublicController extends Controller
         ]);
     }
 
-    public function solution()
-    {
-        $solution = new \App\Solution();
-
-        return View('frontend.' . config('website.frontend') . '.pages.solution')->with([
-            'solution' => $solution->baca()->get(),
-        ]);
-    }
-
     public function detail($slug)
     {
-
         if (!empty($slug)) {
             $data = DB::table('products')
                 ->select(['products.*', 'category.name as categoryName'])
@@ -950,32 +938,6 @@ class PublicController extends Controller
                 'data' => $data,
                 'category' => Helper::createOption('category-api'),
                 'tag' => Helper::createOption('tag-api'),
-            ]);
-        }
-    }
-
-    public function single($id)
-    {
-        if (!empty($id)) {
-            $product = new \App\Product();
-            $data = $product->getStock($id)->first();
-            return View('frontend.' . config('website.frontend') . '.pages.single')->with('data', $data);
-        }
-    }
-
-    public function segment($id)
-    {
-        $segmentasi = new \App\Segmentasi();
-        $category = new \App\Category();
-        $material = new \App\Material();
-        if (!empty($id)) {
-            $product = new \App\Product();
-            $data = $product->segment($id)->paginate(6);
-            return View('frontend.' . config('website.frontend') . '.pages.catalog')->with([
-                'product' => $data,
-                'segmentasi' => $segmentasi->baca()->get(),
-                'category' => $category->baca()->get(),
-                'material' => $material->baca()->get(),
             ]);
         }
     }
