@@ -66,7 +66,6 @@ class ProductController extends Controller
     {
         if (request()->isMethod('POST')) {
             $check = $service->save(self::$model);
-            dd($check);
             if ($check['status']) {
                 return redirect()->route($this->getModule() . '_update', ['code' => $check['data']->item_product_id]);
             }
