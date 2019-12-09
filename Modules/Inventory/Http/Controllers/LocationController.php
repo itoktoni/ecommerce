@@ -7,6 +7,7 @@ use Plugin\Response;
 use App\Http\Controllers\Controller;
 use Modules\Inventory\Dao\Repositories\LocationRepository;
 use App\Http\Services\MasterService;
+use Modules\Inventory\Dao\Repositories\WarehouseRepository;
 
 class LocationController extends Controller
 {
@@ -28,8 +29,7 @@ class LocationController extends Controller
 
     private function share($data = [])
     {
-        $warehouse = Helper::createOption('inventory_warehouse_api', true)
-            ->pluck('inventory_warehouse_name', 'inventory_warehouse_id')->prepend('- Select Warehouse -', '');
+        $warehouse = Helper::shareOption(new WarehouseRepository());
         $view = [
             'key'       => self::$model->getKeyName(),
             'warehouse' => $warehouse,
