@@ -2,7 +2,7 @@
 
 namespace Modules\Item\Dao\Models;
 
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Modules\Production\Models\Vendor;
