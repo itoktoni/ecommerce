@@ -205,6 +205,7 @@ return [
         rizalafani\rajaongkirlaravel\RajaOngkirServiceProvider::class,
         Queueworker\SansDaemon\SansDaemonServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -256,7 +257,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
-        'Helper' => Plugin\Helper::class,
+        'Helper' => Helper::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Notes' => Plugin\Notes::class,
         'Alert' => Plugin\Alert::class,
         'Chrome' => Chrome::class,
@@ -268,6 +270,7 @@ return [
         'RajaOngkir' => rizalafani\rajaongkirlaravel\RajaOngkirFacade::class,
         'BARCODE1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'BARCODE2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

@@ -308,7 +308,7 @@ class Helper
                 }
             }
         }
-        return '<span class="toltip btn btn-xs btn-block btn-' . $color . '">' . $label . '<span class="tultip">Seach with input [ '.$value.' ] </span></span>';
+        return '<span class="toltip btn btn-xs btn-block btn-' . $color . '">' . $label . '<span class="tultip">Seach with input [ ' . $value . ' ] </span></span>';
     }
 
     public static function snakeToLabel($value)
@@ -358,7 +358,7 @@ class Helper
             if (array_key_exists($key, config('action'))) {
                 $button++;
                 $route  = route($data['route'] . '_' . $key, ['code' => $id]);
-                $action = $action . '<a '.$print.' id="linkMenu" href="' . $route . '" class="btn btn-xs btn-' . $value[0] . '">' . $val . '</a> ';
+                $action = $action . '<a ' . $print . ' id="linkMenu" href="' . $route . '" class="btn btn-xs btn-' . $value[0] . '">' . $val . '</a> ';
             }
         }
         session()->put('button', $button);

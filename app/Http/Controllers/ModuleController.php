@@ -22,7 +22,7 @@ class ModuleController extends Controller
         if (self::$model == null) {
             self::$model = new ModuleRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
         $this->render    = 'page.' . $this->template . '.';
     }
 
@@ -80,7 +80,7 @@ class ModuleController extends Controller
                 ];
             }
 
-            return view($this->render . __function__)->with($this->share([
+            return view($this->render . __FUNCTION__)->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName(),
                 'data_group' => $group->getGroupByModule($id)->get(),

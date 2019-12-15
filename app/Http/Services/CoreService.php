@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Services\MasterService;
 use App\Dao\Interfaces\CoreInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 
 class CoreService extends MasterService
@@ -79,7 +80,7 @@ class CoreService extends MasterService
                         if (!empty($act)) {
                             foreach ($act as $function) {
                                 $visible = '0';
-                                if (in_array($function, $this->visible)) {
+                                if (in_array($function, $this->visible) || strtr($controller) == 'report') {
                                     $visible = '1';
                                 }
 

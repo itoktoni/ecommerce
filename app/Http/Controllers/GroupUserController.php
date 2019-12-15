@@ -23,7 +23,7 @@ class GroupUserController extends Controller
         if (self::$model == null) {
             self::$model = new GroupUserRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
         $this->render    = 'page.' . $this->template . '.';
     }
 
@@ -72,7 +72,7 @@ class GroupUserController extends Controller
             $id   = request()->get('code');
             $data = $service->show(self::$model);
 
-            return view($this->render . __function__)->with($this->share([
+            return view($this->render . __FUNCTION__)->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName(),
                 'group_module'  => self::$model->getGroupByUser($id)->get()->pluck('group_module_code')->toArray(),

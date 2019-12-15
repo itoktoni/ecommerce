@@ -47,7 +47,7 @@
         border: 0.7px solid #ddd;
     }
     .action {
-        text-align: left;
+        text-align: right;
     }
     .table-bordered {
         border: none;
@@ -155,7 +155,7 @@
 
 @media (min-width: 481px) and (max-width: 767px) {
     .action {
-        text-align: left;
+        text-align: right;
     }
     .table-bordered {
         border: none;
@@ -197,7 +197,7 @@
         border-bottom: 1px solid #ddd;
     }
     #datatable td {
-        text-align: left !important;
+        text-align: right !important;
         padding: 5% 20px 2% 260px !important;
         position: relative !important;
         vertical-align: middle;
@@ -248,7 +248,7 @@
 
 @media (min-width: 320px) and (max-width: 480px) {
     .action {
-        text-align: left;
+        text-align: right;
     }
     .table-bordered {
         border: none;
@@ -290,7 +290,7 @@
         border-bottom: 1px solid #ddd;
     }
     #datatable td {
-        text-align: left !important;
+        text-align: right !important;
         padding: 5% 20px 5% 160px !important;
         position: relative !important;
         vertical-align: middle;

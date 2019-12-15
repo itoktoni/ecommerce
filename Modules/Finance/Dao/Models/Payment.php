@@ -55,7 +55,7 @@ class Payment extends Model
   const CREATED_AT = 'finance_payment_created_at';
   const UPDATED_AT = 'finance_payment_updated_at';
 
-  public $searching = 'finance_payment_note';
+  public $searching = 'finance_payment_person';
   public $datatable = [
     'finance_payment_id'             => [false => 'ID'],
     'finance_payment_voucher'           => [true => 'Voucher'],

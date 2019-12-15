@@ -123,6 +123,7 @@ class AccessMiddleware
             'template_action' => 'page.master.action',
         ]);
         config()->set('module', $module);
+        config()->set('folder', $folder);
         config()->set('action', $action->toArray());
         return $next($request);
     }

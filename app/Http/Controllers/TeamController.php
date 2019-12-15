@@ -18,7 +18,7 @@ class TeamController extends Controller
         if (self::$model == null) {
             self::$model = new TeamRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
     }
 
     public function index()
