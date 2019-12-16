@@ -39,14 +39,14 @@
 			<div class="row address-inputs">
 				<div class="col-md-6">
 					<input class="{{ $errors->has('finance_payment_person') ? 'error' : ''}}"
-						name="finance_payment_person" type="text" value="{{ old('finance_payment_person') ?? '' }}"
+						name="finance_payment_person" type="text" value="{{ old('finance_payment_person') ?? $order->sales_order_rajaongkir_name ?? '' }}"
 						placeholder="Transfered By">
 
 					{!! $errors->first('finance_payment_person', '<p class="help-block">:message</p>') !!}
 				</div>
 				<div class="col-md-6">
 					<input type="text" class="{{ $errors->has('finance_payment_email') ? 'error' : ''}}"
-						name="finance_payment_email" value="{{ old('finance_payment_email') ?? '' }}"
+						name="finance_payment_email" value="{{ old('finance_payment_email') ?? $order->sales_order_email ?? '' }}"
 						placeholder="Email">
 					{!! $errors->first('finance_payment_email', '<p class="help-block">:message</p>') !!}
 				</div>
@@ -65,13 +65,13 @@
 				<div class="col-md-6">
 					<input class="{{ $errors->has('finance_payment_sales_order_id') ? 'error' : ''}}"
 						name="finance_payment_sales_order_id" type="text"
-						value="{{ old('finance_payment_sales_order_id') ?? '' }}" placeholder="Order No.">
+						value="{{ old('finance_payment_sales_order_id') ?? $order->sales_order_id ?? '' }}" placeholder="Order No.">
 						{!! $errors->first('finance_payment_sales_order_id', '<p class="help-block">:message</p>') !!}
 				</div>
 
 				<div class="col-md-6">
 					<input class="date {{ $errors->has('finance_payment_date') ? 'error' : ''}}"
-						name="finance_payment_date" type="text" value="{{ old('finance_payment_date') ?? '' }}"
+						name="finance_payment_date" type="text" value="{{ old('finance_payment_date') ?? date('Y-m-d') }}"
 						placeholder="Payment Date">
 						{!! $errors->first('finance_payment_date', '<p class="help-block">:message</p>') !!}
 				</div>
@@ -92,7 +92,7 @@
 
 				<div class=" col-md-6">
 						<input type="text" class="money {{ $errors->has('finance_payment_amount') ? 'error' : ''}}"
-							name="finance_payment_amount" value="{{ old('finance_payment_amount') ?? '' }}"
+							name="finance_payment_amount" value="{{ old('finance_payment_amount') ?? $order->sales_order_total ?? '' }}"
 							placeholder="Payment Amount">
 							{!! $errors->first('finance_payment_amount', '<p class="help-block">:message</p>') !!}
 					</div>

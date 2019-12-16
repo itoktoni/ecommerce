@@ -9,9 +9,9 @@
 		</h2>
 		<div class="site-pagination">
 			<a href="{{ Helper::base_url() }}">Home</a> |
-			<a href="{{ route('myaccount') }}">My Account</a> | 
+			<a href="{{ route('myaccount') }}">My Account</a> |
 			<a href="#">{{ $waybill->summary->courier_name }}</a> :
-			<a href="#">{{ $waybill->summary->service_code }}</a> 
+			<a href="#">{{ $waybill->summary->service_code }}</a>
 		</div>
 	</div>
 </div>
@@ -26,33 +26,42 @@
 					<div aria-labelledby="headingOne" data-parent="#accordion">
 						<div class="panel-body">
 							<ul class="list-group">
-								<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
+								<li
+									class="list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
 									<span class="col-md-10">
 										From : {{ $waybill->details->shippper_name }}
 									</span>
-									<span class="btn btn-info btn-sm col-md-2">{{ $waybill->details->waybill_date }} {{ $waybill->details->waybill_time }}</span>
+									<span class="btn btn-info btn-sm col-md-2">{{ $waybill->details->waybill_date }}
+										{{ $waybill->details->waybill_time }}</span>
 								</li>
+								@if ($waybill->manifest)
 								@foreach ($waybill->manifest as $status)
 								<li class="list-group-item d-flex justify-content-between align-items-center">
 									<span class="col-md-10">
 										{{ str_replace('~~', '',$status->manifest_description) }}
 									</span>
-									<span class="btn btn-info btn-sm col-md-2">{{ $status->manifest_date }} {{ $status->manifest_time }}</span>
+									<span class="btn btn-info btn-sm col-md-2">{{ $status->manifest_date }}
+										{{ $status->manifest_time }}</span>
 								</li>
 								@endforeach
-								<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
+								@endif
+								@if ($summary = $waybill->summary)
+								<li
+									class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
 									<span class="col-md-10">
-										Status : {{ $waybill->delivery_status->status }}
+										Status : {{ $summary->status }} to {{ $summary->receiver_name ?? '' }}
 									</span>
-									<span class="btn btn-info btn-sm col-md-2">{{ $waybill->delivery_status->pod_date }} {{ $waybill->delivery_status->pod_time }}</span>
+									<span class="btn btn-secondary btn-sm col-md-2">{{ $summary->waybill_date }}</span>
 								</li>
+								@endif
+
 							</ul>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 </section>
 <!-- product section end -->

@@ -125,7 +125,7 @@
 													<button class="btn btn-link collapsed" type="button"
 														data-toggle="collapse" data-target="#collapseTwo"
 														aria-expanded="false" aria-controls="collapseTwo">
-														List Data - { Sales Order }
+														List Data [ sales order ] 
 													</button>
 												</h2>
 											</div>
@@ -150,7 +150,10 @@
 															@forelse ($order as $item)
 															<tr style="position:relative">
 																<td data-header="Order No.">
-																	{{ $item->sales_order_id ?? '' }}
+																	<button type="button" class="btn btn-primary btn-block btn-sm" data-toggle="modal"
+																		data-target="#{{ $item->sales_order_id ?? '' }}">
+																		{{ $item->sales_order_id ?? '' }}
+																	</button>
 																</td>
 																<td data-header="Order Date">
 																	{{ $item->sales_order_date->format('d M y') }}
@@ -171,11 +174,10 @@
 																	{{ strtoupper($item->sales_order_rajaongkir_courier) ?? '' }}
 																</td>
 																<td data-header="Detail" align="center">
-																	<button type="button" class="btn btn-success btn-sm"
-																		data-toggle="modal"
-																		data-target="#{{ $item->sales_order_id ?? '' }}">
-																		Show
-																	</button>
+																	<a href="{{ route('confirmation', ['code' => $item->sales_order_id]) }}"
+																		class="btn btn-success btn-sm">
+																		Pay
+																	</a>
 																	@if ($item->sales_order_rajaongkir_waybill)
 																	<a id="track" target="__blank"
 																		href="{{ route('track', ['code' => $item->sales_order_id]) }}"
@@ -278,7 +280,7 @@
 													<button class="btn btn-link collapsed" type="button"
 														data-toggle="collapse" data-target="#collapseThree"
 														aria-expanded="false" aria-controls="collapseThree">
-														Wish List - (Loved Product)
+														Wish List [ loved product ]
 													</button>
 												</h2>
 											</div>

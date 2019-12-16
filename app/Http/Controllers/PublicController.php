@@ -592,7 +592,13 @@ class PublicController extends Controller
                 return redirect()->back()->with('success', 'Data has been Success');
             }
         }
+
+        if($code = request()->get('code')){
+            $order = new OrderRepository();
+            $data_order = $order->showRepository($code);
+        }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'order' => $data_order ?? [],
             'bank' => Helper::shareOption($bank, false, true)->pluck('finance_bank_name', 'finance_bank_name'),
         ]);
     }

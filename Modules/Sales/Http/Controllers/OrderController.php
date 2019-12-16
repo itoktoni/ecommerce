@@ -112,7 +112,7 @@ class OrderController extends Controller
         }
     }
 
-    public function prepare(MasterService $service)
+    public function prepare(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
 

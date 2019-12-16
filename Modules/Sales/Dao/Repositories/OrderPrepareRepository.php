@@ -65,7 +65,7 @@ class OrderPrepareRepository extends OrderRepository implements MasterInterface
                                 'sales_order_detail_qty_prepare' => $total
                             ]);
 
-                            Stock::where('item_stock_barcode', $barcode)->update(['item_stock_qty' => 0]);
+                            Stock::where('item_stock_barcode', $barcode)->update(['item_stock_qty' => '0']);
                         } else {
                             return Notes::error('Stock Prepare more than Order');
                         }

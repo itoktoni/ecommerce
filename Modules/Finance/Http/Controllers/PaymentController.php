@@ -36,7 +36,7 @@ class PaymentController extends Controller
     {
         $flag = Helper::createOption((new FlagRepository()), false);
         $account = Helper::createOption((new AccountRepository()));
-        $bank = Helper::createOption((new BankRepository()),false, true)->pluck('finance_bank_name', 'finance_bank_name');
+        $bank = Helper::createOption((new BankRepository()), false, true)->pluck('finance_bank_name', 'finance_bank_name');
         $order = Helper::createOption((new OrderRepository()));
         $purchase = Helper::createOption((new PurchaseRepository()));
         $view = [
@@ -69,7 +69,10 @@ class PaymentController extends Controller
 
             $service->update(self::$model);
             if (request()->has('order_paid')) {
-                self::$model->paidRepository(request()->get('finance_payment_sales_order_id'));
+                $order_id = request()->get('finance_payment_sales_order_id');
+                if ($order_id) {
+                    self::$model->paidRepository($order_id);
+                }
             }
             return redirect()->route($this->getModule() . '_data');
         }
@@ -86,8 +89,8 @@ class PaymentController extends Controller
         if (request()->has('so')) {
             $id = request()->get('so');
             $data = self::$model->soRepository($id);
-            if(!$data){
-                Alert::error('SO '.$id.' Belum dibayar');
+            if (!$data) {
+                Alert::error('SO ' . $id . ' Belum dibayar');
                 return redirect()->back();
             }
             return view(Helper::setViewUpdate())->with($this->share([
@@ -110,7 +113,7 @@ class PaymentController extends Controller
             $datatable->editColumn('finance_payment_account_id', function ($data) {
                 return $data->account->finance_account_name;
             });
-           
+
             $datatable->editColumn('finance_payment_amount', function ($data) {
                 return number_format($data->finance_payment_amount);
             });

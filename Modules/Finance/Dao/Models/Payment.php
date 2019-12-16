@@ -40,6 +40,8 @@ class Payment extends Model
     'finance_payment_updated_by',
     'finance_payment_voucher',
     'finance_payment_email',
+    'finance_payment_email_date',
+    'finance_payment_email_approve_date'
   ];
 
   public $with = ['account', 'order'];

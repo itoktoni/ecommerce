@@ -16,7 +16,7 @@ class StockRepository extends Stock implements MasterInterface
         $product = new ProductRepository();
         $table = $product->select([DB::raw('IFNULL(view_stock_product.id, item_product.item_product_id) AS item_product_id'), 'item_color_name', 'item_product_name', 'view_stock_product.*'])
             ->leftJoin('view_stock_product', 'product', 'item_product_id')
-            ->leftJoin('item_color', 'color', 'item_color_id');
+            ->leftJoin('item_color', 'color', 'item_color_id')->orderBy('qty', 'DESC');
         return $table;
     }
 
