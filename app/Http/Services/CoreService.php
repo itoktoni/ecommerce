@@ -80,7 +80,7 @@ class CoreService extends MasterService
                         if (!empty($act)) {
                             foreach ($act as $function) {
                                 $visible = '0';
-                                if (in_array($function, $this->visible) || strtr($controller) == 'report') {
+                                if (in_array($function, $this->visible) || strpos($controller, 'Report') !== false) {
                                     $visible = '1';
                                 }
 
@@ -134,12 +134,7 @@ class CoreService extends MasterService
 
                     foreach ($act as $function) {
                         $visible = '0';
-                        if (in_array($function, $this->visible)) {
-                            $visible = '1';
-                        }
-
-                        $visible = '0';
-                        if (in_array($function, $this->visible)) {
+                        if (in_array($function, $this->visible) || strpos($controller, 'Report') !== false) {
                             $visible = '1';
                         }
 

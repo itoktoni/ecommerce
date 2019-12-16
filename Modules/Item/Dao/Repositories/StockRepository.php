@@ -7,6 +7,7 @@ use Plugin\Notes;
 use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Models\Stock;
 use App\Dao\Interfaces\MasterInterface;
+use Illuminate\Database\QueryException;
 use Modules\Item\Dao\Models\Product;
 
 class StockRepository extends Stock implements MasterInterface
@@ -17,6 +18,13 @@ class StockRepository extends Stock implements MasterInterface
         $table = $product->select([DB::raw('IFNULL(view_stock_product.id, item_product.item_product_id) AS item_product_id'), 'item_color_name', 'item_product_name', 'view_stock_product.*'])
             ->leftJoin('view_stock_product', 'product', 'item_product_id')
             ->leftJoin('item_color', 'color', 'item_color_id')->orderBy('qty', 'DESC');
+        return $table;
+    }
+
+    public function dataRealRepository()
+    {
+        $table = $this->leftJoin('item_product', 'item_product_id', 'item_stock_product')
+            ->leftJoin('item_color', 'item_stock_color', 'item_color_id')->orderBy('item_stock_qty', 'DESC');
         return $table;
     }
 
@@ -50,7 +58,7 @@ class StockRepository extends Stock implements MasterInterface
         try {
             $activity = $this->findOrFail($id)->update($request);
             return Notes::update($activity);
-        } catch (QueryExceptionAlias $ex) {
+        } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
     }

@@ -4,9 +4,14 @@ namespace Modules\Item\Http\Controllers;
 
 use Helper;
 use Plugin\Response;
-use App\Http\Controllers\Controller;
-use Modules\Item\Dao\Repositories\ReportRepository;
 use Maatwebsite\Excel\Excel;
+use App\Http\Controllers\Controller;
+use Modules\Item\Dao\Repositories\SizeRepository;
+use Modules\Item\Dao\Repositories\ColorRepository;
+use Modules\Item\Dao\Repositories\ReportRepository;
+use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Item\Dao\Repositories\report\ReportRealRepository;
+use Modules\Item\Dao\Repositories\report\ReportStockRepository;
 
 class ReportController extends Controller
 {
@@ -17,9 +22,6 @@ class ReportController extends Controller
 
     public function __construct(Excel $excel)
     {
-        if (self::$model == null) {
-            self::$model = new ReportRepository();
-        }
         $this->excel = $excel;
         $this->template  = Helper::getTemplate(__CLASS__);
     }
@@ -31,7 +33,14 @@ class ReportController extends Controller
 
     private function share($data = [])
     {
+        $product = Helper::shareOption(new ProductRepository());
+        $color = Helper::shareOption(new ColorRepository());
+        $size = Helper::shareOption(new SizeRepository());
+
         $view = [
+            'product' => $product,
+            'color' => $color,
+            'size' => $size,
             'template' => $this->template,
         ];
 
@@ -41,7 +50,35 @@ class ReportController extends Controller
     public function stock()
     {
         if (request()->isMethod('POST')) {
-           return $this->excel->download(new ReportRepository(), 'test.xlsx');
+            $name = 'report_stock_' . date('Y_m_d') . '.xlsx';
+            return $this->excel->download(new ReportStockRepository(), $name);
+        }
+        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
+    }
+
+    public function real()
+    {
+        if (request()->isMethod('POST')) {
+            $name = 'report_real_' . date('Y_m_d') . '.xlsx';;
+            return $this->excel->download(new ReportRealRepository(), $name);
+        }
+        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
+    }
+
+    public function in()
+    {
+        if (request()->isMethod('POST')) {
+            $name = 'report_real_' . date('Y_m_d') . '.xlsx';;
+            return $this->excel->download(new ReportRealRepository(), $name);
+        }
+        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
+    }
+
+    public function out()
+    {
+        if (request()->isMethod('POST')) {
+            $name = 'report_real_' . date('Y_m_d') . '.xlsx';;
+            return $this->excel->download(new ReportRealRepository(), $name);
         }
         return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
     }
