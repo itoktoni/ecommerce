@@ -145,7 +145,7 @@ class PublicController extends Controller
 
             $price = $item->item_product_sell - $discount;
             Cart::add($stock->first()->id, $item->item_product_name, $price, 1, $additional);
-        } else if ($type == 'love' && is_numeric($slug)) {
+        } else if ($type == 'love' && is_string($slug)) {
 
             $love = DB::table('item_wishlist')->where([
                 'item_wishlist_item_product_id' => $slug,
@@ -241,19 +241,25 @@ class PublicController extends Controller
         $data = $model->showRepository($code);
         if ($data) {
 
-            $response = Curl::to(route('waybill'))->withData([
-                'waybill' => $data->sales_order_rajaongkir_waybill,
-                'courier' => $data->sales_order_rajaongkir_courier,
-            ])->post();
-            $waybill  = json_decode($response);
-            if (isset($waybill) && !empty($waybill->rajaongkir) && $waybill->rajaongkir->status->code == 200) {
+            try {
+                //code...
+                $response = Curl::to(route('waybill'))->withData([
+                    'waybill' => $data->sales_order_rajaongkir_waybill,
+                    'courier' => $data->sales_order_rajaongkir_courier,
+                ])->post();
+                $waybill  = json_decode($response);
+                if (isset($waybill) && !empty($waybill->rajaongkir) && $waybill->rajaongkir->status->code == 200) {
 
-                return View(Helper::setViewFrontend(__FUNCTION__))->with([
-                    'data' => $data,
-                    'waybill' => $waybill->rajaongkir->result,
-                ]);
-            } else {
-                abort(403, $waybill->rajaongkir->status->description);
+                    return View(Helper::setViewFrontend(__FUNCTION__))->with([
+                        'data' => $data,
+                        'waybill' => $waybill->rajaongkir->result,
+                    ]);
+                } else {
+                    abort(403, $waybill->rajaongkir->status->description);
+                }
+            } catch (\Throwable $th) {
+                abort(403, 'Ongkir API was down !');
+                //throw $th;
             }
         }
     }
@@ -587,7 +593,7 @@ class PublicController extends Controller
             }
         }
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            'bank' => Helper::shareOption($bank, false,true)->pluck('finance_bank_name', 'finance_bank_name'),
+            'bank' => Helper::shareOption($bank, false, true)->pluck('finance_bank_name', 'finance_bank_name'),
         ]);
     }
 

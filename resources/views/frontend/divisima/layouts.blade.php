@@ -60,6 +60,11 @@
         {
             color: #{{ config('website.color') }} !important;
         }
+
+        .notiny-theme-dark {
+            background-color: #{{ config('website.color') }} !important;
+            color: #f5f5f5;
+        }
     </style>
 </head>
 
