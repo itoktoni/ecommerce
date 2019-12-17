@@ -10,9 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Finance\Dao\Repositories\BankRepository;
 
-class CreateOrderEmail extends Mailable implements ShouldQueue
+class CreateOrderEmail extends Mailable
 {
-    use SerializesModels, Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
