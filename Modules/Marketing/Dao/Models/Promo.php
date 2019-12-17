@@ -2,11 +2,13 @@
 
 namespace Modules\Marketing\Dao\Models;
 
-use Plugin\Helper;
+use Helper;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Marketing\Emails\PromoEmail;
 
 class Promo extends Model
 {
@@ -116,6 +118,16 @@ class Promo extends Model
 
       if (Cache::has('marketing_promo_api')) {
         Cache::forget('marketing_promo_api');
+      }
+
+      if (request()->has('emails')) {
+        foreach (request()->get('emails') as $user) {
+          if ($user) {
+            $data['data'] = $model;
+            $data['user'] = $user;
+            Mail::to($user)->send(new PromoEmail($data));
+          }
+        }
       }
     });
 

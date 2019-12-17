@@ -121,10 +121,16 @@
     </div>
 
     <label class="col-md-2 control-label">File Attachment</label>
-    <div class="col-md-4 {{ $errors->has('files') ? 'has-error' : ''}}">
-        <a class="btn btn-danger btn-sm btn-block" target="__blank"
+    <div class="col-md-2 {{ $errors->has('files') ? 'has-error' : ''}}">
+        <a class="btn btn-success btn-sm btn-block" target="__blank"
             href="{{ Helper::files('payment/'.$model->finance_payment_attachment) }}">Download</a>
     </div>
+    @if ($model->finance_payment_approved_at)
+    <div class="col-md-2 {{ $errors->has('files') ? 'has-error' : ''}}">
+        <a class="btn btn-danger btn-sm btn-block" target="__blank"
+            href="{{ route($module.'_print_voucher', ['code' => $model->finance_payment_id]) }}">PRINT VOUCHER</a>
+    </div>
+    @endif
 
     @if ($model->order)
     <div class="col-md-6">

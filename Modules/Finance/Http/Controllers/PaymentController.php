@@ -3,20 +3,22 @@
 namespace Modules\Finance\Http\Controllers;
 
 use Helper;
+use Plugin\Alert;
 use Plugin\Response;
+use PDF;
 use App\Http\Controllers\Controller;
-use Modules\Finance\Dao\Repositories\PaymentRepository;
 use App\Http\Services\MasterService;
-use Modules\Finance\Dao\Repositories\AccountRepository;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Finance\Dao\Repositories\FlagRepository;
+use Modules\Finance\Dao\Repositories\AccountRepository;
+use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
-use Modules\Sales\Dao\Repositories\OrderRepository;
-use Plugin\Alert;
 
 class PaymentController extends Controller
 {
     public $template;
+    public $folder;
     public static $model;
 
     public function __construct()
@@ -24,6 +26,7 @@ class PaymentController extends Controller
         if (self::$model == null) {
             self::$model = new PaymentRepository();
         }
+        $this->folder = 'finance';
         $this->template  = Helper::getTemplate(__CLASS__);
     }
 
@@ -143,6 +146,19 @@ class PaymentController extends Controller
                 'model'   => $data,
                 'key'   => self::$model->getKeyName()
             ]));
+        }
+    }
+
+    public function print_voucher(MasterService $service)
+    {
+        if (request()->has('code')) {
+            $data['data'] = $service->show(self::$model);
+
+            // return view(Helper::setViewPrint('print_voucher', $this->folder))->with($data);
+
+            $pdf = PDF::loadView(Helper::setViewPrint('print_voucher', $this->folder), $data);
+            return $pdf->stream();
+            // return $pdf->download($id . '.pdf');
         }
     }
 }

@@ -63,9 +63,21 @@ class Helper
         return self::asset('/credential/' . $path);
     }
 
-    public static function files($path)
+    public static function files($path, $disable = false)
     {
+        if ($disable) {
+            return $path = asset($path . '/files/' . $path, false);
+        }
         return self::asset('/files/' . $path);
+    }
+
+
+    public static function print($path, $disable = false)
+    {
+        if ($disable) {
+            return $path = public_path('/files/' . $path);
+        }
+        return $path = public_path('/files/' . $path);
     }
 
     public static function vendor($path)

@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Wishlist extends Model
 {
-  use SoftDeletes;
-
   protected $table = 'item_wishlist';
   protected $primaryKey = 'item_wishlist_id';
   protected $fillable = [

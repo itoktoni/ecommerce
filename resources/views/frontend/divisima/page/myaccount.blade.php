@@ -18,6 +18,16 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 product-details">
+
+				@if (session()->has('info'))
+				<div style="margin-top:-20px;" class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>{{ session()->get('info') }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@endif
+
 				<div class="panel">
 					<div aria-labelledby="headingOne" data-parent="#accordion">
 						<div class="panel-body">
@@ -125,7 +135,7 @@
 													<button class="btn btn-link collapsed" type="button"
 														data-toggle="collapse" data-target="#collapseTwo"
 														aria-expanded="false" aria-controls="collapseTwo">
-														List Data [ sales order ] 
+														List Data [ sales order ]
 													</button>
 												</h2>
 											</div>
@@ -143,14 +153,17 @@
 																<th style="text-align:right" scope="col">Total</th>
 																<th style="text-align:right" scope="col">Status</th>
 																<th style="text-align:center" scope="col">Resi</th>
-																<th style="text-align:center;width:100px;" scope="col">Detail</th>
+																<th style="text-align:center;width:100px;" scope="col">
+																	Detail</th>
 															</tr>
 														</thead>
 														<tbody>
 															@forelse ($order as $item)
 															<tr style="position:relative">
 																<td data-header="Order No.">
-																	<button type="button" class="btn btn-primary btn-block btn-sm" data-toggle="modal"
+																	<button type="button"
+																		class="btn btn-primary btn-block btn-sm"
+																		data-toggle="modal"
 																		data-target="#{{ $item->sales_order_id ?? '' }}">
 																		{{ $item->sales_order_id ?? '' }}
 																	</button>
@@ -332,6 +345,12 @@
 																		</div>
 																	</div>
 																</a>
+																<div>
+																	<a class="btn btn-danger btn-sm"
+																		onclick="return confirm('Are you sure to delete product ?');"
+																		style="position: absolute;bottom:140px;right:15px;"
+																		href="{{ route('myaccount', ['delete' => $item_product->item_product_id]) }}">delete</a>
+																</div>
 															</div>
 														</div>
 														@endforeach

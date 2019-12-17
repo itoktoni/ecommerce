@@ -9,281 +9,537 @@
 
     <style>
         body {
-            margin-top: -30px;
-            margin-left: -35px;
+            margin: 10px;
         }
 
         table#border {
             border: 0.5px solid grey;
         }
+
+        .print-only {
+            display: none !important
+        }
+
+        * {
+            background: transparent !important;
+            color: black !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            -webkit-filter: none !important;
+            filter: none !important;
+            -ms-filter: none !important
+        }
+
+        *,
+        *:before,
+        *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        a,
+        a:visited {
+            text-decoration: underline
+        }
+
+        a[href]:after {
+            content: "
+(" attr(href) ")"}abbr[title]:after{content:"(" attr(title) ")"}.ir
+a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+                content: ""
+            }
+
+            pre,
+            blockquote {
+                border: 1px solid #999;
+                page-break-inside: avoid
+            }
+
+            thead {
+                display: table-header-group
+            }
+
+            tr,
+            img {
+                page-break-inside: avoid
+            }
+
+            img {
+                max-width: 100% !important;
+                vertical-align: middle;
+                max-height: 100% !important
+            }
+
+            table {
+                border-collapse: collapse
+            }
+
+            th,
+            td {
+                border: solid 1px #333;
+                padding: 0.25em 8px;
+                vertical-align: top
+            }
+
+            dl {
+                margin: 0
+            }
+
+            dd {
+                margin: 0
+            }
+
+            @page {
+                margin: 1.25cm 0.5cm
+            }
+
+            p,
+            h2,
+            h3 {
+                orphans: 3;
+                widows: 3
+            }
+
+            h2,
+            h3 {
+                page-break-after: avoid
+            }
+
+            .hide-on-print {
+                display: none !important
+            }
+
+            .print-only {
+                display: block !important
+            }
+
+            .hide-for-print {
+                display: none !important
+            }
+
+            .show-for-print {
+                display: inherit !important
+            }
+
+            .break-page-after {
+                page-break-after: always;
+                page-break-inside: avoid
+            }
+
+            html {
+                overflow-x: visible
+            }
+
+            body {
+                font-size: 12px;
+                line-height: 1.5;
+
+                font-family: "Lucida
+Grande", "Lucida Sans Unicode", "Lucida Sans", Arial, sans-serif;padding:0}h1,h2,h3,h4,h5,h6{font-weight:normal}h1 a,h2
+a, h3 a, h4 a, h5 a, h6 a {
+                    font-weight: inherit
+                }
+
+                h2 {
+                    font-size: 2em;
+                    line-height: 1.5;
+                    margin-bottom: 0.75em
+                }
+
+                h3 {
+                    font-size: 1.5em;
+                    line-height: 1;
+                    margin-top: 2em;
+                    margin-bottom: 1em
+                }
+
+                h4 {
+                    font-size: 1.25em;
+                    line-height: 2.4
+                }
+
+                h5 {
+                    font-weight: bold;
+                    margin-top: 2.25em;
+                    margin-bottom: 0.75em
+                }
+
+                h6 {
+                    text-transform: uppercase;
+                    margin-top: 2.25em;
+                    margin-bottom: 0.75em
+                }
+
+                #page {
+                    width: 100%;
+                    position: relative
+                }
+
+                .bukalapak-transaction-slip {
+                    padding: 8px 9px;
+                    border: solid 1px #000;
+                    margin-bottom: 18px;
+                    width: 100%;
+                    position: relative
+                }
+
+                .bukalapak-transaction-slip--brand {
+                    height: 27px;
+                    display: block;
+                    float: left
+                }
+
+                .bukalapak-transaction-slip--heading {
+                    margin-top: 0;
+                    display: block;
+                    float: right;
+                    line-height: 1;
+                    font-size: 18px
+                }
+
+                .bukalapak-transaction-slip--courier {
+                    margin-top: -5px;
+                    display: block;
+                    float: right;
+                    font-size: 14px;
+                    position: relative;
+                    width: 100%;
+                    text-align: right
+                }
+
+                .bukalapak-transaction-slip-buyer {
+                    margin-top: 9px;
+                    margin-bottom: 9px;
+                    padding-right: 18px;
+                    clear: both;
+                    float: left;
+                    width: 62%;
+                    border-right: dotted 1px #000
+                }
+
+                .bukalapak-transaction-slip-buyer--heading {
+                    font-weight: bold;
+                    margin-top: 0
+                }
+
+                .bukalapak-transaction-slip-buyer--label {
+                    display: block;
+                    float: left;
+                    clear: both;
+                    width: 25%
+                }
+
+                .bukalapak-transaction-slip-buyer--label:after {
+                    content: ":"
+                }
+
+                .bukalapak-transaction-slip-buyer--name,
+                .bukalapak-transaction-slip-buyer--phone {
+                    font-weight: bold
+                }
+
+                .bukalapak-transaction-slip-buyer--address {
+                    display: block;
+                    float: left;
+                    font-weight: bold;
+                    width: 75%;
+                    white-space: -moz-pre-wrap !important;
+                    white-space: -pre-wrap;
+                    white-space: -o-pre-wrap;
+                    white-space: pre-wrap;
+                    white-space: normal
+                }
+
+                .bukalapak-transaction-slip-seller {
+                    display: block;
+                    float: left;
+                    width: 38%;
+                    margin-top: 9px;
+                    margin-bottom: 9px;
+                    padding-left: 18px
+                }
+
+                .bukalapak-transaction-slip-seller--heading {
+                    font-weight: bold;
+                    margin-top: 0em
+                }
+
+                .bukalapak-transaction-slip-seller--lapak,
+                .bukalapak-transaction-slip-seller--name {
+                    white-space: nowrap
+                }
+
+                .bukalapak-transaction-slip--footer {
+                    display: block;
+                    width: 100%;
+                    clear: both;
+                    margin-top: 18px;
+                    border-top: solid 1px #000;
+                    padding-top: 5px;
+                    font-size: 9px
+                }
+
+                .bukalapak-transaction-product {
+                    clear: both;
+                    position: relative;
+                    width: 100%
+                }
+
+                .bukalapak-transaction-product-item {
+                    width: 80%
+                }
+
+                .bukalapak-transaction-product-quantity {
+                    width: 20%
+                }
+
+                .address p {
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                }
     </style>
 
     <title>Document</title>
 </head>
 
+
 <body>
-    <table>
-        <tbody>
-            <tr>
-                <td bgcolor="#ffffff" id="m_-3784408755349078820contentContainer"
-                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                    <table id="border" border="0" cellpadding="5" cellspacing="0"
-                        id="m_-3784408755349078820templateList" width="100%"
-                        style="border-collapse:collapse;border-spacing:0;font-size:13px;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0 0 25px;padding:0"
+    <div id='page'>
+        <div>
+            <img style="margin-top:1px;height:100px;margin-left:-10px;"
+                src="{{ Helper::print('logo/'.config('website.logo')) }}" alt="">
+            <div style="position: absolute;top:0px; right: 0;text-align: right">
+                <h1 style="margin-bottom:0px;margin-right:-10px;">
+                    <span>
+                        NO.
+                        <span
+                            style='color: #{{ config('website.color') }} !important'>#{{ str_replace('SO', 'INV', $master->sales_order_id) }}</span>
+                    </span>
+                </h1>
+                <span style="position: relative;top:0px;">
+                    Tanggal Order {{ $master->sales_order_created_at->format('d M Y H:i') }}
+                </span>
+                <br>
+                <span style="position: relative;">
+                    Tanggal Cetak {{ date('d M Y H:i') }}
+                </span>
+            </div>
+        </div>
+        <div style='margin-top: 0px; margin-bottom: 20px;'>
+            Terima kasih atas kepercayaan Anda kepada kami.
+        </div>
+        <div>
+            <table border='0' cellpadding='5' cellspacing='0' id='templateList' width='100%'>
+                <tr>
+                    <td colspan='8' style='background: #{{ config('website.color') }} !important'>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align='left' colspan='8' valign='middle'>
+                        <p style="text-align:center;font-size:25px;font-weight:bold;margin:0px;">INVOICE</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
+                </tr>
+                <tr>
+                    <td align='center' colspan='4' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Penjual</strong>
+                    </td>
+                    <td align='center' colspan='4' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Pembeli</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td align='left' colspan='1' valign='top'>
+                        Vendor
+                    </td>
+                    <td align='left' colspan='3' valign='top'>
+                        {{ config('website.name') }}
+                    </td>
+                    <td align='left' colspan='1' valign='top'>
+                        Customer
+                    </td>
+                    <td align='left' colspan='3' valign='top'>
+                        {{ $master->sales_order_rajaongkir_name ?? '' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align='left' colspan='1' valign='top'>
+                        Email
+                    </td>
+                    <td align='left' colspan='3' valign='top'>
+                        {{ config('website.email') }}
+                    </td>
+                    <td align='left' colspan='1' valign='top'>
+                        Email
+                    </td>
+                    <td align='left' colspan='3' valign='top'>
+                        {{ $master->sales_order_email }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align='left' colspan='1' valign='top'>
+                        Alamat
+                    </td>
+
+                    <td align='left' colspan='3' valign='top'>
+                        <span class="address">{!! config('website.address') !!}</span>
+                    </td>
+                    <td align='left' colspan='1' valign='top'>
+                        Alamat
+                    </td>
+                    <td align='left' colspan='3' valign='top'>
+                        Kawasan Industri MM2100, Blok T61
+                        <br>
+                        Ganda Mekar, Cikarang Barat
+                        <br>
+                        Bekasi - Jawa Barat &ndash; 17520
+                        <br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align='left' colspan='1' valign='top'>
+                        <p>Catatan</p>
+                    </td>
+                    <td align='left' colspan='7' valign='top'>
+                        <p>{{ $master->sales_order_rajaongkir_notes }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
+                </tr>
+                <tr>
+                    <td align='left' colspan='4' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Nama Barang</strong>
+                    </td>
+                    <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Jumlah</strong>
+                    </td>
+                    <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Harga</strong>
+                    </td>
+                    <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Tax</strong>
+                    </td>
+                    <td align='right' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
+                        <strong>Total</strong>
+                    </td>
+                </tr>
+                <?php
+                $sub = 0;
+                $total = 0;
+                ?>
+                @foreach ($detail as $item)
+                <?php
+                $sub = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
+                $total = $total + $sub;
+                ?>
+
+                <tr>
+                    <td align="left" colspan='4' valign="middle" width="50%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#FFFFFF">
-                        <tbody>
-                            <tr>
-                                <th colspan="4"
-                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                    bgcolor="#{{ config('website.color') }}">
-                                    <h2
-                                        style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:15px;font-weight:bold;margin:0;padding:5px 0">
-                                        No. Order : {{ $master->sales_order_id }}
-                                    </h2>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td align="left" colspan="1" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Waktu
-                                        Transaksi</span>
-                                </td>
-                                <td align="right" valign="top" colspan="3"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_created_at->format('d M Y H:i:s') }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" colspan="1" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
-                                        Nama Customer</span>
-                                </td>
-                                <td align="right" valign="top" colspan="3"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
+                        {{ $item->product->item_product_name }} {{ $item->sales_order_detail_item_size }}
+                        {{ $item->color->item_color_name }}
+                    </td>
+                    <td align="center" valign="middle" width="10%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#FFFFFF">
 
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_rajaongkir_name ?? '' }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" colspan="1" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Email</span>
-                                </td>
-                                <td align="right" valign="top" colspan="3"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <a
-                                        style="text-align: right;color:#{{ config('website.color') }}!important;font-family:Arial,sans-serif;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0">{{ $master->sales_order_email }}</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" colspan="1" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Phone</span>
-                                </td>
-                                <td align="right" valign="top" colspan="3"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_rajaongkir_phone }}</span>
-                                </td>
-                            </tr>
+                        {{ $item->sales_order_detail_qty_order }}
+                    </td>
+                    <td align="center" valign="middle" width="15%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#FFFFFF">
+                        {{ number_format( $item->sales_order_detail_price_order ,0,",",".")}}
+                    </td>
+                    <td align="center" valign="middle" width="15%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#FFFFFF">
+                        @if (config('website.tax'))
+                        {{ $item->sales_order_detail_tax_value }}
+                        @endif
 
-                            <tr>
-                                <td align="left" colspan="1" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Address</span>
-                                </td>
-                                <td align="right" valign="top" colspan="3"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_rajaongkir_address ?? '' }}</span>
-                                </td>
-                            </tr>
+                    </td>
+                    <td align="right" valign="middle" width="25%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                        bgcolor="#FFFFFF">
+                        <span>
+                            {{ number_format($item->sales_order_detail_total_order,0,",",".") }}
+                        </span>
+                    </td>
+                </tr>
 
-                            <tr>
-                                <th colspan="4"
-                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                    bgcolor="#{{ config('website.color') }}"></th>
-                            </tr>
-                            <tr>
-                                <td align="left" class="m_-3784408755349078820headingList" valign="top" width="65%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;font-size:11px;margin:0;padding:5px 10px"
-                                    bgcolor="#F0F0F0">
-                                    <strong style="color:#555;font-size:13px">Nama
-                                        Barang</strong>
-                                </td>
-                                <td align="center" class="m_-3784408755349078820headingList" valign="top" width="10%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;font-size:11px;margin:0;padding:5px 10px"
-                                    bgcolor="#F0F0F0">
-                                    <strong style="color:#555;font-size:13px">Jumlah</strong>
-                                </td>
-                                <td align="center" class="m_-3784408755349078820headingList" valign="top" width="10%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;font-size:11px;margin:0;padding:5px 10px"
-                                    bgcolor="#F0F0F0">
-                                    <strong style="color:#555;font-size:13px">Harga</strong>
-                                </td>
-                                <td align="right" class="m_-3784408755349078820headingList" valign="top" width="15%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;font-size:11px;margin:0;padding:5px 10px"
-                                    bgcolor="#F0F0F0">
-                                    <strong style="color:#555;font-size:13px">Total</strong>
-                                </td>
-                            </tr>
+                @endforeach
 
-                            <?php
-                            $sub = 0;
-                            $total = 0;
-                            ?>
-                            @foreach ($detail as $item)
-                            <?php
-                            $sub = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
-                            $total = $total + $sub;
-                            ?>
-
-                            <tr>
-                                <td align="left" valign="middle" width="50%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    {{ $item->product->item_product_name }}
-                                    @if (config('website.tax'))
-                                    + {{ $item->sales_order_detail_tax_name }}
-                                    @endif
-                                </td>
-                                <td align="center" valign="middle" width="10%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    {{ $item->sales_order_detail_qty_order }}
-                                </td>
-                                <td align="center" valign="middle" width="15%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    {{ number_format( $item->sales_order_detail_price_order ,0,",",".")
-                                                                                            }}
-                                </td>
-                                <td align="right" valign="middle" width="25%"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#FFFFFF">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0"></span><span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
-                                        {{ number_format($item->sales_order_detail_total_order,0,",",".") }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @endforeach
-
-                            <tr>
-                                <td align="left" colspan="2" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#f0f0f0">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Pengiriman
-                                        :
-                                        {{ $master->sales_order_rajaongkir_service ?? '' }}</span>
-                                </td>
-                                <td align="right" valign="top" colspan="2"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#f0f0f0">
-                                    <span
-                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colspan="4"
-                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                    bgcolor="#{{ config('website.color') }}"></th>
-                            </tr>
-                            @if ($master->sales_order_marketing_promo_value)
-                            <tr>
-                                <td align="left" colspan="2" valign="top"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#f0f0f0">
-                                    <span
-                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
-                                        {{ $master->sales_order_marketing_promo_code ?? '' }}
-                                        :
-                                        {{ $master->sales_order_marketing_promo_name ?? '' }}</span>
-                                </td>
-                                <td align="right" valign="top" colspan="2"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                    bgcolor="#f0f0f0">
-                                    <span
-                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">-{{ number_format($master->sales_order_marketing_promo_value,0,",",".") }}</span>
-                                </td>
-                            </tr>
-                            @endif
-                            <tr>
-                                <th colspan="1"
-                                    style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                    bgcolor="#{{ config('website.color') }}">
-                                    <h2
-                                        style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                                        Total
-                                    </h2>
-                                </th>
-                                <th colspan="3"
-                                    style="text-align: right;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                    bgcolor="#{{ config('website.color') }}">
-                                    <h2
-                                        style="text-align: right;font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                                        {{ number_format($master->sales_order_total,0,",",".") }}
-                                    </h2>
-                                </th>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td
-                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                    <table align="left" id="m_-3784408755349078820securityAnnouncementWrapper" width="100%"
-                        style="border-collapse:collapse;border-spacing:0;font-size:13px;margin:0;padding:0"
+                <tr>
+                    <td align="left" colspan="7" valign="top"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#f0f0f0">
-                        <tbody>
-                            <tr>
-                                <td height="5" width="15"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                                </td>
-                                <td height="5" width="24"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                                </td>
-                                <td height="5" width="10"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                                </td>
-                                <td height="5" width="516"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                                </td>
-                                <td height="5" width="15"
-                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#999;line-height:1.5;margin:0;padding:0">
-                                </td>
-                            </tr>
+                        <span
+                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Pengiriman
+                            :
+                            {{ $master->sales_order_rajaongkir_service ?? '' }}</span>
+                    </td>
+                    <td align="right" valign="top" colspan="1"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#f0f0f0">
+                        <span
+                            style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
+                </tr>
+                @if ($master->sales_order_marketing_promo_value)
+                <tr>
+                    <td align="left" colspan="7" valign="top"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#f0f0f0">
+                        <span
+                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
+                            {{ $master->sales_order_marketing_promo_code ?? '' }}
+                            :
+                            {{ $master->sales_order_marketing_promo_name ?? '' }}</span>
+                    </td>
+                    <td align="right" valign="top" colspan="1"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#f0f0f0">
+                        <span
+                            style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">-{{ number_format($master->sales_order_marketing_promo_value,0,",",".") }}</span>
+                    </td>
+                </tr>
+                @endif
+                <tr>
+                    <th colspan="7"
+                        style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                        bgcolor="#{{ config('website.color') }}">
+                        <h2
+                            style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
+                            Total
+                        </h2>
+                    </th>
+                    <th colspan="1"
+                        style="text-align: right;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                        bgcolor="#{{ config('website.color') }}">
+                        <h2
+                            style="text-align: right;font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
+                            {{ number_format($master->sales_order_total,0,",",".") }}
+                        </h2>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
+                </tr>
+            </table>
+        </div>
 
-                        </tbody>
-                    </table>
-
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
 </body>
 
 </html>

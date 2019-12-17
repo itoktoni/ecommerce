@@ -65,7 +65,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 					<p>Quantity</p>
 					<div class="pro-qty"><input type="text" name="qty" value="{{ old('qty') ?? 1}}"></div>
 				</div>
-				<button type="submit" id="pjax" class="site-btn">SHOP NOW</button>
+				<button type="submit" id="pjax" class="site-btn">BUY NOW</button>
 				@else
 				<button type="button" class="site-btn">Out Of Stock</button>
 				@endif

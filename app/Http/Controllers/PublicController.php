@@ -272,6 +272,15 @@ class PublicController extends Controller
         $province = $city = $location = $data = false;
         $list_location = $list_city  = $data_order = $my_wishlist = [];
 
+        if ($delete = request()->get('delete')) {
+            $c = Wishlist::where('item_wishlist_item_product_id', $delete)->where('item_wishlist_user_id', Auth::user()->id)->delete();
+            if ($c) {
+                return redirect()->route('myaccount')->with('info', 'Success Delete Product');
+            } else {
+                return redirect()->route('myaccount')->with('info', 'Fail Delete Product');
+            }
+        }
+
         if (Auth::check()) {
 
             $province = Auth::user()->province;
@@ -577,7 +586,7 @@ class PublicController extends Controller
                 'finance_payment_person' => 'required',
                 'finance_payment_email' => 'required|email',
                 'finance_payment_date' => 'required',
-                'files' => 'required|file',
+                'files' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'finance_payment_to' => 'required',
             ];
             $validate = Validator::make($request, $rules);
@@ -593,7 +602,7 @@ class PublicController extends Controller
             }
         }
 
-        if($code = request()->get('code')){
+        if ($code = request()->get('code')) {
             $order = new OrderRepository();
             $data_order = $order->showRepository($code);
         }
@@ -794,7 +803,8 @@ class PublicController extends Controller
             if ($data['status']) {
                 try {
                     Mail::to(config('website.email'))->send(new ContactEmail($data['data']));
-                } catch (Exception $e) { }
+                } catch (Exception $e) {
+                }
             }
 
             return redirect()->back()->withInput();

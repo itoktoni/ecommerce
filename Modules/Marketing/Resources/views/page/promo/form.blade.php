@@ -103,7 +103,7 @@
 <div class="form-group">
     {!! Form::label('name', 'Voucher', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10 {{ $errors->has($form.'user_json') ? 'has-error' : ''}}">
-        {{ Form::select($form.'user_json[]', $user, json_decode($model->marketing_promo_user_json) ?? null, ['class'=> 'form-control', 'multiple']) }}
+        {{ Form::select('emails[]', $user, json_decode($model->marketing_promo_user_json) ?? null, ['class'=> 'form-control', 'multiple']) }}
         {!! $errors->first($form.'user_json', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

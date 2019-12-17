@@ -183,8 +183,8 @@ class OrderController extends Controller
 
             request()->validate([
                 'sales_order_rajaongkir_waybill' => 'required'
-            ],[
-                'sales_order_rajaongkir_waybill.required' => 'Masukan No Resi' 
+            ], [
+                'sales_order_rajaongkir_waybill.required' => 'Masukan No Resi'
             ]);
             $post = $service->update(self::$delivery);
             if ($post['status']) {
@@ -342,6 +342,8 @@ class OrderController extends Controller
                 'customer' => $data->customer,
                 'detail' => $data->detail,
             ];
+
+            // return view(Helper::setViewPrint('print_sales_order', $this->folder))->with($pasing);
 
             $pdf = PDF::loadView(Helper::setViewPrint('print_sales_order', $this->folder), $pasing);
             return $pdf->stream();

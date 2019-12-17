@@ -5,10 +5,12 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Modules\Finance\Dao\Models\Payment;
-use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Sales\Emails\CreateOrderEmail;
-use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Sales\Emails\TestingOrderEmail;
+use Modules\Sales\Dao\Repositories\OrderRepository;
+use Modules\Finance\Emails\ConfirmationPaymentEmail;
+use Modules\Finance\Dao\Repositories\PaymentRepository;
+use Modules\Finance\Emails\ApprovePaymentEmail;
 
 class SendEmail extends Command
 {
@@ -58,24 +60,28 @@ class SendEmail extends Command
             }
         }
 
-        // $payment = new PaymentRepository();
-        // $payment_data = $payment->dataRepository()->whereNull('finance_payment_email_date')->limit(1)->get();
-        // if ($payment_data) {
+        $payment = new PaymentRepository();
+        $payment_data = $payment->dataRepository()->whereNull('finance_payment_email_date')->limit(1)->get();
+        if ($payment_data) {
 
-        //     foreach ($payment_data as $payment_item) {
-        //         $data = $payment->showRepository($payment_item->finance_payment_id);
-        //         Mail::to($payment_item->finance_payment_email)->send(new CreateOrderEmail($data));
-        //         $data->sales_order_email_date = date('Y-m-d H:i:s');
-        //         $data->save();
-        //     }
-        // }
+            foreach ($payment_data as $payment_item) {
+                $data = $payment->showRepository($payment_item->finance_payment_id);
+                Mail::to([$payment_item->finance_payment_email, config('website.email')])->send(new ConfirmationPaymentEmail($data));
+                $data->finance_payment_email_date = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
+        $payment_approve = $payment->dataRepository()->whereNotNull('finance_payment_approved_at')->limit(1)->get();
+        if ($payment_approve) {
 
-        // Mail::send('emails.send', ['title' => 'New System Copy', 'content' => config()->get('app.url')], function ($message) {
-        //     $message->subject('New System Laravel');
-        //     $message->from('me@itoktoni.com', 'Laravel System');
-        //     $message->to('itok.toni@gmail.com');
-        // });
+            foreach ($payment_approve as $payment_aprove) {
+                $data = $payment->showRepository($payment_aprove->finance_payment_id);
+                Mail::to([$payment_item->finance_payment_email, config('website.email')])->send(new ApprovePaymentEmail($data));
+                $data->finance_payment_email_approve_date = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
         $this->info('The system has been sent successfully!');
     }

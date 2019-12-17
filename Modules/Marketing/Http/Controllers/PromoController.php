@@ -35,7 +35,7 @@ class PromoController extends Controller
             'status' => Helper::shareStatus(self::$model->status),
             'default' => Helper::shareStatus(self::$model->default),
             'type' => Helper::shareStatus(self::$model->type),
-            'user' => $user->pluck('name','id')->all(),
+            'user' => $user->pluck('name','email')->all(),
         ];
 
         return array_merge($view, $data);
@@ -56,7 +56,7 @@ class PromoController extends Controller
     {
         if (request()->isMethod('POST')) {
 
-            $service->update(self::$model);
+            $data = $service->update(self::$model);
             return redirect()->route($this->getModule() . '_data');
         }
 
