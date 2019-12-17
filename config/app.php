@@ -70,8 +70,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', $url_hostname),
-    'asset_url' => env('APP_URL', $url_hostname) . '/public',
+    'url' => $url_hostname,
+    'asset_url' => $url_hostname . '/public',
 
     /*
     |--------------------------------------------------------------------------
