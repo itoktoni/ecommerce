@@ -8,7 +8,8 @@
 <body>
     <div id='page'>
         <div style="margin-bottom: 0px;clear: both;">
-            <h4 style='margin-bottom:20px;text-align: center; color:black;line-height: 0;font-size: 1.2em; font-weight: bold;'>
+            <h4
+                style='margin-bottom:20px;text-align: center; color:black;line-height: 0;font-size: 1.2em; font-weight: bold;'>
                 Payment Voucher ( {{ $data->finance_payment_voucher }} )
             </h4>
 

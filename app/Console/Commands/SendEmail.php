@@ -46,7 +46,6 @@ class SendEmail extends Command
      */
     public function handle()
     {
-
         $order = new OrderRepository();
         $order_data = $order->dataRepository()->whereNull('sales_order_email_date')->limit(1)->get();
         if ($order_data) {
