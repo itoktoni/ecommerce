@@ -71,7 +71,7 @@ class SendEmail extends Command
             }
         }
 
-        $payment_approve = $payment->dataRepository()->whereNotNull('finance_payment_approved_at')->limit(1)->get();
+        $payment_approve = $payment->dataRepository()->whereNull('finance_payment_email_approve_date')->limit(1)->get();
         if ($payment_approve) {
 
             foreach ($payment_approve as $payment_aprove) {
