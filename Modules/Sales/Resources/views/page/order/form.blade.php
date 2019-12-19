@@ -34,7 +34,7 @@
 
         {!! Form::label('name', 'Status', ['class' => 'col-md-2 control-label']) !!}
         <div class="col-md-4 {{ $errors->has('sales_order_status') ? 'has-error' : ''}}">
-            {{ Form::select('sales_order_status',Helper::shareStatus($model->status) , null, ['class'=> 'form-control']) }}
+            {{ Form::select('sales_order_status', $status , null, ['class'=> 'form-control']) }}
             {!! $errors->first('sales_order_status', '<p class="help-block">:message</p>') !!}
         </div>
     </div>

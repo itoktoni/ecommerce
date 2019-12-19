@@ -7,6 +7,7 @@ use Plugin\Notes;
 use Illuminate\Support\Facades\DB;
 use Modules\Procurement\Dao\Models\Purchase;
 use App\Dao\Interfaces\MasterInterface;
+use Illuminate\Database\QueryException;
 use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Product;
 use Modules\Procurement\Dao\Models\PurchaseDetail;
@@ -37,7 +38,7 @@ class PurchaseRepository extends Purchase implements MasterInterface
         try {
             $activity = $this->findOrFail($id)->update($request);
             return Notes::update(collect($request));
-        } catch (QueryExceptionAlias $ex) {
+        } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
     }

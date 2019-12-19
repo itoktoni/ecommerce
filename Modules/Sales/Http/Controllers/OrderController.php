@@ -63,6 +63,8 @@ class OrderController extends Controller
         $product = Helper::createOption((new ProductRepository()), false, true);
         $account = Helper::createOption((new AccountRepository()));
         $bank = Helper::createOption((new BankRepository()));
+        $status = Helper::shareStatus(self::$model->status);
+
         $view = [
             'key'       => self::$model->getKeyName(),
             'customer'      => $customer,
@@ -70,6 +72,7 @@ class OrderController extends Controller
             'product'  => $product,
             'account'  => $account,
             'bank'  => $bank,
+            'status'  => $status,
         ];
 
         return array_merge($view, $data);
@@ -129,12 +132,17 @@ class OrderController extends Controller
             $stock = new StockRepository();
             $product = $data->detail->pluck('sales_order_detail_option')->toArray();
             $data_stock = $stock->dataStockRepository($product)->get();
+
+            $collection = collect(self::$model->status);
+            $status = $collection->forget([1, 2, 4, 0])->toArray();
+
             $delivery = OrderDelivery::whereIn('so_delivery_option', $product)->where('so_delivery_order', request()->get('code'))->get();
             return view(Helper::setViewForm($this->template, __FUNCTION__, $this->folder))->with($this->share([
                 'model'        => $data,
                 'stock'        => $data_stock,
                 'detail'       => $data->detail,
                 'delivery'       => $delivery,
+                'status' => Helper::shareStatus($status),
                 'key'          => self::$model->getKeyName()
             ]));
         }
@@ -195,9 +203,13 @@ class OrderController extends Controller
         if (request()->has('code')) {
 
             $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
+            $collection = collect(self::$model->status);
+            $status = $collection->forget([1, 2, 0])->toArray();
+
             return view(Helper::setViewForm($this->template, 'delivery', $this->folder))->with($this->share([
                 'model'        => $data,
                 'detail'       => $data->detail,
+                'status' => Helper::shareStatus($status),
                 'key'          => self::$model->getKeyName()
             ]));
         }

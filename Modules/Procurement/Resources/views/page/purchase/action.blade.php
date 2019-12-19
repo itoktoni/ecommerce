@@ -40,9 +40,7 @@
                         btn-danger">PDF</a>
                 @endif
 
-                @if($model->purchase_status == 2)
                 <button type="submit" class="btn btn-primary">Save</button>
-                @endif
                 @break
 
                 @case('receive')

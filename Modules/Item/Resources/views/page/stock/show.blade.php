@@ -45,12 +45,12 @@
                                     <a target="__blank" class="btn btn-danger btn-xs" href="{{ route($module.'_print_barcode', ['code' => $item->item_stock_barcode ]) }}">
                                         print
                                     </a>
-                                    @if (Auth::user()->group_user == 'developer')
+                                    {{-- @if (Auth::user()->group_user == 'developer') --}}
                                     <a class="btn btn-primary btn-xs"
                                         href="{{ route($module.'_update', ['code' => $item->item_stock_id ]) }}">
                                         edit
                                     </a>
-                                    @endif
+                                    {{-- @endif --}}
                                 </td>
                             </tr>
                             @if ($loop->last)

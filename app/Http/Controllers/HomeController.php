@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Cache;
-use Route;
-use Artisan;
+use Config;
+// use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Artisan;
 use Closure;
 use Helper;
 use Plugin\Response;
 use App\Charts\HomeChart;
 use Illuminate\Http\Request;
+use App\Dao\Models\GroupUser;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Config;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsole;
-use App\Dao\Models\GroupUser;
 
 class HomeController extends Controller
 {
@@ -116,6 +117,7 @@ class HomeController extends Controller
                 'cache' => request()->get('website_cache'),
                 'session' => request()->get('website_session'),
                 'developer_setting' => request()->get('developer_setting'),
+                'email' => request()->get('mail_address'),
             ];
 
             Config::write('website', $data);
@@ -186,7 +188,8 @@ class HomeController extends Controller
     }
 
     public function directory($name)
-    { }
+    {
+    }
 
     public function file($name)
     {

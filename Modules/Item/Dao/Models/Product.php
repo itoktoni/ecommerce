@@ -14,7 +14,6 @@ use Modules\Item\Dao\Repositories\SizeRepository;
 
 class Product extends Model
 {
-
   use SoftDeletes;
   protected $table = 'item_product';
   protected $primaryKey = 'item_product_id';
@@ -27,25 +26,27 @@ class Product extends Model
     'item_product_buy',
     'item_product_image',
     'item_product_sell',
-    'item_product_gram',
-    'item_product_item_tax_id',
     'item_product_item_category_id',
     'item_product_item_brand_id',
-    'item_product_item_color_json',
-    'item_product_item_size_json',
     'item_product_item_tag_json',
+    'item_product_item_tax_id',
     'item_product_name',
-    'item_product_flag',
     'item_product_description',
-    'item_product_care',
-    'item_product_return',
     'item_product_updated_at',
     'item_product_created_at',
     'item_product_deleted_at',
     'item_product_updated_by',
     'item_product_created_by',
+    'item_product_counter',
+    'item_product_status',
+    'item_product_item_color_json',
+    'item_product_item_size_json',
     'item_product_discount_type',
     'item_product_discount_value',
+    'item_product_gram',
+    'item_product_flag',
+    'item_product_care',
+    'item_product_return',
   ];
 
   public $timestamps = true;

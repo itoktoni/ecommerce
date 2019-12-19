@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Item\Http\Controllers;
+namespace Modules\Sales\Http\Controllers;
 
 use Helper;
 use Plugin\Response;
@@ -14,6 +14,7 @@ use Modules\Item\Dao\Repositories\report\ReportInRepository;
 use Modules\Item\Dao\Repositories\report\ReportOutRepository;
 use Modules\Item\Dao\Repositories\report\ReportRealRepository;
 use Modules\Item\Dao\Repositories\report\ReportStockRepository;
+use Modules\Sales\Dao\Repositories\report\ReportPenjualanRepository;
 
 class ReportController extends Controller
 {
@@ -49,38 +50,11 @@ class ReportController extends Controller
         return array_merge($view, $data);
     }
 
-    public function stock()
-    {
-        if (request()->isMethod('POST')) {
-            $name = 'report_stock_' . date('Y_m_d') . '.xlsx';
-            return $this->excel->download(new ReportStockRepository(), $name);
-        }
-        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
-    }
-
-    public function real()
-    {
-        if (request()->isMethod('POST')) {
-            $name = 'report_real_' . date('Y_m_d') . '.xlsx';;
-            return $this->excel->download(new ReportRealRepository(), $name);
-        }
-        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
-    }
-
-    public function in()
-    {
-        if (request()->isMethod('POST')) {
-            $name = 'report_purchase_stock_in_' . date('Y_m_d') . '.xlsx';;
-            return $this->excel->download(new ReportInRepository(), $name);
-        }
-        return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
-    }
-
-    public function out()
+    public function penjualan()
     {
         if (request()->isMethod('POST')) {
             $name = 'report_sales_order_out_' . date('Y_m_d') . '.xlsx';;
-            return $this->excel->download(new ReportOutRepository(), $name);
+            return $this->excel->download(new ReportPenjualanRepository(), $name);
         }
         return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
     }
