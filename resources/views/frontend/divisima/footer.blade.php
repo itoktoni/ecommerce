@@ -46,9 +46,9 @@
                     <div class="con-info">
                         <p>{{ strtoupper(config('website.name')) }}</p>
                     </div>
-                    <div id="address" class="con-info">
+                    {{-- <div id="address" class="con-info">
                         {!! html_entity_decode(config('website.address')) !!}
-                    </div>
+                    </div> --}}
                     <div class="con-info">
                         <span>Phone : </span>
                         <p>{{ config('website.phone') }}</p>

@@ -55,7 +55,7 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 				<h3 class="p-price">Price {{ number_format($single_product->item_product_sell) }}</h3>
 				@endif
 				@if($stock->count() > 0)
-				<h5 style="margin-top:50px;"> Available Stock </h5>
+				<h5 style="margin-top:50px;"> Available Option </h5>
 				<div id="option_product" class="col-md-5">
 					<div class="row">
 						{{ Form::select('option', $list, old('option') ?? null, ['class' => 'form-control']) }}

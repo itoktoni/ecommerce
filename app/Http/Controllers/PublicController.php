@@ -872,10 +872,10 @@ class PublicController extends Controller
                 $collect_qty = $item->qty - $outstanding[$item->id];
             }
             $size = $item->size ? $item->size . ' - ' : '';
-            $color = $item->hex ? $item->hex . ' - ' : '';
+            $color = $item->hex ?? '';
             $stock = 'Stock ( ' . $collect_qty . ' )';
 
-            return [$item->id => $size . $color . $stock];
+            return [$item->id => $size . $color];
         })->toArray();
 
         $additional = [

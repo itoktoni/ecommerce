@@ -132,14 +132,14 @@
 										<div class="card">
 											<div class="card-header" id="headingTwo">
 												<h2 class="mb-0">
-													<button class="btn btn-link collapsed" type="button"
+													<button class="btn btn-link collapsed " type="button"
 														data-toggle="collapse" data-target="#collapseTwo"
 														aria-expanded="false" aria-controls="collapseTwo">
 														List Data [ sales order ]
 													</button>
 												</h2>
 											</div>
-											<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+											<div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
 												data-parent="#collapseTwo">
 												<div class="card-body">
 													<table id="force-responsive"

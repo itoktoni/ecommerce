@@ -291,10 +291,11 @@
 
                                                     <br>
                                                     <p
-                                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
-                                                        Segera lakukan konfirmasi order barang, untuk memberitahu bahwa
-                                                        kamu telah membayar order barang dengan benar. Jika ternyata
-                                                        order kamu bermasalah, silakan hubungi kami melalui halaman
+                                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
+                                                Segera lakukan konfirmasi order barang di link <a href="{{ route('confirmation', ['code' => $master->sales_order_id]) }}">KONFIRMASI</a> </p>
+                                                        <p style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
+                                                        Jika ternyata
+                                                        order kamu bermasalah, <br>silakan hubungi kami melalui halaman
                                                         <a href=""
                                                             style="font-family:Arial,sans-serif;color:#{{ config('website.color') }}!important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
                                                             target="_blank">

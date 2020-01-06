@@ -1,5 +1,7 @@
 <?php
 
+use Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider;
+
 $url_hostname = '';
 
 if (isset($_SERVER['SERVER_NAME'])) {
@@ -270,7 +272,6 @@ return [
         'RajaOngkir' => rizalafani\rajaongkirlaravel\RajaOngkirFacade::class,
         'BARCODE1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'BARCODE2D' => Milon\Barcode\Facades\DNS2DFacade::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

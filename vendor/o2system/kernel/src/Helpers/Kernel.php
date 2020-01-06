@@ -216,3 +216,105 @@ if ( ! function_exists('server_request')) {
         return services('serverRequest');
     }
 }
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('get')) {
+    /**
+     * get
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed|\O2System\Kernel\DataStructures\Input\Get
+     */
+    function get($offset = null, $default = null)
+    {
+        return input()->get($offset, $default);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('get_post')) {
+    /**
+     * get_post
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    function get_post($offset, $default = null)
+    {
+        return input()->getPost($offset, $default);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('post')) {
+    /**
+     * post
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed|\O2System\Kernel\DataStructures\Input\Post
+     */
+    function post($offset = null, $default = null)
+    {
+        return input()->post($offset, $default);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('post_get')) {
+    /**
+     * post_get
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    function post_get($offset, $default = null)
+    {
+        return input()->postGet($offset, $default);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('request')) {
+    /**
+     * request
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed|\O2System\Kernel\DataStructures\Input\Request
+     */
+    function request($offset = null, $default = null)
+    {
+        return input()->request($offset, $default);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('files')) {
+    /**
+     * files
+     *
+     * @param string $offset
+     * @param mixed  $default
+     *
+     * @return mixed|\O2System\Kernel\DataStructures\Input\Files
+     */
+    function files($offset = null)
+    {
+        return input()->files($offset);
+    }
+}

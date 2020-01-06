@@ -99,7 +99,7 @@
 
     {!! Form::label('name', 'Care', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10">
-        {!! Form::textarea($form.'care', null, ['class' => 'form-control basic', 'rows' => '3']) !!}
+        {!! Form::textarea($form.'care', null, ['id' => 'summernote-editor', 'class' => 'form-control', 'rows' => '3']) !!}
     </div>
 </div>
 
