@@ -58,7 +58,12 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 				<h5 style="margin-top:50px;"> Available Option </h5>
 				<div id="option_product" class="col-md-5">
 					<div class="row">
-						{{ Form::select('option', $list, old('option') ?? null, ['class' => 'form-control']) }}
+						{{ Form::select('option', $list, old('option') ?? null, ['class' => 'form-control', 'id' => 'checkstock']) }}
+					</div>
+					<div class="row">
+						<h5 style="font-size: 12px;margin-top:5px;float:right;" id="setstock">
+							
+						</h5>
 					</div>
 				</div>
 				<div class="quantity">
@@ -117,4 +122,24 @@ $single_product->item_product_slug],'class'=>'form-horizontal','files'=>true])
 
 @push('javascript')
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5db9018ce37b7743"></script>
+
+<script>
+	$('#checkstock').change(function(e){
+		var id = $(this).val();
+		$.ajax({
+			type: 'POST', // Metode pengiriman data menggunakan POST
+			url: '{{ route("stock") }}',
+			data: {'id':id}, // Data yang akan dikirim ke file pemroses
+			success: function(response) { // Jika berhasil
+				if(response != '0'){
+					$('#setstock').text(response);
+				}
+				else{
+
+					$('#setstock').text('');
+				}
+			}
+		});
+	});
+</script>
 @endpush

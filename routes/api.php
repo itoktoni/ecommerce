@@ -176,3 +176,5 @@ Route::match(
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+Route::post('/stock', 'PublicController@stock')->name('stock');

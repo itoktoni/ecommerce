@@ -865,7 +865,7 @@ class PublicController extends Controller
         $outstanding = DB::table('view_outstanding_order')->where('sod_product', $product->item_product_id)->get()->pluck('sod_qty', 'sod_option')->all();
 
         $stock = DB::table('view_stock_product')->where('product', $product->item_product_id)->get();
-        $option_stock = $stock->mapWithKeys(function ($item) use ($outstanding) {
+        $option_stock = $stock->mapWithKeys(function ($item) use ($outstanding, $product) {
 
             $collect_qty = $item->qty;
             if (array_key_exists($item->id, $outstanding)) {
@@ -873,6 +873,7 @@ class PublicController extends Controller
             }
             $size = $item->size ? $item->size . ' - ' : '';
             $color = $item->hex ?? '';
+
             $stock = 'Stock ( ' . $collect_qty . ' )';
 
             return [$item->id => $size . $color];
@@ -961,6 +962,19 @@ class PublicController extends Controller
                 'category' => Helper::createOption('category-api'),
                 'tag' => Helper::createOption('tag-api'),
             ]);
+        }
+    }
+
+    public function stock()
+    {
+        if (request()->has('id')) {
+            $id = request()->get('id');
+            $stock = DB::table('view_stock_product')->leftJoin((new Product())->getTable(),'product','item_product_id')->where('id', $id)->first();
+            if($stock && $stock->item_product_min > $stock->qty){
+                return 'Stock Only '.$stock->qty;
+            }
+            
+            return 0;
         }
     }
 }

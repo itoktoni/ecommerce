@@ -100,11 +100,10 @@ Route::get('/promo', 'PublicController@promo')->name('promo');
 Route::get('/promo/{slug}', 'PublicController@promo')->name('single_promo');
 Route::get('/page/{slug}', 'PublicController@page')->name('page');
 
+Route::get('/jual/{slug}', 'PublicController@product')->name('product');
 Route::match(['get', 'post'], '/product/{slug}', 'PublicController@product')->name('single_product');
 
-
 Route::get('/about', 'PublicController@about')->name('about');
-Route::get('/jual/{slug}', 'PublicController@product')->name('product');
 
 Route::match(['get', 'post'], 'contact', 'PublicController@contact')->name('contact');
 
