@@ -178,3 +178,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::post('/stock', 'PublicController@stock')->name('stock');
+
+Route::post('login', 'Auth\LoginController@login');
