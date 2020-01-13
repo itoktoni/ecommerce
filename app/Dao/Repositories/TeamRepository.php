@@ -2,9 +2,10 @@
 
 namespace App\Dao\Repositories;
 
-use Plugin\Notes;
 use Helper;
 use App\User;
+use Plugin\Notes;
+use Illuminate\Support\Facades\DB;
 use App\Dao\Interfaces\MasterInterface;
 
 class TeamRepository extends User implements MasterInterface
@@ -27,12 +28,15 @@ class TeamRepository extends User implements MasterInterface
 
     public function updateRepository($id, $request)
     {
-        try {
-            $activity = $this->findOrFail($id)->update($request);
-            return Notes::update($activity);
-        } catch (QueryExceptionAlias $ex) {
-            return Notes::error($ex->getMessage());
+        if (request()->has('password')) {
+            $request['password'] = bcrypt(request()->get('password'));
         }
+        unset($request['_token']);
+        unset($request['code']);
+        $affected = DB::table('users')
+            ->where('id', $id)
+            ->update($request);
+        return Notes::update($affected);
     }
 
     public function deleteRepository($data)

@@ -55,14 +55,13 @@ class TeamController extends Controller
     {
         if (request()->isMethod('POST')) {
 
-            $service->update(self::$model);
+            $data = $service->update(self::$model);
             return redirect()->route($this->getModule() . '_data');
         }
 
         if (request()->has('code')) {
 
             $data = $service->show(self::$model);
-
             return view(Helper::setViewUpdate())->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName()
