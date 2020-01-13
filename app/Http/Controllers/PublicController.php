@@ -303,7 +303,7 @@ class PublicController extends Controller
                 'province' => 'required',
                 'city' => 'required',
                 'location' => 'required',
-                'password' => 'required|min:6',
+                // 'password' => 'required|min:6',
             ];
 
             $validate = Validator::make($request, $validation);
