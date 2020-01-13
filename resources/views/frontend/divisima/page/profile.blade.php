@@ -46,7 +46,7 @@
 									<div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
 										data-parent="#">
 										<div class="card-body" style="border-bottom:1px solid lightgrey">
-											{!! Form::model($model, ['route' => 'myaccount', 'class' =>
+											{!! Form::model($model, ['route' => 'profile', 'class' =>
 											'form-horizontal', 'files' => true]) !!}
 											<div class="row">
 												<div class="col-md-4">
