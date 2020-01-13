@@ -264,6 +264,88 @@ class PublicController extends Controller
         }
     }
 
+    public function profile()
+    {
+        $user = new TeamRepository();
+        $order = new OrderRepository();
+
+        $province = $city = $location = $data = false;
+        $list_location = $list_city  = $data_order = $my_wishlist = [];
+
+        if ($delete = request()->get('delete')) {
+            $c = Wishlist::where('item_wishlist_item_product_id', $delete)->where('item_wishlist_user_id', Auth::user()->id)->delete();
+            if ($c) {
+                return redirect()->route('myaccount')->with('info', 'Success Delete Product');
+            } else {
+                return redirect()->route('myaccount')->with('info', 'Fail Delete Product');
+            }
+        }
+
+        if (Auth::check()) {
+
+            $province = Auth::user()->province;
+            $city = Auth::user()->city;
+            $location = Auth::user()->location;
+            $data = $user->showRepository(Auth::user()->id);
+        };
+
+        if (request()->isMethod('POST')) {
+
+            $request = request()->all();
+            $province = request()->get('province');
+            $city = request()->get('city');
+            $location = request()->get('location');
+
+            $validation = [
+                'name' => 'required',
+                'email' => 'required',
+                'address' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'location' => 'required',
+                'password' => 'required|min:6',
+            ];
+
+            $validate = Validator::make($request, $validation);
+            if ($validate->fails()) {
+                return redirect()->back()->withInput()->withErrors($validate);
+            }
+
+            if (request()->has('password')) {
+                $request['password'] = bcrypt(request()->get('password'));
+            }
+
+            $user->updateRepository(Auth::user()->id, $request);
+        }
+
+        if (Cache::has('province')) {
+            $list_province =  Cache::get('province');
+        } else {
+            $list_province = Cache::rememberForever('province', function () {
+                return DB::table('rajaongkir_provinces')->get()->sortBy('rajaongkir_province_name')->pluck('rajaongkir_province_name', 'rajaongkir_province_id')->prepend(' Choose Province', '0')->toArray();
+            });
+        }
+
+        if ($province) {
+            $list_city = DB::table('rajaongkir_cities')->where('rajaongkir_city_province_id', $province)->get()->sortBy('rajaongkir_city_name')->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->toArray();
+        }
+
+        if ($city) {
+            $list_location = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city)->get()->sortBy('rajaongkir_area_name')->pluck('rajaongkir_area_name', 'rajaongkir_area_id')->toArray();
+        }
+
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'model' => $data,
+            'province' => $province,
+            'city' => $city,
+            'location' => $location,
+            'status' => Helper::shareStatus($order->status),
+            'list_province' => $list_province,
+            'list_city' => $list_city,
+            'list_location' => $list_location,
+        ]);
+    }
+
     public function myaccount()
     {
         $user = new TeamRepository();
@@ -969,11 +1051,11 @@ class PublicController extends Controller
     {
         if (request()->has('id')) {
             $id = request()->get('id');
-            $stock = DB::table('view_stock_product')->leftJoin((new Product())->getTable(),'product','item_product_id')->where('id', $id)->first();
-            if($stock && $stock->item_product_min > $stock->qty){
-                return 'Stock Only '.$stock->qty;
+            $stock = DB::table('view_stock_product')->leftJoin((new Product())->getTable(), 'product', 'item_product_id')->where('id', $id)->first();
+            if ($stock && $stock->item_product_min > $stock->qty) {
+                return 'Stock Only ' . $stock->qty;
             }
-            
+
             return 0;
         }
     }

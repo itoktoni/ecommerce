@@ -77,4 +77,24 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if ($this->attemptLogin($request)) {
+            $user = $this->guard()->user();
+            $user->generateToken();
+            if ($request->has('api')) {
+
+                return response()->json([
+                    'data' => $user->toArray(),
+                ]);
+                die();
+            }
+            return $this->sendLoginResponse($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
 }

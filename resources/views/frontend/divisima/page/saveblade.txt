@@ -1,0 +1,79 @@
+<div class="row">
+												<div class="col-md-4">
+													<div class="form-group">
+														<label>Name</label>
+														{!! Form::text('name', null, ['class' => 'form-control']) !!}
+														{!! $errors->first('name', '<p class=text-danger">:message</p>')
+														!!}
+													</div>
+													<div class="form-group">
+														<label>Email</label>
+														{!! Form::email('email', null, ['class' => 'form-control']) !!}
+														{!! $errors->first('email', '<p class=text-danger">:message</p>
+														') !!}
+													</div>
+													<div class="form-group">
+														<label>Phone</label>
+														{!! Form::text('phone', null, ['class' => 'form-control']) !!}
+														{!! $errors->first('phone', '<p class=text-danger">:message</p>
+														') !!}
+													</div>
+												</div>
+
+												<div class="col-md-4">
+
+													<div class="form-group">
+														<label>Password</label>
+														{!! Form::password('password', ['class' => 'form-control']) !!}
+														{!! $errors->first('password', '<p class=text-danger">:message
+														</p>
+														') !!}
+													</div>
+
+													<div class="form-group">
+														<label>Address</label>
+														{!! Form::textarea('address', null, ['class' => 'form-control',
+														'rows' => '3']) !!}
+														{!! $errors->first('address', '<p class=text-danger">:message
+														</p>
+														') !!}
+													</div>
+
+													<div class="form-group row">
+														<div class="col-md-3">
+															<label>Postcode</label>
+														</div>
+														<div class="col-md-9">
+															{!! Form::text('postcode', null, ['class' =>
+															'form-control'])
+															!!}
+															{!! $errors->first('postcode', '<p class=text-danger">
+																:message
+															</p>
+															') !!}
+														</div>
+													</div>
+
+												</div>
+
+												<div class="col-md-4">
+													<div class="form-group">
+														<label>Province</label>
+														{{ Form::select('province', $list_province, $province, ['id' => 'province', 'class'=> 'form-control chosen '.($errors->has('province') ? 'error':'')]) }}
+													</div>
+													<div class="form-group">
+														<label>City</label>
+														{{ Form::select('city', $list_city, $city, ['id' => 'city','class'=> 'form-control chosen']) }}
+													</div>
+													<div class="form-group">
+														<label>Area</label>
+														{{ Form::select('location', $list_location, $location, ['id' => 'location','class'=> 'form-control chosen '.($errors->has('location') ? 'error':'')]) }}
+													</div>
+													<div class="pull-right">
+														<button type="submit" class="btn btn-primary btn-sm">Save
+															Data</button>
+													</div>
+
+												</div>
+
+											</div>

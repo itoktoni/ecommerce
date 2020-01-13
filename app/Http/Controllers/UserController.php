@@ -139,4 +139,8 @@ class UserController extends Controller
 
         return redirect()->to('/');
     }
+
+    public function login(){
+        
+    }
 }

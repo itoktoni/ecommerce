@@ -29,8 +29,7 @@ class TeamController extends Controller
     private function share($data = [])
     {
         $status = Helper::shareStatus(self::$model->status)->prepend('- Select Status -', '');
-        $group = Helper::createOption((new GroupUserRepository()), true)
-            ->pluck('group_user_name', 'group_user_code')->prepend('- Select Group -', '');
+        $group = Helper::createOption((new GroupUserRepository()));
 
         $view = [
             'key'      => self::$model->getKeyName(),

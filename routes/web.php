@@ -89,6 +89,7 @@ Route::get('/track/{code}', 'PublicController@track')->name('track');
 Route::match(['get', 'post'], 'cart', 'PublicController@cart')->name('cart');
 Route::match(['get', 'post'], 'checkout', 'PublicController@checkout')->name('checkout');
 Route::match(['get', 'post'], 'myaccount', 'PublicController@myaccount')->name('myaccount');
+Route::match(['get', 'post'], 'profile', 'PublicController@profile')->name('profile');
 Route::match(['get', 'post'], 'confirmation', 'PublicController@confirmation')->name('confirmation');
 
 Route::get('/delete/{id}', 'PublicController@delete')->name('delete');
